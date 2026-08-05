@@ -30,17 +30,17 @@ export interface Route {
   status: "Active" | "Inactive";
 }
 
-export interface Driver {
+export type Driver = {
   driver_id: string;
   name: string;
   nic: string;
   phone: string;
   address: string;
   license_number: string;
-  license_expiry: string; // YYYY-MM-DD
-  working_hours: number; // weekly accumulated hours
+  license_expiry: string;
+  working_hours: number;
   status: "Active" | "Inactive" | "On Trip";
-}
+};
 
 export interface Vehicle {
   vehicle_id: string;

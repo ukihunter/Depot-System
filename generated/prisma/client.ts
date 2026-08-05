@@ -46,3 +46,8 @@ export { Prisma }
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Driver
+ * 
+ */
+export type Driver = Prisma.DriverModel

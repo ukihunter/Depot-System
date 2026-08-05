@@ -17,7 +17,12 @@ import {
   Users,
   Zap,
 } from "lucide-react";
-
+import {
+  createDriver,
+  deleteDriver,
+  getDrivers,
+  updateDriver,
+} from "@/lib/api/drivers";
 import Dashboard from "./Dashboard";
 import DriversModule from "./DriversModule";
 import OperationsModules from "./OperationsModules";
@@ -77,31 +82,6 @@ const initialRoutes: Route[] = [
     distance: 33.1,
     estimated_duration: 65,
     status: "Active",
-  },
-];
-
-const initialDrivers: Driver[] = [
-  {
-    driver_id: "driver_1",
-    name: "Nimal Perera",
-    nic: "901234567V",
-    phone: "0771234567",
-    address: "Colombo 07",
-    license_number: "B1234567",
-    license_expiry: "2027-12-31",
-    working_hours: 36,
-    status: "Active",
-  },
-  {
-    driver_id: "driver_2",
-    name: "Rashmi Silva",
-    nic: "942345678V",
-    phone: "0719876543",
-    address: "Nugegoda",
-    license_number: "B7654321",
-    license_expiry: "2026-11-30",
-    working_hours: 28,
-    status: "On Trip",
   },
 ];
 
@@ -266,13 +246,53 @@ function App() {
   const [saveSuccessMsg, setSaveSuccessMsg] = useState("");
 
   const [routes, setRoutes] = useState<Route[]>(initialRoutes);
-  const [drivers, setDrivers] = useState<Driver[]>(initialDrivers);
+  const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [driversLoading, setDriversLoading] = useState(false);
+  const [driversError, setDriversError] = useState("");
   const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
+
   const [schedules, setSchedules] = useState<Schedule[]>(initialSchedules);
   const [trips, setTrips] = useState<Trip[]>(initialTrips);
   const [fuelLogs, setFuelLogs] = useState<FuelLog[]>(initialFuelLogs);
   const [maintenance, setMaintenance] =
     useState<MaintenanceRecord[]>(initialMaintenance);
+
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadDrivers() {
+      setDriversLoading(true);
+      setDriversError("");
+
+      try {
+        const data = await getDrivers();
+
+        if (!cancelled) {
+          setDrivers(data);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setDriversError(
+            error instanceof Error ? error.message : "Failed to load drivers.",
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setDriversLoading(false);
+        }
+      }
+    }
+
+    loadDrivers();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [currentUser]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -417,33 +437,64 @@ function App() {
   };
 
   const handleAddDriver = async (driver: Partial<Driver>) => {
-    setDrivers((prev) => [
-      ...prev,
-      {
-        driver_id: driver.driver_id ?? createId("driver"),
-        name: driver.name ?? "New Driver",
-        nic: driver.nic ?? "",
-        phone: driver.phone ?? "",
-        address: driver.address ?? "",
-        license_number: driver.license_number ?? "",
-        license_expiry: driver.license_expiry ?? "2027-12-31",
-        working_hours: driver.working_hours ?? 0,
-        status: driver.status ?? "Active",
-      },
-    ]);
+    try {
+      const created = await createDriver(driver);
+
+      setDrivers((prev) => [created, ...prev]);
+    } catch (error) {
+      console.error("Failed to create driver:", error);
+
+      setDriversError(
+        error instanceof Error ? error.message : "Failed to create driver.",
+      );
+    }
   };
 
   const handleUpdateDriver = async (
     driverId: string,
     updates: Partial<Driver>,
   ) => {
-    setDrivers((prev) => updateById(prev, "driver_id", driverId, updates));
+    try {
+      const updated = await updateDriver(driverId, updates);
+
+      setDrivers((prev) =>
+        prev.map((driver) =>
+          driver.driver_id === updated.driver_id ? updated : driver,
+        ),
+      );
+    } catch (error) {
+      console.error("Failed to update driver:", error);
+
+      setDriversError(
+        error instanceof Error ? error.message : "Failed to update driver.",
+      );
+    }
   };
 
   const handleDeleteDriver = async (driverId: string) => {
-    setDrivers((prev) =>
-      prev.filter((driver) => driver.driver_id !== driverId),
-    );
+    const driver = drivers.find((item) => item.driver_id === driverId);
+
+    if (!driver) {
+      return;
+    }
+
+    const confirmed = window.confirm(`Delete driver "${driver.name}"?`);
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await deleteDriver(driverId);
+
+      setDrivers((prev) => prev.filter((item) => item.driver_id !== driverId));
+    } catch (error) {
+      console.error("Failed to delete driver:", error);
+
+      setDriversError(
+        error instanceof Error ? error.message : "Failed to delete driver.",
+      );
+    }
   };
 
   const handleAddVehicle = async (vehicle: Partial<Vehicle>) => {

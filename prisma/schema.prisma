@@ -26,3 +26,31 @@ model User {
 
   @@map("users")
 }
+
+model Driver {
+  id              Int      @id @default(autoincrement())
+  driverId        String   @unique @default(cuid())
+
+  name            String
+  nic             String   @unique
+  phone           String
+  address         String?
+
+  licenseNumber   String   @unique
+  licenseExpiry   DateTime
+
+  workingHours    Int      @default(0)
+
+  status          DriverStatus @default(ACTIVE)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("drivers")
+}
+
+enum DriverStatus {
+  ACTIVE
+  INACTIVE
+  ON_TRIP
+}
