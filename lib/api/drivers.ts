@@ -50,7 +50,7 @@ export async function updateDriver(
   payload: Partial<Driver>,
 ): Promise<Driver> {
   const response = await fetch(`/api/drivers/${driverId}`, {
-    method: "PATCH",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
