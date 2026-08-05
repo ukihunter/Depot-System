@@ -26,3 +26,52 @@ export const DriverStatus = {
 } as const
 
 export type DriverStatus = (typeof DriverStatus)[keyof typeof DriverStatus]
+
+
+export const VehicleType = {
+  SINGLE_DECKER: 'SINGLE_DECKER',
+  DOUBLE_DECKER: 'DOUBLE_DECKER',
+  ELECTRIC_BUS: 'ELECTRIC_BUS',
+  ARTICULATED_BUS: 'ARTICULATED_BUS',
+  COACH: 'COACH'
+} as const
+
+export type VehicleType = (typeof VehicleType)[keyof typeof VehicleType]
+
+
+export const FuelType = {
+  DIESEL: 'DIESEL',
+  ELECTRIC: 'ELECTRIC',
+  CNG: 'CNG',
+  HYBRID: 'HYBRID'
+} as const
+
+export type FuelType = (typeof FuelType)[keyof typeof FuelType]
+
+
+export const VehicleStatus = {
+  AVAILABLE: 'AVAILABLE',
+  MAINTENANCE: 'MAINTENANCE',
+  ON_TRIP: 'ON_TRIP'
+} as const
+
+export type VehicleStatus = (typeof VehicleStatus)[keyof typeof VehicleStatus]
+
+
+export const RouteStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type RouteStatus = (typeof RouteStatus)[keyof typeof RouteStatus]
+
+
+export const ScheduleStatus = {
+  SCHEDULED: 'SCHEDULED',
+  ACTIVE: 'ACTIVE',
+  DELAYED: 'DELAYED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ScheduleStatus = (typeof ScheduleStatus)[keyof typeof ScheduleStatus]

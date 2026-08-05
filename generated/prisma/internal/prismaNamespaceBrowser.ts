@@ -52,7 +52,10 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Driver: 'Driver'
+  Driver: 'Driver',
+  Vehicle: 'Vehicle',
+  Route: 'Route',
+  Schedule: 'Schedule'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -103,12 +106,69 @@ export const DriverScalarFieldEnum = {
 export type DriverScalarFieldEnum = (typeof DriverScalarFieldEnum)[keyof typeof DriverScalarFieldEnum]
 
 
+export const VehicleScalarFieldEnum = {
+  id: 'id',
+  vehicleId: 'vehicleId',
+  registrationNumber: 'registrationNumber',
+  vehicleType: 'vehicleType',
+  seatingCapacity: 'seatingCapacity',
+  mileage: 'mileage',
+  fuelType: 'fuelType',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
+
+
+export const RouteScalarFieldEnum = {
+  id: 'id',
+  routeId: 'routeId',
+  routeName: 'routeName',
+  startLocation: 'startLocation',
+  endLocation: 'endLocation',
+  stops: 'stops',
+  distance: 'distance',
+  estimatedDuration: 'estimatedDuration',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RouteScalarFieldEnum = (typeof RouteScalarFieldEnum)[keyof typeof RouteScalarFieldEnum]
+
+
+export const ScheduleScalarFieldEnum = {
+  id: 'id',
+  scheduleId: 'scheduleId',
+  routeId: 'routeId',
+  vehicleId: 'vehicleId',
+  driverId: 'driverId',
+  departureTime: 'departureTime',
+  arrivalTime: 'arrivalTime',
+  scheduleDate: 'scheduleDate',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const UserOrderByRelevanceFieldEnum = {
@@ -139,4 +199,51 @@ export const DriverOrderByRelevanceFieldEnum = {
 } as const
 
 export type DriverOrderByRelevanceFieldEnum = (typeof DriverOrderByRelevanceFieldEnum)[keyof typeof DriverOrderByRelevanceFieldEnum]
+
+
+export const VehicleOrderByRelevanceFieldEnum = {
+  vehicleId: 'vehicleId',
+  registrationNumber: 'registrationNumber'
+} as const
+
+export type VehicleOrderByRelevanceFieldEnum = (typeof VehicleOrderByRelevanceFieldEnum)[keyof typeof VehicleOrderByRelevanceFieldEnum]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const RouteOrderByRelevanceFieldEnum = {
+  routeId: 'routeId',
+  routeName: 'routeName',
+  startLocation: 'startLocation',
+  endLocation: 'endLocation'
+} as const
+
+export type RouteOrderByRelevanceFieldEnum = (typeof RouteOrderByRelevanceFieldEnum)[keyof typeof RouteOrderByRelevanceFieldEnum]
+
+
+export const ScheduleOrderByRelevanceFieldEnum = {
+  scheduleId: 'scheduleId',
+  routeId: 'routeId',
+  vehicleId: 'vehicleId',
+  driverId: 'driverId',
+  departureTime: 'departureTime',
+  arrivalTime: 'arrivalTime'
+} as const
+
+export type ScheduleOrderByRelevanceFieldEnum = (typeof ScheduleOrderByRelevanceFieldEnum)[keyof typeof ScheduleOrderByRelevanceFieldEnum]
 

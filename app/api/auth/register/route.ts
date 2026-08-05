@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import argon2 from "argon2";
 
 export async function POST(request: Request) {
   try {
@@ -58,12 +59,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const hashedPassword = await argon2.hash(password);
+
     const user = await prisma.user.create({
       data: {
         fullName,
         email,
         username,
-        password,
+        password: hashedPassword,
         role: "USER",
       },
     });

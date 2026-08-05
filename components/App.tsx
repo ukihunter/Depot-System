@@ -23,6 +23,24 @@ import {
   getDrivers,
   updateDriver,
 } from "@/lib/api/drivers";
+import {
+  createVehicle,
+  deleteVehicle,
+  getVehicles,
+  updateVehicle,
+} from "@/lib/api/vehicles";
+import {
+  createRoute,
+  deleteRoute,
+  getRoutes,
+  updateRoute,
+} from "@/lib/api/routes";
+import {
+  createSchedule,
+  deleteSchedule,
+  getSchedules,
+  updateSchedule,
+} from "@/lib/api/schedules";
 import Dashboard from "./Dashboard";
 import DriversModule from "./DriversModule";
 import OperationsModules from "./OperationsModules";
@@ -197,6 +215,11 @@ function normalizeUser(user: {
 }
 
 function App() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => {
     if (typeof window === "undefined") {
       return null;
@@ -245,13 +268,19 @@ function App() {
   const [operatingHours, setOperatingHours] = useState("24/7 operations");
   const [saveSuccessMsg, setSaveSuccessMsg] = useState("");
 
-  const [routes, setRoutes] = useState<Route[]>(initialRoutes);
+  const [routes, setRoutes] = useState<Route[]>([]);
+  const [routesLoading, setRoutesLoading] = useState(false);
+  const [routesError, setRoutesError] = useState("");
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [driversLoading, setDriversLoading] = useState(false);
   const [driversError, setDriversError] = useState("");
-  const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [vehiclesLoading, setVehiclesLoading] = useState(false);
+  const [vehiclesError, setVehiclesError] = useState("");
 
-  const [schedules, setSchedules] = useState<Schedule[]>(initialSchedules);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [schedulesLoading, setSchedulesLoading] = useState(false);
+  const [schedulesError, setSchedulesError] = useState("");
   const [trips, setTrips] = useState<Trip[]>(initialTrips);
   const [fuelLogs, setFuelLogs] = useState<FuelLog[]>(initialFuelLogs);
   const [maintenance, setMaintenance] =
@@ -287,7 +316,59 @@ function App() {
       }
     }
 
+    async function loadVehicles() {
+      setVehiclesLoading(true);
+      setVehiclesError("");
+
+      try {
+        const data = await getVehicles();
+
+        if (!cancelled) {
+          setVehicles(data);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setVehiclesError(
+            error instanceof Error ? error.message : "Failed to load vehicles.",
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setVehiclesLoading(false);
+        }
+      }
+    }
+
+    async function loadRoutes() {
+      setRoutesLoading(true);
+      setRoutesError("");
+      try {
+        const data = await getRoutes();
+        if (!cancelled) setRoutes(data);
+      } catch (error) {
+        if (!cancelled) setRoutesError(error instanceof Error ? error.message : "Failed to load routes.");
+      } finally {
+        if (!cancelled) setRoutesLoading(false);
+      }
+    }
+
+    async function loadSchedules() {
+      setSchedulesLoading(true);
+      setSchedulesError("");
+      try {
+        const data = await getSchedules();
+        if (!cancelled) setSchedules(data);
+      } catch (error) {
+        if (!cancelled) setSchedulesError(error instanceof Error ? error.message : "Failed to load schedules.");
+      } finally {
+        if (!cancelled) setSchedulesLoading(false);
+      }
+    }
+
     loadDrivers();
+    loadVehicles();
+    loadRoutes();
+    loadSchedules();
 
     return () => {
       cancelled = true;
@@ -410,30 +491,42 @@ function App() {
   };
 
   const handleCreateRoute = async (route: Partial<Route>) => {
-    setRoutes((prev) => [
-      ...prev,
-      {
-        route_id: route.route_id ?? createId("route"),
-        route_name: route.route_name ?? "New Route",
-        start_location: route.start_location ?? "",
-        end_location: route.end_location ?? "",
-        stops: route.stops ?? [],
-        distance: route.distance ?? 0,
-        estimated_duration: route.estimated_duration ?? 0,
-        status: route.status ?? "Active",
-      },
-    ]);
+    try {
+      const created = await createRoute(route);
+      setRoutes((prev) => [created, ...prev]);
+    } catch (error) {
+      console.error("Failed to create route:", error);
+      setRoutesError(error instanceof Error ? error.message : "Failed to create route.");
+    }
   };
 
   const handleUpdateRoute = async (
     routeId: string,
     updates: Partial<Route>,
   ) => {
-    setRoutes((prev) => updateById(prev, "route_id", routeId, updates));
+    try {
+      const updated = await updateRoute(routeId, updates);
+      setRoutes((prev) =>
+        prev.map((r) => (r.route_id === updated.route_id ? updated : r))
+      );
+    } catch (error) {
+      console.error("Failed to update route:", error);
+      setRoutesError(error instanceof Error ? error.message : "Failed to update route.");
+    }
   };
 
   const handleDeleteRoute = async (routeId: string) => {
-    setRoutes((prev) => prev.filter((route) => route.route_id !== routeId));
+    const route = routes.find((item) => item.route_id === routeId);
+    if (!route) return;
+    const confirmed = window.confirm(`Delete route "${route.route_name}"?`);
+    if (!confirmed) return;
+    try {
+      await deleteRoute(routeId);
+      setRoutes((prev) => prev.filter((item) => item.route_id !== routeId));
+    } catch (error) {
+      console.error("Failed to delete route:", error);
+      setRoutesError(error instanceof Error ? error.message : "Failed to delete route.");
+    }
   };
 
   const handleAddDriver = async (driver: Partial<Driver>) => {
@@ -498,62 +591,107 @@ function App() {
   };
 
   const handleAddVehicle = async (vehicle: Partial<Vehicle>) => {
-    setVehicles((prev) => [
-      ...prev,
-      {
-        vehicle_id: vehicle.vehicle_id ?? createId("vehicle"),
-        registration_number: vehicle.registration_number ?? "",
-        vehicle_type: vehicle.vehicle_type ?? "Single Decker",
-        seating_capacity: vehicle.seating_capacity ?? 0,
-        mileage: vehicle.mileage ?? 0,
-        fuel_type: vehicle.fuel_type ?? "Diesel",
-        status: vehicle.status ?? "Available",
-      },
-    ]);
+    try {
+      const created = await createVehicle(vehicle);
+
+      setVehicles((prev) => [created, ...prev]);
+    } catch (error) {
+      console.error("Failed to create vehicle:", error);
+
+      setVehiclesError(
+        error instanceof Error ? error.message : "Failed to create vehicle.",
+      );
+    }
   };
 
   const handleUpdateVehicle = async (
     vehicleId: string,
     updates: Partial<Vehicle>,
   ) => {
-    setVehicles((prev) => updateById(prev, "vehicle_id", vehicleId, updates));
+    try {
+      const updated = await updateVehicle(vehicleId, updates);
+
+      setVehicles((prev) =>
+        prev.map((vehicle) =>
+          vehicle.vehicle_id === updated.vehicle_id ? updated : vehicle,
+        ),
+      );
+    } catch (error) {
+      console.error("Failed to update vehicle:", error);
+
+      setVehiclesError(
+        error instanceof Error ? error.message : "Failed to update vehicle.",
+      );
+    }
   };
 
   const handleDeleteVehicle = async (vehicleId: string) => {
-    setVehicles((prev) =>
-      prev.filter((vehicle) => vehicle.vehicle_id !== vehicleId),
+    const vehicle = vehicles.find((item) => item.vehicle_id === vehicleId);
+
+    if (!vehicle) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Delete vehicle "${vehicle.registration_number}"?`,
     );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await deleteVehicle(vehicleId);
+
+      setVehicles((prev) =>
+        prev.filter((item) => item.vehicle_id !== vehicleId),
+      );
+    } catch (error) {
+      console.error("Failed to delete vehicle:", error);
+
+      setVehiclesError(
+        error instanceof Error ? error.message : "Failed to delete vehicle.",
+      );
+    }
   };
 
   const handleCreateSchedule = async (schedule: Partial<Schedule>) => {
-    setSchedules((prev) => [
-      ...prev,
-      {
-        schedule_id: schedule.schedule_id ?? createId("schedule"),
-        route_id: schedule.route_id ?? routes[0]?.route_id ?? "",
-        vehicle_id: schedule.vehicle_id ?? vehicles[0]?.vehicle_id ?? "",
-        driver_id: schedule.driver_id ?? drivers[0]?.driver_id ?? "",
-        departure_time: schedule.departure_time ?? "08:00",
-        arrival_time: schedule.arrival_time ?? "09:00",
-        schedule_date: schedule.schedule_date ?? "2026-08-05",
-        status: schedule.status ?? "Scheduled",
-      },
-    ]);
+    try {
+      const created = await createSchedule(schedule);
+      setSchedules((prev) => [created, ...prev]);
+    } catch (error) {
+      console.error("Failed to create schedule:", error);
+      setSchedulesError(error instanceof Error ? error.message : "Failed to create schedule.");
+    }
   };
 
   const handleUpdateSchedule = async (
     scheduleId: string,
     updates: Partial<Schedule>,
   ) => {
-    setSchedules((prev) =>
-      updateById(prev, "schedule_id", scheduleId, updates),
-    );
+    try {
+      const updated = await updateSchedule(scheduleId, updates);
+      setSchedules((prev) =>
+        prev.map((s) => (s.schedule_id === updated.schedule_id ? updated : s))
+      );
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+      setSchedulesError(error instanceof Error ? error.message : "Failed to update schedule.");
+    }
   };
 
   const handleDeleteSchedule = async (scheduleId: string) => {
-    setSchedules((prev) =>
-      prev.filter((schedule) => schedule.schedule_id !== scheduleId),
-    );
+    const schedule = schedules.find((item) => item.schedule_id === scheduleId);
+    if (!schedule) return;
+    const confirmed = window.confirm(`Delete this schedule?`);
+    if (!confirmed) return;
+    try {
+      await deleteSchedule(scheduleId);
+      setSchedules((prev) => prev.filter((item) => item.schedule_id !== scheduleId));
+    } catch (error) {
+      console.error("Failed to delete schedule:", error);
+      setSchedulesError(error instanceof Error ? error.message : "Failed to delete schedule.");
+    }
   };
 
   const handleAIResolve = async (prompt: string) => {
@@ -647,6 +785,10 @@ function App() {
     setSaveSuccessMsg("Depot settings saved successfully.");
     window.setTimeout(() => setSaveSuccessMsg(""), 2500);
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   if (!currentUser) {
     return (

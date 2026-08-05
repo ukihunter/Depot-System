@@ -28,23 +28,21 @@ model User {
 }
 
 model Driver {
-  id              Int      @id @default(autoincrement())
-  driverId        String   @unique @default(cuid())
+  id            Int          @id @default(autoincrement())
+  driverId      String       @unique @default(cuid())
+  name          String
+  nic           String       @unique
+  phone         String
+  address       String?
+  licenseNumber String       @unique
+  licenseExpiry DateTime
+  workingHours  Int          @default(0)
+  status        DriverStatus @default(ACTIVE)
 
-  name            String
-  nic             String   @unique
-  phone           String
-  address         String?
+  schedules Schedule[]
 
-  licenseNumber   String   @unique
-  licenseExpiry   DateTime
-
-  workingHours    Int      @default(0)
-
-  status          DriverStatus @default(ACTIVE)
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("drivers")
 }
@@ -53,4 +51,100 @@ enum DriverStatus {
   ACTIVE
   INACTIVE
   ON_TRIP
+}
+
+model Vehicle {
+  id                 Int           @id @default(autoincrement())
+  vehicleId          String        @unique @default(cuid())
+  registrationNumber String        @unique
+  vehicleType        VehicleType
+  seatingCapacity    Int           @default(0)
+  mileage            Int           @default(0)
+  fuelType           FuelType
+  status             VehicleStatus @default(AVAILABLE)
+
+  schedules Schedule[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("vehicles")
+}
+
+enum VehicleType {
+  SINGLE_DECKER
+  DOUBLE_DECKER
+  ELECTRIC_BUS
+  ARTICULATED_BUS
+  COACH
+}
+
+enum FuelType {
+  DIESEL
+  ELECTRIC
+  CNG
+  HYBRID
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  MAINTENANCE
+  ON_TRIP
+}
+
+model Route {
+  id                Int         @id @default(autoincrement())
+  routeId           String      @unique @default(cuid())
+  routeName         String      @map("route_name")
+  startLocation     String      @map("start_location")
+  endLocation       String      @map("end_location")
+  stops             Json
+  distance          Float       @default(0)
+  estimatedDuration Int         @default(0) @map("estimated_duration")
+  status            RouteStatus @default(ACTIVE)
+
+  schedules Schedule[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("routes")
+}
+
+enum RouteStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Schedule {
+  id            Int            @id @default(autoincrement())
+  scheduleId    String         @unique @default(cuid())
+  routeId       String         @map("route_id")
+  vehicleId     String         @map("vehicle_id")
+  driverId      String         @map("driver_id")
+  departureTime String         @map("departure_time")
+  arrivalTime   String         @map("arrival_time")
+  scheduleDate  DateTime       @map("schedule_date")
+  status        ScheduleStatus @default(SCHEDULED)
+
+  route   Route   @relation(fields: [routeId], references: [routeId], onDelete: Restrict)
+  vehicle Vehicle @relation(fields: [vehicleId], references: [vehicleId], onDelete: Restrict)
+  driver  Driver  @relation(fields: [driverId], references: [driverId], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([routeId])
+  @@index([vehicleId])
+  @@index([driverId])
+  @@index([scheduleDate])
+  @@map("schedules")
+}
+
+enum ScheduleStatus {
+  SCHEDULED
+  ACTIVE
+  DELAYED
+  COMPLETED
+  CANCELLED
 }

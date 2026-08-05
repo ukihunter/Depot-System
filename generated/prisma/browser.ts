@@ -27,3 +27,18 @@ export type User = Prisma.UserModel
  * 
  */
 export type Driver = Prisma.DriverModel
+/**
+ * Model Vehicle
+ * 
+ */
+export type Vehicle = Prisma.VehicleModel
+/**
+ * Model Route
+ * 
+ */
+export type Route = Prisma.RouteModel
+/**
+ * Model Schedule
+ * 
+ */
+export type Schedule = Prisma.ScheduleModel

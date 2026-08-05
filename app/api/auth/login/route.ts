@@ -1,18 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import argon2 from "argon2";
-import { PrismaClient } from "@/generated/prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-
-const adapter = new PrismaMariaDb({
-  host: process.env.DB_HOST ?? "localhost",
-  port: Number(process.env.DB_PORT ?? 3306),
-  user: process.env.DB_USER ?? "root",
-  password: process.env.DB_PASSWORD ?? "",
-  database: process.env.DB_NAME ?? "srmss",
-  connectionLimit: 5,
-});
-
-const prisma = new PrismaClient({ adapter });
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,9 +21,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
-        username,
+        OR: [
+          { username },
+          { email: username },
+        ],
       },
     });
 
@@ -81,7 +72,5 @@ export async function POST(request: NextRequest) {
       },
       { status: 500 },
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
