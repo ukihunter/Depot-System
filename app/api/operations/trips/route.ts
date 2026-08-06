@@ -31,23 +31,31 @@ function serializeTrip(trip: {
 
 export async function GET() {
   try {
-    const trips = await prisma.$queryRaw<Array<{
-      tripId: string;
-      scheduleId: string;
-      startTime: string;
-      endTime: string;
-      status: "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
-      remarks: string | null;
-    }>>`
+    const trips = await prisma.$queryRaw<
+      Array<{
+        tripId: string;
+        scheduleId: string;
+        startTime: string;
+        endTime: string;
+        status: "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
+        remarks: string | null;
+      }>
+    >`
       SELECT tripId, schedule_id AS scheduleId, start_time AS startTime, end_time AS endTime, status, remarks
       FROM trips
       ORDER BY created_at DESC
     `;
 
-    return NextResponse.json({ success: true, trips: trips.map(serializeTrip) });
+    return NextResponse.json({
+      success: true,
+      trips: trips.map(serializeTrip),
+    });
   } catch (error) {
     console.error("GET /api/operations/trips failed:", error);
-    return NextResponse.json({ success: false, message: "Failed to load trips." }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: "Failed to load trips." },
+      { status: 500 },
+    );
   }
 }
 
@@ -58,10 +66,14 @@ export async function POST(request: NextRequest) {
     const startTime = String(body.start_time ?? "").trim();
     const endTime = String(body.end_time ?? "").trim();
     const status = String(body.status ?? "SCHEDULED").toUpperCase();
-    const remarks = body.remarks === undefined ? null : String(body.remarks).trim();
+    const remarks =
+      body.remarks === undefined ? null : String(body.remarks).trim();
 
     if (!scheduleId || !startTime) {
-      return NextResponse.json({ success: false, message: "Schedule and start time are required." }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "Schedule and start time are required." },
+        { status: 400 },
+      );
     }
 
     const tripId = randomUUID().replace(/-/g, "");
@@ -71,14 +83,16 @@ export async function POST(request: NextRequest) {
       VALUES (${tripId}, ${scheduleId}, ${startTime}, ${endTime}, ${status}, ${remarks}, NOW(3), NOW(3))
     `;
 
-    const rows = await prisma.$queryRaw<Array<{
-      tripId: string;
-      scheduleId: string;
-      startTime: string;
-      endTime: string;
-      status: "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
-      remarks: string | null;
-    }>>`
+    const rows = await prisma.$queryRaw<
+      Array<{
+        tripId: string;
+        scheduleId: string;
+        startTime: string;
+        endTime: string;
+        status: "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
+        remarks: string | null;
+      }>
+    >`
       SELECT tripId, schedule_id AS scheduleId, start_time AS startTime, end_time AS endTime, status, remarks
       FROM trips
       WHERE tripId = ${tripId}
@@ -87,12 +101,21 @@ export async function POST(request: NextRequest) {
 
     const trip = rows[0] ?? null;
     if (!trip) {
-      return NextResponse.json({ success: false, message: "Failed to create trip." }, { status: 500 });
+      return NextResponse.json(
+        { success: false, message: "Failed to create trip." },
+        { status: 500 },
+      );
     }
 
-    return NextResponse.json({ success: true, trip: serializeTrip(trip) }, { status: 201 });
+    return NextResponse.json(
+      { success: true, trip: serializeTrip(trip) },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("POST /api/operations/trips failed:", error);
-    return NextResponse.json({ success: false, message: "Failed to create trip." }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: "Failed to create trip." },
+      { status: 500 },
+    );
   }
 }

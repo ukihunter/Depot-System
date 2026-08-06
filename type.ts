@@ -107,3 +107,17 @@ export interface DBState {
   fuelLogs: FuelLog[];
   maintenance: MaintenanceRecord[];
 }
+
+export interface Depot {
+  id: number;
+  depotCode?: string;
+  name: string;
+  code: string;
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string | null;
+}

@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-type TripStatus = "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
+type TripStatus =
+  | "SCHEDULED"
+  | "ACTIVE"
+  | "DELAYED"
+  | "COMPLETED"
+  | "CANCELLED";
 
 function serializeTrip(trip: {
   tripId: string;
@@ -30,7 +35,10 @@ function serializeTrip(trip: {
   };
 }
 
-export async function PATCH(request: NextRequest, context: { params: Promise<{ tripId: string }> }) {
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ tripId: string }> },
+) {
   try {
     const { tripId } = await context.params;
     const body = await request.json();
@@ -74,17 +82,22 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ t
     }
 
     if (updateCount === 0) {
-      return NextResponse.json({ success: false, message: "No trip updates provided." }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "No trip updates provided." },
+        { status: 400 },
+      );
     }
 
-    const rows = await prisma.$queryRaw<Array<{
-      tripId: string;
-      scheduleId: string;
-      startTime: string;
-      endTime: string;
-      status: TripStatus;
-      remarks: string | null;
-    }>>`
+    const rows = await prisma.$queryRaw<
+      Array<{
+        tripId: string;
+        scheduleId: string;
+        startTime: string;
+        endTime: string;
+        status: TripStatus;
+        remarks: string | null;
+      }>
+    >`
       SELECT tripId, schedule_id AS scheduleId, start_time AS startTime, end_time AS endTime, status, remarks
       FROM trips
       WHERE tripId = ${tripId}
@@ -93,12 +106,18 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ t
 
     const trip = rows[0];
     if (!trip) {
-      return NextResponse.json({ success: false, message: "Trip not found." }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: "Trip not found." },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json({ success: true, trip: serializeTrip(trip) });
   } catch (error) {
     console.error("PATCH /api/operations/trips/[tripId] failed:", error);
-    return NextResponse.json({ success: false, message: "Failed to update trip." }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: "Failed to update trip." },
+      { status: 500 },
+    );
   }
 }

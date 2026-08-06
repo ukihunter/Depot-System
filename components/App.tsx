@@ -25,6 +25,12 @@ import {
   updateDriver,
 } from "@/lib/api/drivers";
 import {
+  getDepots,
+  createDepot,
+  updateDepot,
+  deleteDepot,
+} from "@/lib/api/depots";
+import {
   createVehicle,
   deleteVehicle,
   getVehicles,
@@ -58,7 +64,9 @@ import type {
   Schedule,
   Trip,
   Vehicle,
+  Depot,
 } from "../type";
+import DepotManagement from "./DepotManagement";
 
 type AppRole =
   | "MAIN_ADMIN"
@@ -345,6 +353,9 @@ function App() {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [routesLoading, setRoutesLoading] = useState(false);
   const [routesError, setRoutesError] = useState("");
+  const [depots, setDepots] = useState<Depot[]>([]);
+  const [depotsLoading, setDepotsLoading] = useState(false);
+  const [depotsError, setDepotsError] = useState("");
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [driversLoading, setDriversLoading] = useState(false);
   const [driversError, setDriversError] = useState("");
@@ -447,6 +458,23 @@ function App() {
       }
     }
 
+    async function loadDepots() {
+      setDepotsLoading(true);
+      setDepotsError("");
+
+      try {
+        const data = await getDepots();
+        if (!cancelled) setDepots(data);
+      } catch (error) {
+        if (!cancelled)
+          setDepotsError(
+            error instanceof Error ? error.message : "Failed to load depots.",
+          );
+      } finally {
+        if (!cancelled) setDepotsLoading(false);
+      }
+    }
+
     async function loadTrips() {
       try {
         const response = await fetch("/api/operations/trips", {
@@ -501,6 +529,7 @@ function App() {
     loadVehicles();
     loadRoutes();
     loadSchedules();
+    loadDepots();
     loadTrips();
     loadFuelLogs();
     loadMaintenance();
@@ -668,6 +697,49 @@ function App() {
       console.error("Failed to delete route:", error);
       setRoutesError(
         error instanceof Error ? error.message : "Failed to delete route.",
+      );
+    }
+  };
+
+  const handleAddDepot = async (depot: Partial<Depot>) => {
+    try {
+      const created = await createDepot(depot);
+      setDepots((prev) => [created, ...prev]);
+    } catch (error) {
+      console.error("Failed to create depot:", error);
+      setDepotsError(
+        error instanceof Error ? error.message : "Failed to create depot.",
+      );
+    }
+  };
+
+  const handleUpdateDepot = async (
+    depotId: number,
+    updates: Partial<Depot>,
+  ) => {
+    try {
+      const updated = await updateDepot(String(depotId), updates);
+      setDepots((prev) => prev.map((d) => (d.id === updated.id ? updated : d)));
+    } catch (error) {
+      console.error("Failed to update depot:", error);
+      setDepotsError(
+        error instanceof Error ? error.message : "Failed to update depot.",
+      );
+    }
+  };
+
+  const handleDeleteDepot = async (depotId: number) => {
+    const depot = depots.find((item) => item.id === depotId);
+    if (!depot) return;
+    const confirmed = window.confirm(`Delete depot "${depot.name}"?`);
+    if (!confirmed) return;
+    try {
+      await deleteDepot(String(depotId));
+      setDepots((prev) => prev.filter((item) => item.id !== depotId));
+    } catch (error) {
+      console.error("Failed to delete depot:", error);
+      setDepotsError(
+        error instanceof Error ? error.message : "Failed to delete depot.",
       );
     }
   };
@@ -1414,7 +1486,15 @@ function App() {
               onSetTab={setActiveTab}
             />
           )}
-
+          {activeTab === "depots" && (
+            <DepotManagement
+              depots={depots}
+              onAddDepot={handleAddDepot}
+              onUpdateDepot={handleUpdateDepot}
+              onDeleteDepot={handleDeleteDepot}
+              userRole={currentUser.role}
+            />
+          )}
           {activeTab === "routes" && (
             <RoutesModule
               routes={routes}
