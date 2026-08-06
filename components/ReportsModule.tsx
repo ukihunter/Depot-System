@@ -54,6 +54,62 @@ export default function ReportsModule({
     window.print();
   };
 
+  const handleExportReport = () => {
+    let csvHeader = "";
+    let csvRows: string[] = [];
+
+    if (reportType === "performance") {
+      csvHeader = "Route Name,Start Location,Arrival Station,Distance (KM),Duration (MIN),Status";
+      csvRows = routes.map(
+        (r) => `"${r.route_name}","${r.start_location}","${r.end_location}",${r.distance},${r.estimated_duration},"${r.status}"`
+      );
+    } else if (reportType === "fuel") {
+      csvHeader = "Refuel Date,Vehicle Reg ID,Liters Loaded,Fuel Price Paid (LKR),Run Distance (KM),Fuel Efficiency (KM/L)";
+      csvRows = fuelLogs.map((fl) => {
+        const v = vehicles.find((bus) => bus.vehicle_id === fl.vehicle_id);
+        const eff = fl.liters > 0 ? (fl.distance_covered / fl.liters).toFixed(2) : "0.00";
+        return `"${fl.date}","${v?.registration_number || fl.vehicle_id}",${fl.liters},${fl.cost},${fl.distance_covered},${eff}`;
+      });
+    } else if (reportType === "maintenance") {
+      csvHeader = "Vehicle Reg ID,Type,Refit Date,Next Check Date,Cost (LKR),Status";
+      csvRows = maintenance.map((m) => {
+        const v = vehicles.find((bus) => bus.vehicle_id === m.vehicle_id);
+        return `"${v?.registration_number || m.vehicle_id}","${m.maintenance_type}","${m.service_date}","${m.next_service_date}",${m.cost},"${m.status}"`;
+      });
+    } else if (reportType === "utilization") {
+      csvHeader = "Driver Name,NIC Number,License Reference,Mobile Contact,Weekly Shift Hours,Duty Status";
+      csvRows = drivers.map(
+        (d) => `"${d.name}","${d.nic}","${d.license_number}","${d.phone}",${d.working_hours},"${d.status}"`
+      );
+    }
+
+    const csvContent = [csvHeader, ...csvRows].join("\n");
+
+    // 1. Save to Local Storage
+    const storageKey = `srmss_report_export_${reportType}_${timeframe}`;
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify({
+        exportedAt: new Date().toISOString(),
+        reportType,
+        timeframe,
+        data: csvContent,
+      }));
+    } catch (err) {
+      console.error("Failed to save report export to LocalStorage:", err);
+    }
+
+    // 2. Download File to local disk
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `SRMSS_${reportType}_${timeframe}_report.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div id="reports-module-root" className="space-y-6">
       {/* Filtering selectors */}
@@ -92,14 +148,25 @@ export default function ReportsModule({
           </div>
         </div>
 
-        <button
-          id="btn-print-pdf-report"
-          onClick={triggerPDFPrint}
-          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 duration-205 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold shadow-sm cursor-pointer"
-        >
-          <Printer className="w-4 h-4" />
-          Generate Official Print PDF
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            id="btn-export-csv-report"
+            onClick={handleExportReport}
+            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 duration-205 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold shadow-sm cursor-pointer"
+          >
+            <Download className="w-4 h-4" />
+            Export CSV to Storage
+          </button>
+
+          <button
+            id="btn-print-pdf-report"
+            onClick={triggerPDFPrint}
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 duration-205 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold shadow-sm cursor-pointer"
+          >
+            <Printer className="w-4 h-4" />
+            Generate Official Print PDF
+          </button>
+        </div>
       </div>
 
       {/* Printable Report Layout block */}
@@ -107,37 +174,41 @@ export default function ReportsModule({
         className="bg-white border border-slate-200 rounded-3xl p-8 max-w-4xl mx-auto shadow-md print:shadow-none print:border-none relative overflow-hidden"
         id="official-audit-document"
       >
-        {/* Academic watermark stamp background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-12 opacity-5 pointer-events-none text-slate-900 border-8 border-slate-950 p-6 rounded-full inline-block text-center select-none font-bold text-base max-w-sm">
-          SMART ROUTE SYSTEM (SRMSS) • DEPOT ACCOUNTING • ACADEMIC RECORD
-        </div>
-
         {/* Report Header block */}
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b-2 pb-6 border-slate-250">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b-2 pb-6 border-slate-300">
           <div className="space-y-1">
-            <span className="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold font-mono tracking-widest block w-max uppercase">
-              Official Audit Ledger
+            <span className="text-[10px] bg-slate-900 text-white px-2 py-0.5 rounded font-bold font-mono tracking-wider block w-max uppercase">
+              SRMSS Official Depot Audit Report
             </span>
-            <h2 className="text-xl font-extrabold text-slate-950 tracking-tight leading-none">
-              SMART ROUTE MANAGEMENT SYSTEM
+            <h2 className="text-xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+              {reportType === "performance" && "Route Operational Performance Report"}
+              {reportType === "fuel" && "Fleet Fuel Consumption & Audit Log"}
+              {reportType === "maintenance" && "Fleet Maintenance Expense Report"}
+              {reportType === "utilization" && "Driver Duty Utilization Register"}
             </h2>
             <p className="text-xs text-blue-700 font-mono font-bold uppercase tracking-wider">
-              Public Transport Depot Terminal Hubs
+              Depot Transit System Management Hub
             </p>
           </div>
-          <div className="text-right text-[10px] font-mono text-slate-500 space-y-0.5">
+          <div className="text-right text-[10px] font-mono text-slate-600 space-y-0.5">
             <div>
-              DOCUMENT REFERENCE:{" "}
-              <span className="font-bold text-slate-800">SRMSS-AUDIT-2026</span>
+              REF ID:{" "}
+              <span className="font-bold text-slate-900">
+                SRMSS-RPT-{reportType.toUpperCase()}-{new Date().getFullYear()}
+              </span>
             </div>
             <div>
-              COMPILED DATE:{" "}
-              <span className="font-bold text-slate-800">June 14, 2026</span>
+              TIMEFRAME:{" "}
+              <span className="font-bold text-slate-900 uppercase">{timeframe}</span>
             </div>
             <div>
-              STATUS:{" "}
-              <span className="text-emerald-600 font-bold">
-                APPROVED BY BOARD
+              GENERATED DATE:{" "}
+              <span className="font-bold text-slate-900">
+                {new Date().toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
               </span>
             </div>
           </div>

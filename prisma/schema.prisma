@@ -148,3 +148,76 @@ enum ScheduleStatus {
   COMPLETED
   CANCELLED
 }
+
+model Trip {
+  id         Int         @id @default(autoincrement())
+  tripId     String      @unique @default(cuid())
+  scheduleId String      @map("schedule_id")
+  startTime  String      @map("start_time")
+  endTime    String      @default("") @map("end_time")
+  status     TripStatus  @default(SCHEDULED)
+  remarks    String?     @map("remarks")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([scheduleId])
+  @@map("trips")
+}
+
+enum TripStatus {
+  SCHEDULED
+  ACTIVE
+  DELAYED
+  COMPLETED
+  CANCELLED
+}
+
+model FuelLog {
+  id              Int      @id @default(autoincrement())
+  fuelId          String   @unique @default(cuid())
+  vehicleId       String   @map("vehicle_id")
+  date            DateTime @map("date")
+  liters          Float
+  cost            Float
+  distanceCovered Float    @map("distance_covered")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([vehicleId])
+  @@index([date])
+  @@map("fuel_logs")
+}
+
+model MaintenanceRecord {
+  id               Int               @id @default(autoincrement())
+  maintenanceId    String            @unique @default(cuid())
+  vehicleId        String            @map("vehicle_id")
+  maintenanceType  MaintenanceType   @map("maintenance_type")
+  serviceDate      DateTime          @map("service_date")
+  nextServiceDate  DateTime          @map("next_service_date")
+  cost             Float
+  remarks          String?
+  status           MaintenanceStatus @default(SCHEDULED)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([vehicleId])
+  @@index([serviceDate])
+  @@map("maintenance_records")
+}
+
+enum MaintenanceType {
+  SCHEDULED
+  CORRECTIVE
+  EMERGENCY
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
