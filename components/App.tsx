@@ -55,7 +55,8 @@ import ReportsModule from "./ReportsModule";
 import RoutesModule from "./RoutesModule";
 import SchedulesModule from "./SchedulesModule";
 import VehiclesModule from "./VehiclesModule";
-
+import UserManagement from "./UserManagement";
+import { User } from "./type";
 import type {
   Driver,
   FuelLog,
@@ -362,7 +363,7 @@ function App() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [vehiclesLoading, setVehiclesLoading] = useState(false);
   const [vehiclesError, setVehiclesError] = useState("");
-
+  const [users, setUsers] = useState<User[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [schedulesLoading, setSchedulesLoading] = useState(false);
   const [schedulesError, setSchedulesError] = useState("");
@@ -458,6 +459,18 @@ function App() {
       }
     }
 
+    async function loadUsers() {
+      try {
+        const response = await fetch("/api/users", { cache: "no-store" });
+        const data = await response.json();
+        if (!cancelled && response.ok && data.success) {
+          setUsers(data.users ?? []);
+        }
+      } catch (error) {
+        console.error("Failed to load users:", error);
+      }
+    }
+
     async function loadDepots() {
       setDepotsLoading(true);
       setDepotsError("");
@@ -529,6 +542,7 @@ function App() {
     loadVehicles();
     loadRoutes();
     loadSchedules();
+    loadUsers();
     loadDepots();
     loadTrips();
     loadFuelLogs();
@@ -583,7 +597,76 @@ function App() {
       setAuthLoading(false);
     }
   };
+  const handleAddUser = async (user: Partial<User>) => {
+    try {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
 
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+
+      setUsers((prev) => [...prev, data.user]);
+
+      return data.user;
+    } catch (error) {
+      console.error("ADD USER ERROR:", error);
+      throw error;
+    }
+  };
+
+  const handleUpdateUser = async (userId: number, updates: Partial<User>) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updates),
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+
+      setUsers((prev) =>
+        prev.map((user) => (user.id === userId ? data.user : user)),
+      );
+
+      return data.user;
+    } catch (error) {
+      console.error("UPDATE USER ERROR:", error);
+      throw error;
+    }
+  };
+
+  const handleDeleteUser = async (userId: number) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+
+      setUsers((prev) => prev.filter((user) => user.id !== userId));
+    } catch (error) {
+      console.error("DELETE USER ERROR:", error);
+      throw error;
+    }
+  };
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoginError("");
@@ -1492,6 +1575,16 @@ function App() {
               onAddDepot={handleAddDepot}
               onUpdateDepot={handleUpdateDepot}
               onDeleteDepot={handleDeleteDepot}
+              userRole={currentUser.role}
+            />
+          )}
+          {activeTab === "users" && (
+            <UserManagement
+              users={users}
+              depots={depots}
+              onAddUser={handleAddUser}
+              onUpdateUser={handleUpdateUser}
+              onDeleteUser={handleDeleteUser}
               userRole={currentUser.role}
             />
           )}
