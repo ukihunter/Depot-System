@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   AlertTriangle,
+  Building,
   Bus,
   Calendar,
   Cog,
@@ -79,7 +80,7 @@ const permissions: Record<AppRole, readonly string[]> = {
   ],
   DEPOT_ADMIN: [
     "dashboard",
-    "users",
+
     "routes",
     "drivers",
     "vehicles",
@@ -100,6 +101,8 @@ type AppTab =
   | "schedules"
   | "operations"
   | "reports"
+  | "depots"
+  | "users"
   | "settings";
 
 type AuthUser = {
@@ -1310,6 +1313,35 @@ function App() {
                 className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 ${activeTab === "routes" ? "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300" : "text-slate-600"}`}
               >
                 <Calendar className="h-4 w-4" /> Routes
+              </button>
+            )}
+            {canAccessTab(currentUser.role, "depots") && (
+              <button
+                type="button"
+                onClick={() => setActiveTab("depots")}
+                className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 ${
+                  activeTab === "depots"
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-slate-600"
+                }`}
+              >
+                <Building className="h-4 w-4" />
+                Depot Management
+              </button>
+            )}
+
+            {canAccessTab(currentUser.role, "users") && (
+              <button
+                type="button"
+                onClick={() => setActiveTab("users")}
+                className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 ${
+                  activeTab === "users"
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-slate-600"
+                }`}
+              >
+                <Users className="h-4 w-4" />
+                User Management
               </button>
             )}
             {canAccessTab(currentUser.role, "drivers") && (
