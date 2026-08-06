@@ -365,10 +365,58 @@ function App() {
       }
     }
 
+    async function loadTrips() {
+      try {
+        const response = await fetch("/api/operations/trips", {
+          method: "GET",
+          cache: "no-store",
+        });
+        const data = await response.json();
+        if (!cancelled && response.ok && data.success && Array.isArray(data.trips)) {
+          setTrips(data.trips);
+        }
+      } catch (error) {
+        console.error("Failed to load trips:", error);
+      }
+    }
+
+    async function loadFuelLogs() {
+      try {
+        const response = await fetch("/api/operations/fuel-logs", {
+          method: "GET",
+          cache: "no-store",
+        });
+        const data = await response.json();
+        if (!cancelled && response.ok && data.success) {
+          setFuelLogs(data.fuelLogs ?? []);
+        }
+      } catch (error) {
+        console.error("Failed to load fuel logs:", error);
+      }
+    }
+
+    async function loadMaintenance() {
+      try {
+        const response = await fetch("/api/operations/maintenance", {
+          method: "GET",
+          cache: "no-store",
+        });
+        const data = await response.json();
+        if (!cancelled && response.ok && data.success) {
+          setMaintenance(data.maintenance ?? []);
+        }
+      } catch (error) {
+        console.error("Failed to load maintenance records:", error);
+      }
+    }
+
     loadDrivers();
     loadVehicles();
     loadRoutes();
     loadSchedules();
+    loadTrips();
+    loadFuelLogs();
+    loadMaintenance();
 
     return () => {
       cancelled = true;
@@ -699,17 +747,25 @@ function App() {
   };
 
   const handleStartTrip = async (tripId: string) => {
-    setTrips((prev) =>
-      prev.map((trip) =>
-        trip.trip_id === tripId
-          ? {
-              ...trip,
-              status: "Active",
-              start_time: trip.start_time || new Date().toISOString(),
-            }
-          : trip,
-      ),
-    );
+    try {
+      const existingTrip = trips.find((trip) => trip.trip_id === tripId);
+      const startTime = existingTrip?.start_time || new Date().toISOString();
+      const response = await fetch(`/api/operations/trips/${tripId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "ACTIVE", start_time: startTime }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.message ?? "Failed to start trip.");
+      }
+
+      setTrips((prev) =>
+        prev.map((trip) => (trip.trip_id === tripId ? data.trip : trip)),
+      );
+    } catch (error) {
+      console.error("Failed to start trip:", error);
+    }
   };
 
   const handleEndTrip = async (
@@ -717,65 +773,111 @@ function App() {
     status: "Completed" | "Cancelled",
     remarks?: string,
   ) => {
-    setTrips((prev) =>
-      prev.map((trip) =>
-        trip.trip_id === tripId
-          ? { ...trip, status, end_time: new Date().toISOString(), remarks }
-          : trip,
-      ),
-    );
+    try {
+      const response = await fetch(`/api/operations/trips/${tripId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: status.toUpperCase(),
+          end_time: new Date().toISOString(),
+          remarks,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.message ?? "Failed to complete trip.");
+      }
+
+      setTrips((prev) =>
+        prev.map((trip) => (trip.trip_id === tripId ? data.trip : trip)),
+      );
+    } catch (error) {
+      console.error("Failed to end trip:", error);
+    }
   };
 
   const handleUpdateTripStatus = async (
     tripId: string,
     status: Trip["status"],
   ) => {
-    setTrips((prev) =>
-      prev.map((trip) =>
-        trip.trip_id === tripId ? { ...trip, status } : trip,
-      ),
-    );
+    try {
+      const response = await fetch(`/api/operations/trips/${tripId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: status.toUpperCase() }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.message ?? "Failed to update trip status.");
+      }
+
+      setTrips((prev) =>
+        prev.map((trip) => (trip.trip_id === tripId ? data.trip : trip)),
+      );
+    } catch (error) {
+      console.error("Failed to update trip status:", error);
+    }
   };
 
   const handleAddFuelLog = async (log: Partial<FuelLog>) => {
-    setFuelLogs((prev) => [
-      ...prev,
-      {
-        fuel_id: log.fuel_id ?? createId("fuel"),
-        vehicle_id: log.vehicle_id ?? vehicles[0]?.vehicle_id ?? "",
-        date: log.date ?? "2026-08-05",
-        liters: log.liters ?? 0,
-        cost: log.cost ?? 0,
-        distance_covered: log.distance_covered ?? 0,
-      },
-    ]);
+    try {
+      const response = await fetch("/api/operations/fuel-logs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(log),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.message ?? "Failed to add fuel log.");
+      }
+
+      setFuelLogs((prev) => [data.fuelLog, ...prev]);
+    } catch (error) {
+      console.error("Failed to add fuel log:", error);
+    }
   };
 
   const handleAddMaintenance = async (record: Partial<MaintenanceRecord>) => {
-    setMaintenance((prev) => [
-      ...prev,
-      {
-        maintenance_id: record.maintenance_id ?? createId("maint"),
-        vehicle_id: record.vehicle_id ?? vehicles[0]?.vehicle_id ?? "",
-        maintenance_type: record.maintenance_type ?? "Scheduled",
-        service_date: record.service_date ?? "2026-08-05",
-        next_service_date: record.next_service_date ?? "2026-11-05",
-        cost: record.cost ?? 0,
-        remarks: record.remarks ?? "",
-        status: record.status ?? "Scheduled",
-      },
-    ]);
+    try {
+      const response = await fetch("/api/operations/maintenance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(record),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.message ?? "Failed to add maintenance record.");
+      }
+
+      setMaintenance((prev) => [data.maintenance, ...prev]);
+    } catch (error) {
+      console.error("Failed to add maintenance record:", error);
+    }
   };
 
   const handleUpdateMaintenanceStatus = async (
     recordId: string,
     status: MaintenanceRecord["status"],
   ) => {
-    setMaintenance((prev) =>
-      prev.map((record) =>
-        record.maintenance_id === recordId ? { ...record, status } : record,
-      ),
-    );
+    try {
+      const response = await fetch(`/api/operations/maintenance/${recordId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.message ?? "Failed to update maintenance status.");
+      }
+
+      setMaintenance((prev) =>
+        prev.map((record) =>
+          record.maintenance_id === recordId ? { ...record, status } : record,
+        ),
+      );
+    } catch (error) {
+      console.error("Failed to update maintenance status:", error);
+    }
   };
 
   const handleSaveSettings = async (

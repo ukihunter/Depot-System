@@ -54,6 +54,62 @@ export default function ReportsModule({
     window.print();
   };
 
+  const handleExportReport = () => {
+    let csvHeader = "";
+    let csvRows: string[] = [];
+
+    if (reportType === "performance") {
+      csvHeader = "Route Name,Start Location,Arrival Station,Distance (KM),Duration (MIN),Status";
+      csvRows = routes.map(
+        (r) => `"${r.route_name}","${r.start_location}","${r.end_location}",${r.distance},${r.estimated_duration},"${r.status}"`
+      );
+    } else if (reportType === "fuel") {
+      csvHeader = "Refuel Date,Vehicle Reg ID,Liters Loaded,Fuel Price Paid (LKR),Run Distance (KM),Fuel Efficiency (KM/L)";
+      csvRows = fuelLogs.map((fl) => {
+        const v = vehicles.find((bus) => bus.vehicle_id === fl.vehicle_id);
+        const eff = fl.liters > 0 ? (fl.distance_covered / fl.liters).toFixed(2) : "0.00";
+        return `"${fl.date}","${v?.registration_number || fl.vehicle_id}",${fl.liters},${fl.cost},${fl.distance_covered},${eff}`;
+      });
+    } else if (reportType === "maintenance") {
+      csvHeader = "Vehicle Reg ID,Type,Refit Date,Next Check Date,Cost (LKR),Status";
+      csvRows = maintenance.map((m) => {
+        const v = vehicles.find((bus) => bus.vehicle_id === m.vehicle_id);
+        return `"${v?.registration_number || m.vehicle_id}","${m.maintenance_type}","${m.service_date}","${m.next_service_date}",${m.cost},"${m.status}"`;
+      });
+    } else if (reportType === "utilization") {
+      csvHeader = "Driver Name,NIC Number,License Reference,Mobile Contact,Weekly Shift Hours,Duty Status";
+      csvRows = drivers.map(
+        (d) => `"${d.name}","${d.nic}","${d.license_number}","${d.phone}",${d.working_hours},"${d.status}"`
+      );
+    }
+
+    const csvContent = [csvHeader, ...csvRows].join("\n");
+
+    // 1. Save to Local Storage
+    const storageKey = `srmss_report_export_${reportType}_${timeframe}`;
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify({
+        exportedAt: new Date().toISOString(),
+        reportType,
+        timeframe,
+        data: csvContent,
+      }));
+    } catch (err) {
+      console.error("Failed to save report export to LocalStorage:", err);
+    }
+
+    // 2. Download File to local disk
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `SRMSS_${reportType}_${timeframe}_report.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div id="reports-module-root" className="space-y-6">
       {/* Filtering selectors */}
@@ -92,14 +148,25 @@ export default function ReportsModule({
           </div>
         </div>
 
-        <button
-          id="btn-print-pdf-report"
-          onClick={triggerPDFPrint}
-          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 duration-205 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold shadow-sm cursor-pointer"
-        >
-          <Printer className="w-4 h-4" />
-          Generate Official Print PDF
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            id="btn-export-csv-report"
+            onClick={handleExportReport}
+            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 duration-205 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold shadow-sm cursor-pointer"
+          >
+            <Download className="w-4 h-4" />
+            Export CSV to Storage
+          </button>
+
+          <button
+            id="btn-print-pdf-report"
+            onClick={triggerPDFPrint}
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 duration-205 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold shadow-sm cursor-pointer"
+          >
+            <Printer className="w-4 h-4" />
+            Generate Official Print PDF
+          </button>
+        </div>
       </div>
 
       {/* Printable Report Layout block */}
