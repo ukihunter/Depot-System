@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
 import { randomUUID } from "node:crypto";
 
 function serializeTrip(trip: {
@@ -29,8 +30,16 @@ function serializeTrip(trip: {
   };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const depotIdParam = request.nextUrl.searchParams.get("depotId");
+    const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
+
+    const depotFilter =
+      depotId === undefined
+        ? Prisma.empty
+        : Prisma.sql`WHERE s.depotId = ${depotId}`;
+
     const trips = await prisma.$queryRaw<
       Array<{
         tripId: string;
@@ -40,11 +49,13 @@ export async function GET() {
         status: "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
         remarks: string | null;
       }>
-    >`
-      SELECT tripId, schedule_id AS scheduleId, start_time AS startTime, end_time AS endTime, status, remarks
-      FROM trips
-      ORDER BY created_at DESC
-    `;
+    >(Prisma.sql`
+      SELECT t.tripId, t.schedule_id AS scheduleId, t.start_time AS startTime, t.end_time AS endTime, t.status, t.remarks
+      FROM trips t
+      INNER JOIN schedules s ON s.scheduleId = t.schedule_id
+      ${depotFilter}
+      ORDER BY t.created_at DESC
+    `);
 
     return NextResponse.json({
       success: true,

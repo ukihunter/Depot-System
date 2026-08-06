@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 export function serializeVehicle(vehicle: any) {
   return {
     vehicle_id: vehicle.vehicleId,
+    depot_id: vehicle.depotId,
     registration_number: vehicle.registrationNumber,
     vehicle_type:
       vehicle.vehicleType === "SINGLE_DECKER"
@@ -34,9 +35,18 @@ export function serializeVehicle(vehicle: any) {
   };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const depotIdParam = request.nextUrl.searchParams.get("depotId");
+    const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
+
     const vehicles = await prisma.vehicle.findMany({
+      where:
+        depotId === undefined
+          ? undefined
+          : {
+              depotId,
+            },
       orderBy: {
         createdAt: "desc",
       },
@@ -69,15 +79,19 @@ export async function POST(request: NextRequest) {
       seating_capacity,
       mileage,
       fuel_type,
+      depot_id,
       status,
     } = body;
+
+    const numericDepotId = Number(depot_id);
 
     if (
       !registration_number ||
       !vehicle_type ||
       seating_capacity === undefined ||
       mileage === undefined ||
-      !fuel_type
+      !fuel_type ||
+      !Number.isFinite(numericDepotId)
     ) {
       return NextResponse.json(
         {
@@ -86,6 +100,22 @@ export async function POST(request: NextRequest) {
             "Registration number, vehicle type, seating capacity, mileage, and fuel type are required.",
         },
         { status: 400 },
+      );
+    }
+
+    const depot = await prisma.depot.findUnique({
+      where: {
+        id: numericDepotId,
+      },
+    });
+
+    if (!depot) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Depot not found.",
+        },
+        { status: 404 },
       );
     }
 
@@ -128,6 +158,7 @@ export async function POST(request: NextRequest) {
               : fuel_type === "CNG"
                 ? "CNG"
                 : "HYBRID",
+        depotId: numericDepotId,
         status:
           status === "Maintenance"
             ? "MAINTENANCE"

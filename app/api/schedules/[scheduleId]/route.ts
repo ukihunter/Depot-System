@@ -66,6 +66,12 @@ export async function PUT(request: NextRequest, context: ScheduleContext) {
       if (!routeExists) {
         return NextResponse.json({ error: "Route not found" }, { status: 404 });
       }
+      if (routeExists.depotId !== existingSchedule.depotId) {
+        return NextResponse.json(
+          { error: "Route belongs to a different depot." },
+          { status: 400 },
+        );
+      }
       data.routeId = String(body.route_id);
     }
 
@@ -76,6 +82,12 @@ export async function PUT(request: NextRequest, context: ScheduleContext) {
       if (!vehicleExists) {
         return NextResponse.json({ error: "Vehicle not found" }, { status: 404 });
       }
+      if (vehicleExists.depotId !== existingSchedule.depotId) {
+        return NextResponse.json(
+          { error: "Vehicle belongs to a different depot." },
+          { status: 400 },
+        );
+      }
       data.vehicleId = String(body.vehicle_id);
     }
 
@@ -85,6 +97,12 @@ export async function PUT(request: NextRequest, context: ScheduleContext) {
       });
       if (!driverExists) {
         return NextResponse.json({ error: "Driver not found" }, { status: 404 });
+      }
+      if (driverExists.depotId !== existingSchedule.depotId) {
+        return NextResponse.json(
+          { error: "Driver belongs to a different depot." },
+          { status: 400 },
+        );
       }
       data.driverId = String(body.driver_id);
     }

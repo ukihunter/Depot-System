@@ -3,10 +3,16 @@ import { prisma } from "@/lib/prisma";
 import argon2 from "argon2";
 import { UserRole, UserStatus } from "@/generated/prisma/browser";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const depotIdParam = request.nextUrl.searchParams.get("depotId");
+    const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
+
     const users = await prisma.user.findMany({
-      where: { deletedAt: null },
+      where:
+        depotId === undefined
+          ? { deletedAt: null }
+          : { deletedAt: null, depotId },
       include: { depot: true },
       orderBy: { createdAt: "desc" },
     });

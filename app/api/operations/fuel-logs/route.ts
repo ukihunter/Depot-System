@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
 import { randomUUID } from "node:crypto";
 
 function serializeFuelLog(log: {
   fuelId: string;
+  depotId: number;
   vehicleId: string;
   date: Date;
   liters: number;
@@ -12,6 +14,7 @@ function serializeFuelLog(log: {
 }) {
   return {
     fuel_id: log.fuelId,
+    depot_id: log.depotId,
     vehicle_id: log.vehicleId,
     date: log.date.toISOString().split("T")[0],
     liters: Number(log.liters),
@@ -20,22 +23,32 @@ function serializeFuelLog(log: {
   };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const depotIdParam = request.nextUrl.searchParams.get("depotId");
+    const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
+
+    const depotFilter =
+      depotId === undefined
+        ? Prisma.empty
+        : Prisma.sql`WHERE depotId = ${depotId}`;
+
     const rows = await prisma.$queryRaw<
       Array<{
         fuelId: string;
+        depotId: number;
         vehicleId: string;
         date: Date;
         liters: number;
         cost: number;
         distanceCovered: number;
       }>
-    >`
-      SELECT fuelId, vehicle_id AS vehicleId, date, liters, cost, distance_covered AS distanceCovered
+    >(Prisma.sql`
+      SELECT fuelId, depotId, vehicle_id AS vehicleId, date, liters, cost, distance_covered AS distanceCovered
       FROM fuel_logs
+      ${depotFilter}
       ORDER BY created_at DESC
-    `;
+    `);
 
     return NextResponse.json({
       success: true,
@@ -53,6 +66,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const depotId = Number(body.depotId ?? body.depot_id);
     const vehicleId = String(body.vehicle_id ?? "").trim();
     const date = String(body.date ?? "").trim();
     const liters = Number(body.liters ?? 0);
@@ -60,6 +74,7 @@ export async function POST(request: NextRequest) {
     const distanceCovered = Number(body.distance_covered ?? 0);
 
     if (
+      !Number.isFinite(depotId) ||
       !vehicleId ||
       !date ||
       !Number.isFinite(liters) ||
@@ -75,29 +90,66 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const depot = await prisma.depot.findUnique({
+      where: {
+        id: depotId,
+      },
+    });
+
+    if (!depot) {
+      return NextResponse.json(
+        { success: false, message: "Depot not found." },
+        { status: 404 },
+      );
+    }
+
+    const vehicle = await prisma.vehicle.findUnique({
+      where: {
+        vehicleId,
+      },
+    });
+
+    if (!vehicle) {
+      return NextResponse.json(
+        { success: false, message: "Vehicle not found." },
+        { status: 404 },
+      );
+    }
+
+    if (vehicle.depotId !== depotId) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Vehicle belongs to a different depot.",
+        },
+        { status: 400 },
+      );
+    }
+
     const fuelId = randomUUID().replace(/-/g, "");
 
     await prisma.$executeRaw`
-      INSERT INTO fuel_logs (fuelId, vehicle_id, date, liters, cost, distance_covered, created_at, updated_at)
-      VALUES (${fuelId}, ${vehicleId}, ${new Date(`${date}T00:00:00.000Z`)}, ${liters}, ${cost}, ${distanceCovered}, NOW(3), NOW(3))
+      INSERT INTO fuel_logs (fuelId, depotId, vehicle_id, date, liters, cost, distance_covered, created_at, updated_at)
+      VALUES (${fuelId}, ${depotId}, ${vehicleId}, ${new Date(`${date}T00:00:00.000Z`)}, ${liters}, ${cost}, ${distanceCovered}, NOW(3), NOW(3))
     `;
 
     const rows = await prisma.$queryRaw<
       Array<{
         fuelId: string;
+        depotId: number;
         vehicleId: string;
         date: Date;
         liters: number;
         cost: number;
         distanceCovered: number;
       }>
-    >`
-      SELECT fuelId, vehicle_id AS vehicleId, date, liters, cost, distance_covered AS distanceCovered
+    >(Prisma.sql`
+      SELECT fuelId, depotId, vehicle_id AS vehicleId, date, liters, cost, distance_covered AS distanceCovered
       FROM fuel_logs
       WHERE fuelId = ${fuelId}
       ORDER BY created_at DESC
       LIMIT 1
-    `;
+    `);
 
     const fuelLog = rows[0];
     if (!fuelLog) {

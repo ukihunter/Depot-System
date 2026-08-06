@@ -82,6 +82,7 @@ export async function POST(request: Request) {
           email: user.email,
           username: user.username,
           role: user.role,
+          depot_id: user.depotId,
         },
       },
       { status: 201 },

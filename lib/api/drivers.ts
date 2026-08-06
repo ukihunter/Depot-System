@@ -12,8 +12,10 @@ type DriversResponse = {
   message?: string;
 };
 
-export async function getDrivers(): Promise<Driver[]> {
-  const response = await fetch("/api/drivers", {
+export async function getDrivers(depotId?: number | null): Promise<Driver[]> {
+  const query = depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
+
+  const response = await fetch(`/api/drivers${query}`, {
     method: "GET",
     cache: "no-store",
   });
@@ -27,13 +29,19 @@ export async function getDrivers(): Promise<Driver[]> {
   return data.drivers;
 }
 
-export async function createDriver(payload: Partial<Driver>): Promise<Driver> {
+export async function createDriver(
+  payload: Partial<Driver>,
+  depotId?: number | null,
+): Promise<Driver> {
   const response = await fetch("/api/drivers", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...payload,
+      depot_id: depotId,
+    }),
   });
 
   const data: DriverResponse = await response.json();

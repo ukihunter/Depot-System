@@ -10,8 +10,10 @@ type RoutesResponse = {
   error?: string;
 };
 
-export async function getRoutes(): Promise<Route[]> {
-  const response = await fetch("/api/routes", {
+export async function getRoutes(depotId?: number | null): Promise<Route[]> {
+  const query = depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
+
+  const response = await fetch(`/api/routes${query}`, {
     method: "GET",
     cache: "no-store",
   });
@@ -25,7 +27,10 @@ export async function getRoutes(): Promise<Route[]> {
   return data.routes ?? [];
 }
 
-export async function createRoute(payload: Partial<Route>): Promise<Route> {
+export async function createRoute(
+  payload: Partial<Route>,
+  depotId?: number | null,
+): Promise<Route> {
   const response = await fetch("/api/routes", {
     method: "POST",
     headers: {
@@ -38,6 +43,7 @@ export async function createRoute(payload: Partial<Route>): Promise<Route> {
       stops: payload.stops,
       distance: payload.distance,
       estimatedDuration: payload.estimated_duration,
+      depotId,
       status: payload.status,
     }),
   });

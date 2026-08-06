@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 function serializeDriver(driver: Prisma.DriverGetPayload<{}>) {
   return {
     driver_id: driver.driverId,
+    depot_id: driver.depotId,
     name: driver.fullName,
     nic: driver.nic,
     phone: driver.phone,

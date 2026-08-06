@@ -12,8 +12,10 @@ type VehiclesResponse = {
   message?: string;
 };
 
-export async function getVehicles(): Promise<Vehicle[]> {
-  const response = await fetch("/api/vehicles", {
+export async function getVehicles(depotId?: number | null): Promise<Vehicle[]> {
+  const query = depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
+
+  const response = await fetch(`/api/vehicles${query}`, {
     method: "GET",
     cache: "no-store",
   });
@@ -29,13 +31,17 @@ export async function getVehicles(): Promise<Vehicle[]> {
 
 export async function createVehicle(
   payload: Partial<Vehicle>,
+  depotId?: number | null,
 ): Promise<Vehicle> {
   const response = await fetch("/api/vehicles", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...payload,
+      depot_id: depotId,
+    }),
   });
 
   const data: VehicleResponse = await response.json();

@@ -284,7 +284,8 @@ function normalizeUser(user: {
   email: string;
   username: string;
   role: string;
-  depot_id: number | null;
+  depot_id?: number | null;
+  depotId?: number | null;
 }): AuthUser {
   return {
     id: user.id,
@@ -292,7 +293,7 @@ function normalizeUser(user: {
     email: user.email,
     username: user.username,
     role: normalizeRole(user.role),
-    depot_id: user.depot_id,
+    depot_id: user.depot_id ?? user.depotId ?? null,
   };
 }
 function App() {
@@ -384,7 +385,7 @@ function App() {
       setDriversError("");
 
       try {
-        const data = await getDrivers();
+        const data = await getDrivers(currentUser.depot_id);
 
         if (!cancelled) {
           setDrivers(data);
@@ -407,7 +408,7 @@ function App() {
       setVehiclesError("");
 
       try {
-        const data = await getVehicles();
+        const data = await getVehicles(currentUser.depot_id);
 
         if (!cancelled) {
           setVehicles(data);
@@ -429,7 +430,7 @@ function App() {
       setRoutesLoading(true);
       setRoutesError("");
       try {
-        const data = await getRoutes();
+        const data = await getRoutes(currentUser.depot_id);
         if (!cancelled) setRoutes(data);
       } catch (error) {
         if (!cancelled)
@@ -445,7 +446,7 @@ function App() {
       setSchedulesLoading(true);
       setSchedulesError("");
       try {
-        const data = await getSchedules();
+        const data = await getSchedules(currentUser.depot_id);
         if (!cancelled) setSchedules(data);
       } catch (error) {
         if (!cancelled)
@@ -461,7 +462,14 @@ function App() {
 
     async function loadUsers() {
       try {
-        const response = await fetch("/api/users", { cache: "no-store" });
+        const query =
+          currentUser.depot_id === null
+            ? ""
+            : `?depotId=${currentUser.depot_id}`;
+
+        const response = await fetch(`/api/users${query}`, {
+          cache: "no-store",
+        });
         const data = await response.json();
         if (!cancelled && response.ok && data.success) {
           setUsers(data.users ?? []);
@@ -490,7 +498,12 @@ function App() {
 
     async function loadTrips() {
       try {
-        const response = await fetch("/api/operations/trips", {
+        const query =
+          currentUser.depot_id === null
+            ? ""
+            : `?depotId=${currentUser.depot_id}`;
+
+        const response = await fetch(`/api/operations/trips${query}`, {
           method: "GET",
           cache: "no-store",
         });
@@ -510,7 +523,12 @@ function App() {
 
     async function loadFuelLogs() {
       try {
-        const response = await fetch("/api/operations/fuel-logs", {
+        const query =
+          currentUser.depot_id === null
+            ? ""
+            : `?depotId=${currentUser.depot_id}`;
+
+        const response = await fetch(`/api/operations/fuel-logs${query}`, {
           method: "GET",
           cache: "no-store",
         });
@@ -525,7 +543,12 @@ function App() {
 
     async function loadMaintenance() {
       try {
-        const response = await fetch("/api/operations/maintenance", {
+        const query =
+          currentUser.depot_id === null
+            ? ""
+            : `?depotId=${currentUser.depot_id}`;
+
+        const response = await fetch(`/api/operations/maintenance${query}`, {
           method: "GET",
           cache: "no-store",
         });
@@ -741,7 +764,7 @@ function App() {
 
   const handleCreateRoute = async (route: Partial<Route>) => {
     try {
-      const created = await createRoute(route);
+      const created = await createRoute(route, currentUser?.depot_id);
       setRoutes((prev) => [created, ...prev]);
     } catch (error) {
       console.error("Failed to create route:", error);
@@ -829,7 +852,7 @@ function App() {
 
   const handleAddDriver = async (driver: Partial<Driver>) => {
     try {
-      const created = await createDriver(driver);
+      const created = await createDriver(driver, currentUser?.depot_id);
 
       setDrivers((prev) => [created, ...prev]);
     } catch (error) {
@@ -890,7 +913,7 @@ function App() {
 
   const handleAddVehicle = async (vehicle: Partial<Vehicle>) => {
     try {
-      const created = await createVehicle(vehicle);
+      const created = await createVehicle(vehicle, currentUser?.depot_id);
 
       setVehicles((prev) => [created, ...prev]);
     } catch (error) {
@@ -955,7 +978,7 @@ function App() {
 
   const handleCreateSchedule = async (schedule: Partial<Schedule>) => {
     try {
-      const created = await createSchedule(schedule);
+      const created = await createSchedule(schedule, currentUser?.depot_id);
       setSchedules((prev) => [created, ...prev]);
     } catch (error) {
       console.error("Failed to create schedule:", error);
@@ -1082,7 +1105,10 @@ function App() {
       const response = await fetch("/api/operations/fuel-logs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(log),
+        body: JSON.stringify({
+          ...log,
+          depotId: currentUser?.depot_id ?? undefined,
+        }),
       });
       const data = await response.json();
       if (!response.ok || !data.success) {
@@ -1100,7 +1126,10 @@ function App() {
       const response = await fetch("/api/operations/maintenance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(record),
+        body: JSON.stringify({
+          ...record,
+          depotId: currentUser?.depot_id ?? undefined,
+        }),
       });
       const data = await response.json();
       if (!response.ok || !data.success) {

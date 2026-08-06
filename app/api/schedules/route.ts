@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 export function serializeSchedule(schedule: any) {
   return {
     schedule_id: schedule.scheduleId,
+    depot_id: schedule.depotId,
     route_id: schedule.routeId,
     vehicle_id: schedule.vehicleId,
     driver_id: schedule.driverId,
@@ -23,9 +24,18 @@ export function serializeSchedule(schedule: any) {
   };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const depotIdParam = request.nextUrl.searchParams.get("depotId");
+    const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
+
     const schedules = await prisma.schedule.findMany({
+      where:
+        depotId === undefined
+          ? undefined
+          : {
+              depotId,
+            },
       orderBy: {
         createdAt: "desc",
       },
@@ -57,8 +67,11 @@ export async function POST(request: NextRequest) {
       departure_time,
       arrival_time,
       schedule_date,
+      depotId,
       status,
     } = body;
+
+    const numericDepotId = Number(depotId);
 
     if (
       !route_id ||
@@ -66,12 +79,21 @@ export async function POST(request: NextRequest) {
       !driver_id ||
       !departure_time ||
       !arrival_time ||
-      !schedule_date
+      !schedule_date ||
+      !Number.isFinite(numericDepotId)
     ) {
       return NextResponse.json(
         { error: "All schedule fields are required." },
         { status: 400 },
       );
+    }
+
+    const depot = await prisma.depot.findUnique({
+      where: { id: numericDepotId },
+    });
+
+    if (!depot) {
+      return NextResponse.json({ error: "Depot not found" }, { status: 404 });
     }
 
     const routeExists = await prisma.route.findUnique({
@@ -95,8 +117,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Driver not found" }, { status: 404 });
     }
 
+    if (
+      routeExists.depotId !== numericDepotId ||
+      vehicleExists.depotId !== numericDepotId ||
+      driverExists.depotId !== numericDepotId
+    ) {
+      return NextResponse.json(
+        { error: "All schedule assignments must belong to the same depot." },
+        { status: 400 },
+      );
+    }
+
     const schedule = await prisma.schedule.create({
       data: {
+        depotId: numericDepotId,
         routeId: String(route_id),
         vehicleId: String(vehicle_id),
         driverId: String(driver_id),

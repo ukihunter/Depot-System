@@ -5,6 +5,7 @@ import { Prisma } from "@/generated/prisma/client";
 function serializeDriver(driver: Prisma.DriverGetPayload<{}>) {
   return {
     driver_id: driver.driverId,
+    depot_id: driver.depotId,
     name: driver.fullName,
     nic: driver.nic,
     phone: driver.phone,
@@ -23,9 +24,18 @@ function serializeDriver(driver: Prisma.DriverGetPayload<{}>) {
 /**
  * GET /api/drivers
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const depotIdParam = request.nextUrl.searchParams.get("depotId");
+    const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
+
     const drivers = await prisma.driver.findMany({
+      where:
+        depotId === undefined
+          ? undefined
+          : {
+              depotId,
+            },
       orderBy: {
         createdAt: "desc",
       },
@@ -68,13 +78,15 @@ export async function POST(request: NextRequest) {
       status,
     } = body;
 
+    const numericDepotId = Number(depot_id);
+
     if (
       !name ||
       !nic ||
       !phone ||
       !license_number ||
       !license_expiry ||
-      !depot_id
+      !Number.isFinite(numericDepotId)
     ) {
       return NextResponse.json(
         {
@@ -84,6 +96,24 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 400,
+        },
+      );
+    }
+
+    const depot = await prisma.depot.findUnique({
+      where: {
+        id: numericDepotId,
+      },
+    });
+
+    if (!depot) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Depot not found.",
+        },
+        {
+          status: 404,
         },
       );
     }
@@ -141,7 +171,7 @@ export async function POST(request: NextRequest) {
 
         licenseExpiry: new Date(`${license_expiry}T00:00:00.000Z`),
 
-        depotId: Number(depot_id),
+        depotId: numericDepotId,
 
         status:
           status === "Inactive"

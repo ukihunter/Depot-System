@@ -19,6 +19,7 @@ function isValidStops(value: unknown): value is string[] {
 function serializeRoute(route: any) {
   return {
     route_id: route.routeId,
+    depot_id: route.depotId,
     route_name: route.routeName,
     start_location: route.startLocation,
     end_location: route.endLocation,

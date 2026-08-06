@@ -12,8 +12,10 @@ type SchedulesResponse = {
   error?: string;
 };
 
-export async function getSchedules(): Promise<Schedule[]> {
-  const response = await fetch("/api/schedules", {
+export async function getSchedules(depotId?: number | null): Promise<Schedule[]> {
+  const query = depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
+
+  const response = await fetch(`/api/schedules${query}`, {
     method: "GET",
     cache: "no-store",
   });
@@ -27,7 +29,10 @@ export async function getSchedules(): Promise<Schedule[]> {
   return data.schedules ?? [];
 }
 
-export async function createSchedule(payload: Partial<Schedule>): Promise<Schedule> {
+export async function createSchedule(
+  payload: Partial<Schedule>,
+  depotId?: number | null,
+): Promise<Schedule> {
   const response = await fetch("/api/schedules", {
     method: "POST",
     headers: {
@@ -40,6 +45,7 @@ export async function createSchedule(payload: Partial<Schedule>): Promise<Schedu
       departure_time: payload.departure_time,
       arrival_time: payload.arrival_time,
       schedule_date: payload.schedule_date,
+      depotId,
       status: payload.status,
     }),
   });

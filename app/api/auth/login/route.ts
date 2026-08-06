@@ -60,6 +60,7 @@ export async function POST(request: NextRequest) {
         email: user.email,
         username: user.username,
         role: user.role,
+        depot_id: user.depotId,
       },
     });
   } catch (error) {

@@ -13,6 +13,7 @@ function isValidStops(value: unknown): value is string[] {
 function serializeRoute(route: any) {
   return {
     route_id: route.routeId,
+    depot_id: route.depotId,
     route_name: route.routeName,
     start_location: route.startLocation,
     end_location: route.endLocation,
@@ -26,9 +27,18 @@ function serializeRoute(route: any) {
 /**
  * GET /api/routes
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const depotIdParam = request.nextUrl.searchParams.get("depotId");
+    const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
+
     const routes = await prisma.route.findMany({
+      where:
+        depotId === undefined
+          ? undefined
+          : {
+              depotId,
+            },
       orderBy: {
         createdAt: "desc",
       },
@@ -65,8 +75,11 @@ export async function POST(request: NextRequest) {
       stops,
       distance,
       estimatedDuration,
+      depotId,
       status,
     } = body;
+
+    const numericDepotId = Number(depotId);
 
     if (typeof routeName !== "string" || !routeName.trim()) {
       return NextResponse.json(
@@ -117,8 +130,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!Number.isFinite(numericDepotId)) {
+      return NextResponse.json({ error: "Depot ID is required" }, { status: 400 });
+    }
+
+    const depot = await prisma.depot.findUnique({
+      where: { id: numericDepotId },
+    });
+
+    if (!depot) {
+      return NextResponse.json({ error: "Depot not found" }, { status: 404 });
+    }
+
     const route = await prisma.route.create({
       data: {
+        depotId: numericDepotId,
         routeName: routeName.trim(),
         startLocation: startLocation.trim(),
         endLocation: endLocation.trim(),
