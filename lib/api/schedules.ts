@@ -12,8 +12,11 @@ type SchedulesResponse = {
   error?: string;
 };
 
-export async function getSchedules(depotId?: number | null): Promise<Schedule[]> {
-  const query = depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
+export async function getSchedules(
+  depotId?: number | null,
+): Promise<Schedule[]> {
+  const query =
+    depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
 
   const response = await fetch(`/api/schedules${query}`, {
     method: "GET",

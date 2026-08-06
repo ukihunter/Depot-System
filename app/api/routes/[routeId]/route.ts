@@ -17,13 +17,21 @@ function isValidStops(value: unknown): value is string[] {
 }
 
 function serializeRoute(route: any) {
+  const stops = Array.isArray(route.stops)
+    ? route.stops
+        .map((stop: any) =>
+          typeof stop === "string" ? stop : stop?.stopName ?? stop?.name ?? "",
+        )
+        .filter((stop: string) => stop.length > 0)
+    : [];
+
   return {
     route_id: route.routeId,
     depot_id: route.depotId,
     route_name: route.routeName,
     start_location: route.startLocation,
     end_location: route.endLocation,
-    stops: Array.isArray(route.stops) ? route.stops : [],
+    stops,
     distance: Number(route.distance),
     estimated_duration: route.estimatedDuration,
     status: route.status,
@@ -40,6 +48,13 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     const route = await prisma.route.findUnique({
       where: {
         routeId,
+      },
+      include: {
+        stops: {
+          orderBy: {
+            stopOrder: "asc",
+          },
+        },
       },
     });
 
@@ -145,7 +160,13 @@ export async function PUT(request: NextRequest, context: RouteContext) {
         );
       }
 
-      data.stops = body.stops.map((stop: string) => stop.trim());
+      data.stops = {
+        deleteMany: {},
+        create: body.stops.map((stop: string, index: number) => ({
+          stopName: stop.trim(),
+          stopOrder: index + 1,
+        })),
+      };
     }
 
     if (body.distance !== undefined) {
@@ -175,7 +196,10 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     }
 
     if (body.status !== undefined) {
-      data.status = body.status === "Inactive" || body.status === "INACTIVE" ? "INACTIVE" : "ACTIVE";
+      data.status =
+        body.status === "Inactive" || body.status === "INACTIVE"
+          ? "INACTIVE"
+          : "ACTIVE";
     }
 
     const route = await prisma.route.update({
@@ -183,6 +207,13 @@ export async function PUT(request: NextRequest, context: RouteContext) {
         routeId,
       },
       data,
+      include: {
+        stops: {
+          orderBy: {
+            stopOrder: "asc",
+          },
+        },
+      },
     });
 
     return NextResponse.json({

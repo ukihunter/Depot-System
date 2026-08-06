@@ -84,10 +84,13 @@ CREATE TABLE IF NOT EXISTS `drivers` (
   KEY `drivers_depotId_idx` (`depotId`),
   KEY `drivers_status_idx` (`status`),
   CONSTRAINT `drivers_depotId_fkey` FOREIGN KEY (`depotId`) REFERENCES `depots` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table srmss.drivers: ~0 rows (approximately)
+-- Dumping data for table srmss.drivers: ~1 rows (approximately)
 DELETE FROM `drivers`;
+INSERT INTO `drivers` (`id`, `driverId`, `depotId`, `fullName`, `nic`, `phone`, `address`, `licenseNumber`, `licenseExpiry`, `status`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
+	(1, 'cmshk6dot0000i4uvnhfsgedw', 1, 'amila', '20045789654', '07456987452', 'kuruanagala 123', '0124685745', '2027-12-31 00:00:00.000', 'ACTIVE', '2026-08-06 13:35:30.509', '2026-08-06 13:35:30.509', NULL),
+	(2, 'cmshk84jh0001i4uvke7h2d87', 2, 'hirun', '20045239654', '074569874234', 'kuruanagala 546', '01246853456', '2027-12-31 00:00:00.000', 'ACTIVE', '2026-08-06 13:36:51.965', '2026-08-06 13:36:51.965', NULL);
 
 -- Dumping structure for table srmss.fuel_logs
 CREATE TABLE IF NOT EXISTS `fuel_logs` (
@@ -158,10 +161,12 @@ CREATE TABLE IF NOT EXISTS `routes` (
   KEY `routes_depotId_idx` (`depotId`),
   KEY `routes_status_idx` (`status`),
   CONSTRAINT `routes_depotId_fkey` FOREIGN KEY (`depotId`) REFERENCES `depots` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table srmss.routes: ~0 rows (approximately)
 DELETE FROM `routes`;
+INSERT INTO `routes` (`id`, `routeId`, `depotId`, `routeName`, `startLocation`, `endLocation`, `distance`, `estimatedDuration`, `status`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
+	(1, 'cmshkkexj0000cguv7nveyl96', 1, 'colombo to kurunagala', 'colombo', 'kurunagala', 10, 30, 'ACTIVE', '2026-08-06 13:46:25.303', '2026-08-06 13:46:25.303', NULL);
 
 -- Dumping structure for table srmss.route_stops
 CREATE TABLE IF NOT EXISTS `route_stops` (
@@ -173,10 +178,12 @@ CREATE TABLE IF NOT EXISTS `route_stops` (
   PRIMARY KEY (`id`),
   KEY `route_stops_routeId_idx` (`routeId`),
   CONSTRAINT `route_stops_routeId_fkey` FOREIGN KEY (`routeId`) REFERENCES `routes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table srmss.route_stops: ~0 rows (approximately)
 DELETE FROM `route_stops`;
+INSERT INTO `route_stops` (`id`, `routeId`, `stopName`, `stopOrder`, `createdAt`) VALUES
+	(1, 1, 'kurunagala', 1, '2026-08-06 13:46:25.303');
 
 -- Dumping structure for table srmss.schedules
 CREATE TABLE IF NOT EXISTS `schedules` (
@@ -284,10 +291,12 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   KEY `vehicles_depotId_idx` (`depotId`),
   KEY `vehicles_status_idx` (`status`),
   CONSTRAINT `vehicles_depotId_fkey` FOREIGN KEY (`depotId`) REFERENCES `depots` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table srmss.vehicles: ~0 rows (approximately)
 DELETE FROM `vehicles`;
+INSERT INTO `vehicles` (`id`, `vehicleId`, `depotId`, `registrationNumber`, `vehicleType`, `seatingCapacity`, `mileage`, `fuelType`, `status`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
+	(1, 'cmshka76y0002i4uv2qhxu0tn', 1, 'NEWONE', 'SINGLE_DECKER', 40, 10000, 'ELECTRIC', 'AVAILABLE', '2026-08-06 13:38:28.714', '2026-08-06 13:38:28.714', NULL);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

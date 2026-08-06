@@ -80,7 +80,10 @@ export async function PUT(request: NextRequest, context: ScheduleContext) {
         where: { vehicleId: String(body.vehicle_id) },
       });
       if (!vehicleExists) {
-        return NextResponse.json({ error: "Vehicle not found" }, { status: 404 });
+        return NextResponse.json(
+          { error: "Vehicle not found" },
+          { status: 404 },
+        );
       }
       if (vehicleExists.depotId !== existingSchedule.depotId) {
         return NextResponse.json(
@@ -96,7 +99,10 @@ export async function PUT(request: NextRequest, context: ScheduleContext) {
         where: { driverId: String(body.driver_id) },
       });
       if (!driverExists) {
-        return NextResponse.json({ error: "Driver not found" }, { status: 404 });
+        return NextResponse.json(
+          { error: "Driver not found" },
+          { status: 404 },
+        );
       }
       if (driverExists.depotId !== existingSchedule.depotId) {
         return NextResponse.json(

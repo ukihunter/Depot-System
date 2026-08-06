@@ -762,9 +762,11 @@ function App() {
     );
   };
 
+  const activeDepotId = currentUser?.depot_id ?? depots[0]?.id ?? null;
+
   const handleCreateRoute = async (route: Partial<Route>) => {
     try {
-      const created = await createRoute(route, currentUser?.depot_id);
+      const created = await createRoute(route, activeDepotId);
       setRoutes((prev) => [created, ...prev]);
     } catch (error) {
       console.error("Failed to create route:", error);
@@ -852,7 +854,7 @@ function App() {
 
   const handleAddDriver = async (driver: Partial<Driver>) => {
     try {
-      const created = await createDriver(driver, currentUser?.depot_id);
+      const created = await createDriver(driver, activeDepotId);
 
       setDrivers((prev) => [created, ...prev]);
     } catch (error) {
@@ -913,7 +915,7 @@ function App() {
 
   const handleAddVehicle = async (vehicle: Partial<Vehicle>) => {
     try {
-      const created = await createVehicle(vehicle, currentUser?.depot_id);
+      const created = await createVehicle(vehicle, activeDepotId);
 
       setVehicles((prev) => [created, ...prev]);
     } catch (error) {
@@ -978,7 +980,7 @@ function App() {
 
   const handleCreateSchedule = async (schedule: Partial<Schedule>) => {
     try {
-      const created = await createSchedule(schedule, currentUser?.depot_id);
+      const created = await createSchedule(schedule, activeDepotId);
       setSchedules((prev) => [created, ...prev]);
     } catch (error) {
       console.error("Failed to create schedule:", error);
@@ -1107,7 +1109,7 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...log,
-          depotId: currentUser?.depot_id ?? undefined,
+          depotId: activeDepotId ?? undefined,
         }),
       });
       const data = await response.json();
@@ -1128,7 +1130,7 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...record,
-          depotId: currentUser?.depot_id ?? undefined,
+          depotId: activeDepotId ?? undefined,
         }),
       });
       const data = await response.json();

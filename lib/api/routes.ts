@@ -11,7 +11,8 @@ type RoutesResponse = {
 };
 
 export async function getRoutes(depotId?: number | null): Promise<Route[]> {
-  const query = depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
+  const query =
+    depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
 
   const response = await fetch(`/api/routes${query}`, {
     method: "GET",
@@ -63,11 +64,14 @@ export async function updateRoute(
 ): Promise<Route> {
   const body: any = {};
   if (payload.route_name !== undefined) body.routeName = payload.route_name;
-  if (payload.start_location !== undefined) body.startLocation = payload.start_location;
-  if (payload.end_location !== undefined) body.endLocation = payload.end_location;
+  if (payload.start_location !== undefined)
+    body.startLocation = payload.start_location;
+  if (payload.end_location !== undefined)
+    body.endLocation = payload.end_location;
   if (payload.stops !== undefined) body.stops = payload.stops;
   if (payload.distance !== undefined) body.distance = payload.distance;
-  if (payload.estimated_duration !== undefined) body.estimatedDuration = payload.estimated_duration;
+  if (payload.estimated_duration !== undefined)
+    body.estimatedDuration = payload.estimated_duration;
   if (payload.status !== undefined) body.status = payload.status;
 
   const response = await fetch(`/api/routes/${routeId}`, {

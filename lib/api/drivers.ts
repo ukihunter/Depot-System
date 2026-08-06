@@ -13,7 +13,8 @@ type DriversResponse = {
 };
 
 export async function getDrivers(depotId?: number | null): Promise<Driver[]> {
-  const query = depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
+  const query =
+    depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
 
   const response = await fetch(`/api/drivers${query}`, {
     method: "GET",

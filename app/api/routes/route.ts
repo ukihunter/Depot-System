@@ -11,13 +11,21 @@ function isValidStops(value: unknown): value is string[] {
 }
 
 function serializeRoute(route: any) {
+  const stops = Array.isArray(route.stops)
+    ? route.stops
+        .map((stop: any) =>
+          typeof stop === "string" ? stop : stop?.stopName ?? stop?.name ?? "",
+        )
+        .filter((stop: string) => stop.length > 0)
+    : [];
+
   return {
     route_id: route.routeId,
     depot_id: route.depotId,
     route_name: route.routeName,
     start_location: route.startLocation,
     end_location: route.endLocation,
-    stops: Array.isArray(route.stops) ? route.stops : [],
+    stops,
     distance: Number(route.distance),
     estimated_duration: route.estimatedDuration,
     status: route.status,
@@ -33,6 +41,13 @@ export async function GET(request: NextRequest) {
     const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
 
     const routes = await prisma.route.findMany({
+      include: {
+        stops: {
+          orderBy: {
+            stopOrder: "asc",
+          },
+        },
+      },
       where:
         depotId === undefined
           ? undefined
@@ -131,7 +146,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!Number.isFinite(numericDepotId)) {
-      return NextResponse.json({ error: "Depot ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Depot ID is required" },
+        { status: 400 },
+      );
     }
 
     const depot = await prisma.depot.findUnique({
@@ -148,10 +166,22 @@ export async function POST(request: NextRequest) {
         routeName: routeName.trim(),
         startLocation: startLocation.trim(),
         endLocation: endLocation.trim(),
-        stops: stops.map((stop) => stop.trim()),
         distance: numericDistance,
         estimatedDuration: numericDuration,
         status: status === "INACTIVE" ? "INACTIVE" : "ACTIVE",
+        stops: {
+          create: stops.map((stopName: string, index: number) => ({
+            stopName: stopName.trim(),
+            stopOrder: index + 1,
+          })),
+        },
+      },
+      include: {
+        stops: {
+          orderBy: {
+            stopOrder: "asc",
+          },
+        },
       },
     });
 

@@ -13,7 +13,8 @@ type VehiclesResponse = {
 };
 
 export async function getVehicles(depotId?: number | null): Promise<Vehicle[]> {
-  const query = depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
+  const query =
+    depotId === undefined || depotId === null ? "" : `?depotId=${depotId}`;
 
   const response = await fetch(`/api/vehicles${query}`, {
     method: "GET",
