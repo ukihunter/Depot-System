@@ -174,37 +174,41 @@ export default function ReportsModule({
         className="bg-white border border-slate-200 rounded-3xl p-8 max-w-4xl mx-auto shadow-md print:shadow-none print:border-none relative overflow-hidden"
         id="official-audit-document"
       >
-        {/* Academic watermark stamp background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-12 opacity-5 pointer-events-none text-slate-900 border-8 border-slate-950 p-6 rounded-full inline-block text-center select-none font-bold text-base max-w-sm">
-          SMART ROUTE SYSTEM (SRMSS) • DEPOT ACCOUNTING • ACADEMIC RECORD
-        </div>
-
         {/* Report Header block */}
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b-2 pb-6 border-slate-250">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b-2 pb-6 border-slate-300">
           <div className="space-y-1">
-            <span className="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold font-mono tracking-widest block w-max uppercase">
-              Official Audit Ledger
+            <span className="text-[10px] bg-slate-900 text-white px-2 py-0.5 rounded font-bold font-mono tracking-wider block w-max uppercase">
+              SRMSS Official Depot Audit Report
             </span>
-            <h2 className="text-xl font-extrabold text-slate-950 tracking-tight leading-none">
-              SMART ROUTE MANAGEMENT SYSTEM
+            <h2 className="text-xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+              {reportType === "performance" && "Route Operational Performance Report"}
+              {reportType === "fuel" && "Fleet Fuel Consumption & Audit Log"}
+              {reportType === "maintenance" && "Fleet Maintenance Expense Report"}
+              {reportType === "utilization" && "Driver Duty Utilization Register"}
             </h2>
             <p className="text-xs text-blue-700 font-mono font-bold uppercase tracking-wider">
-              Public Transport Depot Terminal Hubs
+              Depot Transit System Management Hub
             </p>
           </div>
-          <div className="text-right text-[10px] font-mono text-slate-500 space-y-0.5">
+          <div className="text-right text-[10px] font-mono text-slate-600 space-y-0.5">
             <div>
-              DOCUMENT REFERENCE:{" "}
-              <span className="font-bold text-slate-800">SRMSS-AUDIT-2026</span>
+              REF ID:{" "}
+              <span className="font-bold text-slate-900">
+                SRMSS-RPT-{reportType.toUpperCase()}-{new Date().getFullYear()}
+              </span>
             </div>
             <div>
-              COMPILED DATE:{" "}
-              <span className="font-bold text-slate-800">June 14, 2026</span>
+              TIMEFRAME:{" "}
+              <span className="font-bold text-slate-900 uppercase">{timeframe}</span>
             </div>
             <div>
-              STATUS:{" "}
-              <span className="text-emerald-600 font-bold">
-                APPROVED BY BOARD
+              GENERATED DATE:{" "}
+              <span className="font-bold text-slate-900">
+                {new Date().toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
               </span>
             </div>
           </div>

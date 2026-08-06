@@ -37,12 +37,61 @@ CREATE TABLE IF NOT EXISTS `drivers` (
   UNIQUE KEY `drivers_driverId_key` (`driverId`),
   UNIQUE KEY `drivers_nic_key` (`nic`),
   UNIQUE KEY `drivers_licenseNumber_key` (`licenseNumber`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table srmss.drivers: ~0 rows (approximately)
+-- Dumping data for table srmss.drivers: ~1 rows (approximately)
 DELETE FROM `drivers`;
 INSERT INTO `drivers` (`id`, `driverId`, `name`, `nic`, `phone`, `address`, `licenseNumber`, `licenseExpiry`, `workingHours`, `status`, `createdAt`, `updatedAt`) VALUES
-	(1, 'cmsgkoxub0002uouvbpwu6fm3', 'kevin', '200218901709', '0774856985', 'ududududud', '56984523', '2027-12-31 00:00:00.000', 32, 'ACTIVE', '2026-08-05 21:02:10.259', '2026-08-05 21:02:10.259');
+	(1, 'cmsgkoxub0002uouvbpwu6fm3', 'kevin', '200218901709', '0774856985', 'ududududud', '56984523', '2027-12-31 00:00:00.000', 32, 'ACTIVE', '2026-08-05 21:02:10.259', '2026-08-05 21:02:10.259'),
+	(2, 'cmsh1wn3c0001lwthvoc7mwqp', 'Manusha', '2000000000', '0711234567', 'Kurunegala', '200500000', '2027-12-31 00:00:00.000', 32, 'ACTIVE', '2026-08-06 05:04:03.049', '2026-08-06 05:04:03.049');
+
+-- Dumping structure for table srmss.fuel_logs
+CREATE TABLE IF NOT EXISTS `fuel_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fuelId` varchar(191) NOT NULL,
+  `vehicle_id` varchar(191) NOT NULL,
+  `date` datetime(3) NOT NULL,
+  `liters` double NOT NULL,
+  `cost` double NOT NULL,
+  `distance_covered` double NOT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
+  `updated_at` datetime(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fuel_logs_fuelId_key` (`fuelId`),
+  KEY `fuel_logs_vehicle_id_idx` (`vehicle_id`),
+  KEY `fuel_logs_date_idx` (`date`),
+  CONSTRAINT `fuel_logs_vehicle_id_fkey` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicleId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table srmss.fuel_logs: ~0 rows (approximately)
+DELETE FROM `fuel_logs`;
+INSERT INTO `fuel_logs` (`id`, `fuelId`, `vehicle_id`, `date`, `liters`, `cost`, `distance_covered`, `created_at`, `updated_at`) VALUES
+	(1, '511b1dc15ea540a3b33f09bed24bc69a', 'cmsh1tmb20000lwthxw8aoh4h', '2026-06-14 00:00:00.000', 70, 130, 380, '2026-08-06 10:32:07.536', '2026-08-06 10:32:07.536');
+
+-- Dumping structure for table srmss.maintenance_records
+CREATE TABLE IF NOT EXISTS `maintenance_records` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `maintenanceId` varchar(191) NOT NULL,
+  `vehicle_id` varchar(191) NOT NULL,
+  `maintenance_type` enum('SCHEDULED','CORRECTIVE','EMERGENCY') NOT NULL,
+  `service_date` datetime(3) NOT NULL,
+  `next_service_date` datetime(3) NOT NULL,
+  `cost` double NOT NULL,
+  `remarks` varchar(191) DEFAULT NULL,
+  `status` enum('SCHEDULED','IN_PROGRESS','COMPLETED','CANCELLED') NOT NULL DEFAULT 'SCHEDULED',
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
+  `updated_at` datetime(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `maintenance_records_maintenanceId_key` (`maintenanceId`),
+  KEY `maintenance_records_vehicle_id_idx` (`vehicle_id`),
+  KEY `maintenance_records_service_date_idx` (`service_date`),
+  CONSTRAINT `maintenance_records_vehicle_id_fkey` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicleId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table srmss.maintenance_records: ~0 rows (approximately)
+DELETE FROM `maintenance_records`;
+INSERT INTO `maintenance_records` (`id`, `maintenanceId`, `vehicle_id`, `maintenance_type`, `service_date`, `next_service_date`, `cost`, `remarks`, `status`, `created_at`, `updated_at`) VALUES
+	(1, 'ae6fb31dfd294adfa8da7fb2b01eae74', 'cmsh1tmb20000lwthxw8aoh4h', 'SCHEDULED', '2026-06-14 00:00:00.000', '2026-09-14 00:00:00.000', 45000, '', 'COMPLETED', '2026-08-06 10:42:00.054', '2026-08-06 10:42:42.732');
 
 -- Dumping structure for table srmss.routes
 CREATE TABLE IF NOT EXISTS `routes` (
@@ -59,12 +108,13 @@ CREATE TABLE IF NOT EXISTS `routes` (
   `updated_at` datetime(3) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `routes_routeId_key` (`routeId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table srmss.routes: ~1 rows (approximately)
 DELETE FROM `routes`;
 INSERT INTO `routes` (`id`, `routeId`, `route_name`, `start_location`, `end_location`, `stops`, `distance`, `estimated_duration`, `status`, `created_at`, `updated_at`) VALUES
-	(3, 'cmsgkog520001uouv5yk4g5f0', 'new', 'dfsdf', 'sdfsdf', '[]', 10, 30, 'ACTIVE', '2026-08-05 21:01:47.318', '2026-08-05 21:01:47.318');
+	(3, 'cmsgkog520001uouv5yk4g5f0', 'new', 'dfsdf', 'sdfsdf', '[]', 10, 30, 'ACTIVE', '2026-08-05 21:01:47.318', '2026-08-05 21:01:47.318'),
+	(4, 'cmsh1ysdb0002lwthkiok4vn1', '57', 'Galgamuwa', 'KUrunegala', '[]', 70, 120, 'ACTIVE', '2026-08-06 05:05:43.199', '2026-08-06 05:05:43.199');
 
 -- Dumping structure for table srmss.schedules
 CREATE TABLE IF NOT EXISTS `schedules` (
@@ -88,12 +138,13 @@ CREATE TABLE IF NOT EXISTS `schedules` (
   CONSTRAINT `schedules_driver_id_fkey` FOREIGN KEY (`driver_id`) REFERENCES `drivers` (`driverId`) ON UPDATE CASCADE,
   CONSTRAINT `schedules_route_id_fkey` FOREIGN KEY (`route_id`) REFERENCES `routes` (`routeId`) ON UPDATE CASCADE,
   CONSTRAINT `schedules_vehicle_id_fkey` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicleId`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table srmss.schedules: ~0 rows (approximately)
+-- Dumping data for table srmss.schedules: ~1 rows (approximately)
 DELETE FROM `schedules`;
 INSERT INTO `schedules` (`id`, `scheduleId`, `route_id`, `vehicle_id`, `driver_id`, `departure_time`, `arrival_time`, `schedule_date`, `status`, `created_at`, `updated_at`) VALUES
-	(1, 'cmsgkpc3o0004uouvwlbd5ijl', 'cmsgkog520001uouv5yk4g5f0', 'cmsgkp8vi0003uouv3yp9andc', 'cmsgkoxub0002uouvbpwu6fm3', '08:00', '09:30', '2026-06-15 00:00:00.000', 'SCHEDULED', '2026-08-05 21:02:28.741', '2026-08-05 21:02:28.741');
+	(1, 'cmsgkpc3o0004uouvwlbd5ijl', 'cmsgkog520001uouv5yk4g5f0', 'cmsgkp8vi0003uouv3yp9andc', 'cmsgkoxub0002uouvbpwu6fm3', '08:00', '09:30', '2026-06-15 00:00:00.000', 'ACTIVE', '2026-08-05 21:02:28.741', '2026-08-06 05:00:14.033'),
+	(3, 'cmsh20txm0004lwthadyea7dh', 'cmsh1ysdb0002lwthkiok4vn1', 'cmsh1tmb20000lwthxw8aoh4h', 'cmsh1wn3c0001lwthvoc7mwqp', '08:00', '09:30', '2026-08-06 00:00:00.000', 'ACTIVE', '2026-08-06 05:07:18.539', '2026-08-06 05:10:19.806');
 
 -- Dumping structure for table srmss.trips
 CREATE TABLE IF NOT EXISTS `trips` (
@@ -109,46 +160,11 @@ CREATE TABLE IF NOT EXISTS `trips` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `trips_tripId_key` (`tripId`),
   KEY `trips_schedule_id_idx` (`schedule_id`),
-  CONSTRAINT `trips_schedule_id_fkey` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`scheduleId`) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT `trips_schedule_id_fkey` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`scheduleId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping structure for table srmss.fuel_logs
-CREATE TABLE IF NOT EXISTS `fuel_logs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fuelId` varchar(191) NOT NULL,
-  `vehicle_id` varchar(191) NOT NULL,
-  `date` datetime(3) NOT NULL,
-  `liters` double NOT NULL,
-  `cost` double NOT NULL,
-  `distance_covered` double NOT NULL,
-  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
-  `updated_at` datetime(3) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `fuel_logs_fuelId_key` (`fuelId`),
-  KEY `fuel_logs_vehicle_id_idx` (`vehicle_id`),
-  KEY `fuel_logs_date_idx` (`date`),
-  CONSTRAINT `fuel_logs_vehicle_id_fkey` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicleId`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Dumping structure for table srmss.maintenance_records
-CREATE TABLE IF NOT EXISTS `maintenance_records` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `maintenanceId` varchar(191) NOT NULL,
-  `vehicle_id` varchar(191) NOT NULL,
-  `maintenance_type` enum('SCHEDULED','CORRECTIVE','EMERGENCY') NOT NULL,
-  `service_date` datetime(3) NOT NULL,
-  `next_service_date` datetime(3) NOT NULL,
-  `cost` double NOT NULL,
-  `remarks` varchar(191) DEFAULT NULL,
-  `status` enum('SCHEDULED','IN_PROGRESS','COMPLETED','CANCELLED') NOT NULL DEFAULT 'SCHEDULED',
-  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
-  `updated_at` datetime(3) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `maintenance_records_maintenanceId_key` (`maintenanceId`),
-  KEY `maintenance_records_vehicle_id_idx` (`vehicle_id`),
-  KEY `maintenance_records_service_date_idx` (`service_date`),
-  CONSTRAINT `maintenance_records_vehicle_id_fkey` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicleId`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- Dumping data for table srmss.trips: ~0 rows (approximately)
+DELETE FROM `trips`;
 
 -- Dumping structure for table srmss.users
 CREATE TABLE IF NOT EXISTS `users` (
@@ -165,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `users_username_key` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table srmss.users: ~2 rows (approximately)
+-- Dumping data for table srmss.users: ~3 rows (approximately)
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `full_name`, `email`, `username`, `password`, `role`, `created_at`, `updated_at`) VALUES
 	(1, 'System Administrator', 'admin@srmss.local', 'admin', '$argon2id$v=19$m=65536,p=4,t=3$B8Cc/w84S/Q2Hzssp+dCRA$8FFWrzbiNgKvGZAcEJvpVwLsUyMHnwP9mSFrtKK+kK8', 'ADMIN', '2026-08-05 16:36:13.761', '2026-08-05 16:36:13.761'),
@@ -187,12 +203,13 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `vehicles_vehicleId_key` (`vehicleId`),
   UNIQUE KEY `vehicles_registrationNumber_key` (`registrationNumber`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table srmss.vehicles: ~0 rows (approximately)
+-- Dumping data for table srmss.vehicles: ~1 rows (approximately)
 DELETE FROM `vehicles`;
 INSERT INTO `vehicles` (`id`, `vehicleId`, `registrationNumber`, `vehicleType`, `seatingCapacity`, `mileage`, `fuelType`, `status`, `createdAt`, `updatedAt`) VALUES
-	(1, 'cmsgkp8vi0003uouv3yp9andc', 'ER34343', 'SINGLE_DECKER', 40, 10000, 'ELECTRIC', 'AVAILABLE', '2026-08-05 21:02:24.558', '2026-08-05 21:02:24.558');
+	(1, 'cmsgkp8vi0003uouv3yp9andc', 'ER34343', 'SINGLE_DECKER', 40, 10000, 'ELECTRIC', 'AVAILABLE', '2026-08-05 21:02:24.558', '2026-08-05 21:02:24.558'),
+	(2, 'cmsh1tmb20000lwthxw8aoh4h', 'XQ4645', 'SINGLE_DECKER', 54, 10000, 'DIESEL', 'AVAILABLE', '2026-08-06 05:01:42.062', '2026-08-06 05:01:42.062');
 
 -- Dumping structure for table srmss._prisma_migrations
 CREATE TABLE IF NOT EXISTS `_prisma_migrations` (
