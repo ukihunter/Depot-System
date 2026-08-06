@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@/generated/prisma/client";
-import { randomUUID } from "node:crypto";
+
+function formatDate(value: Date) {
+  return value.toISOString().split("T")[0];
+}
 
 function serializeFuelLog(log: {
   fuelId: string;
   depotId: number;
-  vehicleId: string;
+  vehicle: { vehicleId: string };
   date: Date;
   liters: number;
   cost: number;
@@ -15,8 +17,8 @@ function serializeFuelLog(log: {
   return {
     fuel_id: log.fuelId,
     depot_id: log.depotId,
-    vehicle_id: log.vehicleId,
-    date: log.date.toISOString().split("T")[0],
+    vehicle_id: log.vehicle.vehicleId,
+    date: formatDate(log.date),
     liters: Number(log.liters),
     cost: Number(log.cost),
     distance_covered: Number(log.distanceCovered),
@@ -28,27 +30,22 @@ export async function GET(request: NextRequest) {
     const depotIdParam = request.nextUrl.searchParams.get("depotId");
     const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
 
-    const depotFilter =
-      depotId === undefined
-        ? Prisma.empty
-        : Prisma.sql`WHERE depotId = ${depotId}`;
-
-    const rows = await prisma.$queryRaw<
-      Array<{
-        fuelId: string;
-        depotId: number;
-        vehicleId: string;
-        date: Date;
-        liters: number;
-        cost: number;
-        distanceCovered: number;
-      }>
-    >(Prisma.sql`
-      SELECT fuelId, depotId, vehicle_id AS vehicleId, date, liters, cost, distance_covered AS distanceCovered
-      FROM fuel_logs
-      ${depotFilter}
-      ORDER BY created_at DESC
-    `);
+    const rows = await prisma.fuelLog.findMany({
+      where:
+        depotId === undefined
+          ? undefined
+          : {
+              depotId,
+            },
+      include: {
+        vehicle: {
+          select: { vehicleId: true },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     return NextResponse.json({
       success: true,
@@ -126,38 +123,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const fuelId = randomUUID().replace(/-/g, "");
-
-    await prisma.$executeRaw`
-      INSERT INTO fuel_logs (fuelId, depotId, vehicle_id, date, liters, cost, distance_covered, created_at, updated_at)
-      VALUES (${fuelId}, ${depotId}, ${vehicleId}, ${new Date(`${date}T00:00:00.000Z`)}, ${liters}, ${cost}, ${distanceCovered}, NOW(3), NOW(3))
-    `;
-
-    const rows = await prisma.$queryRaw<
-      Array<{
-        fuelId: string;
-        depotId: number;
-        vehicleId: string;
-        date: Date;
-        liters: number;
-        cost: number;
-        distanceCovered: number;
-      }>
-    >(Prisma.sql`
-      SELECT fuelId, depotId, vehicle_id AS vehicleId, date, liters, cost, distance_covered AS distanceCovered
-      FROM fuel_logs
-      WHERE fuelId = ${fuelId}
-      ORDER BY created_at DESC
-      LIMIT 1
-    `);
-
-    const fuelLog = rows[0];
-    if (!fuelLog) {
-      return NextResponse.json(
-        { success: false, message: "Failed to create fuel log." },
-        { status: 500 },
-      );
-    }
+    const fuelLog = await prisma.fuelLog.create({
+      data: {
+        depotId,
+        vehicleId: vehicle.id,
+        date: new Date(`${date}T00:00:00.000Z`),
+        liters,
+        cost,
+        distanceCovered,
+      },
+      include: {
+        vehicle: {
+          select: { vehicleId: true },
+        },
+      },
+    });
 
     return NextResponse.json(
       { success: true, fuelLog: serializeFuelLog(fuelLog) },

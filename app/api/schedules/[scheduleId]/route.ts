@@ -2,6 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { serializeSchedule } from "../route";
 
+function parseScheduleDate(value: string) {
+  return new Date(`${value}T00:00:00.000Z`);
+}
+
+function combineDateAndTime(date: Date, time: string) {
+  const datePart = date.toISOString().split("T")[0];
+  const normalizedTime = time.length === 5 ? `${time}:00` : time;
+  return new Date(`${datePart}T${normalizedTime}.000Z`);
+}
+
+function formatTime(value: Date) {
+  return value.toISOString().slice(11, 16);
+}
+
 interface ScheduleContext {
   params: Promise<{
     scheduleId: string;
@@ -72,7 +86,7 @@ export async function PUT(request: NextRequest, context: ScheduleContext) {
           { status: 400 },
         );
       }
-      data.routeId = String(body.route_id);
+      data.routeId = routeExists.id;
     }
 
     if (body.vehicle_id !== undefined) {
@@ -91,7 +105,7 @@ export async function PUT(request: NextRequest, context: ScheduleContext) {
           { status: 400 },
         );
       }
-      data.vehicleId = String(body.vehicle_id);
+      data.vehicleId = vehicleExists.id;
     }
 
     if (body.driver_id !== undefined) {
@@ -110,19 +124,44 @@ export async function PUT(request: NextRequest, context: ScheduleContext) {
           { status: 400 },
         );
       }
-      data.driverId = String(body.driver_id);
+      data.driverId = driverExists.id;
     }
 
     if (body.departure_time !== undefined) {
-      data.departureTime = String(body.departure_time);
+      data.departureTime = combineDateAndTime(
+        body.schedule_date !== undefined
+          ? parseScheduleDate(String(body.schedule_date))
+          : existingSchedule.scheduleDate,
+        String(body.departure_time),
+      );
     }
 
     if (body.arrival_time !== undefined) {
-      data.arrivalTime = String(body.arrival_time);
+      data.arrivalTime = combineDateAndTime(
+        body.schedule_date !== undefined
+          ? parseScheduleDate(String(body.schedule_date))
+          : existingSchedule.scheduleDate,
+        String(body.arrival_time),
+      );
     }
 
     if (body.schedule_date !== undefined) {
-      data.scheduleDate = new Date(`${body.schedule_date}T00:00:00.000Z`);
+      const scheduleDate = parseScheduleDate(String(body.schedule_date));
+      data.scheduleDate = scheduleDate;
+
+      if (body.departure_time === undefined) {
+        data.departureTime = combineDateAndTime(
+          scheduleDate,
+          formatTime(existingSchedule.departureTime),
+        );
+      }
+
+      if (body.arrival_time === undefined) {
+        data.arrivalTime = combineDateAndTime(
+          scheduleDate,
+          formatTime(existingSchedule.arrivalTime),
+        );
+      }
     }
 
     if (body.status !== undefined) {
@@ -143,6 +182,17 @@ export async function PUT(request: NextRequest, context: ScheduleContext) {
         scheduleId,
       },
       data,
+      include: {
+        route: {
+          select: { routeId: true },
+        },
+        vehicle: {
+          select: { vehicleId: true },
+        },
+        driver: {
+          select: { driverId: true },
+        },
+      },
     });
 
     return NextResponse.json({

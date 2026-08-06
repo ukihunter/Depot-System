@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@/generated/prisma/client";
-import { randomUUID } from "node:crypto";
+
+function formatDate(value: Date | null) {
+  return value ? value.toISOString().split("T")[0] : "";
+}
 
 function serializeMaintenance(record: {
   maintenanceId: string;
   depotId: number;
-  vehicleId: string;
+  vehicle: { vehicleId: string };
   maintenanceType: "SCHEDULED" | "CORRECTIVE" | "EMERGENCY";
   serviceDate: Date;
-  nextServiceDate: Date;
+  nextServiceDate: Date | null;
   cost: number;
   remarks: string | null;
   status: "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
@@ -17,15 +19,15 @@ function serializeMaintenance(record: {
   return {
     maintenance_id: record.maintenanceId,
     depot_id: record.depotId,
-    vehicle_id: record.vehicleId,
+    vehicle_id: record.vehicle.vehicleId,
     maintenance_type:
       record.maintenanceType === "CORRECTIVE"
         ? "Corrective"
         : record.maintenanceType === "EMERGENCY"
           ? "Emergency"
           : "Scheduled",
-    service_date: record.serviceDate.toISOString().split("T")[0],
-    next_service_date: record.nextServiceDate.toISOString().split("T")[0],
+    service_date: formatDate(record.serviceDate),
+    next_service_date: formatDate(record.nextServiceDate),
     cost: Number(record.cost),
     remarks: record.remarks ?? "",
     status:
@@ -44,29 +46,22 @@ export async function GET(request: NextRequest) {
     const depotIdParam = request.nextUrl.searchParams.get("depotId");
     const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
 
-    const depotFilter =
-      depotId === undefined
-        ? Prisma.empty
-        : Prisma.sql`WHERE depotId = ${depotId}`;
-
-    const rows = await prisma.$queryRaw<
-      Array<{
-        maintenanceId: string;
-        depotId: number;
-        vehicleId: string;
-        maintenanceType: "SCHEDULED" | "CORRECTIVE" | "EMERGENCY";
-        serviceDate: Date;
-        nextServiceDate: Date;
-        cost: number;
-        remarks: string | null;
-        status: "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
-      }>
-    >(Prisma.sql`
-      SELECT maintenanceId, depotId, vehicle_id AS vehicleId, maintenance_type AS maintenanceType, service_date AS serviceDate, next_service_date AS nextServiceDate, cost, remarks, status
-      FROM maintenance_records
-      ${depotFilter}
-      ORDER BY created_at DESC
-    `);
+    const rows = await prisma.maintenanceRecord.findMany({
+      where:
+        depotId === undefined
+          ? undefined
+          : {
+              depotId,
+            },
+      include: {
+        vehicle: {
+          select: { vehicleId: true },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     return NextResponse.json({
       success: true,
@@ -145,40 +140,35 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const maintenanceId = randomUUID().replace(/-/g, "");
-
-    await prisma.$executeRaw`
-      INSERT INTO maintenance_records (maintenanceId, depotId, vehicle_id, maintenance_type, service_date, next_service_date, cost, remarks, status, created_at, updated_at)
-      VALUES (${maintenanceId}, ${depotId}, ${vehicleId}, ${maintenanceType}, ${new Date(`${serviceDate}T00:00:00.000Z`)}, ${new Date(`${nextServiceDate}T00:00:00.000Z`)}, ${cost}, ${remarks}, ${status}, NOW(3), NOW(3))
-    `;
-
-    const rows = await prisma.$queryRaw<
-      Array<{
-        maintenanceId: string;
-        depotId: number;
-        vehicleId: string;
-        maintenanceType: "SCHEDULED" | "CORRECTIVE" | "EMERGENCY";
-        serviceDate: Date;
-        nextServiceDate: Date;
-        cost: number;
-        remarks: string | null;
-        status: "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
-      }>
-    >(Prisma.sql`
-      SELECT maintenanceId, depotId, vehicle_id AS vehicleId, maintenance_type AS maintenanceType, service_date AS serviceDate, next_service_date AS nextServiceDate, cost, remarks, status
-      FROM maintenance_records
-      WHERE maintenanceId = ${maintenanceId}
-      ORDER BY created_at DESC
-      LIMIT 1
-    `);
-
-    const record = rows[0];
-    if (!record) {
-      return NextResponse.json(
-        { success: false, message: "Failed to create maintenance record." },
-        { status: 500 },
-      );
-    }
+    const record = await prisma.maintenanceRecord.create({
+      data: {
+        depotId,
+        vehicleId: vehicle.id,
+        maintenanceType:
+          maintenanceType === "CORRECTIVE"
+            ? "CORRECTIVE"
+            : maintenanceType === "EMERGENCY"
+              ? "EMERGENCY"
+              : "SCHEDULED",
+        serviceDate: new Date(`${serviceDate}T00:00:00.000Z`),
+        nextServiceDate: new Date(`${nextServiceDate}T00:00:00.000Z`),
+        cost,
+        remarks,
+        status:
+          status === "IN_PROGRESS"
+            ? "IN_PROGRESS"
+            : status === "COMPLETED"
+              ? "COMPLETED"
+              : status === "CANCELLED"
+                ? "CANCELLED"
+                : "SCHEDULED",
+      },
+      include: {
+        vehicle: {
+          select: { vehicleId: true },
+        },
+      },
+    });
 
     return NextResponse.json(
       { success: true, maintenance: serializeMaintenance(record) },

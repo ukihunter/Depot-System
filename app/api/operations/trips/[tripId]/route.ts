@@ -8,19 +8,31 @@ type TripStatus =
   | "COMPLETED"
   | "CANCELLED";
 
+function formatDateTime(value: Date | null) {
+  return value ? value.toISOString() : "";
+}
+
+function parseOptionalDateTime(value: unknown) {
+  if (value === undefined || value === null || String(value).trim() === "") {
+    return undefined;
+  }
+
+  return new Date(String(value));
+}
+
 function serializeTrip(trip: {
   tripId: string;
-  scheduleId: string;
-  startTime: string;
-  endTime: string;
+  schedule: { scheduleId: string };
+  startTime: Date;
+  endTime: Date | null;
   status: TripStatus;
   remarks: string | null;
 }) {
   return {
     trip_id: trip.tripId,
-    schedule_id: trip.scheduleId,
-    start_time: trip.startTime,
-    end_time: trip.endTime,
+    schedule_id: trip.schedule.scheduleId,
+    start_time: formatDateTime(trip.startTime),
+    end_time: formatDateTime(trip.endTime),
     status:
       trip.status === "ACTIVE"
         ? "Active"
@@ -43,74 +55,57 @@ export async function PATCH(
     const { tripId } = await context.params;
     const body = await request.json();
 
-    let updateCount = 0;
+    const data: {
+      startTime?: Date;
+      endTime?: Date | null;
+      status?: TripStatus;
+      remarks?: string | null;
+    } = {};
 
     if (body.start_time !== undefined) {
-      await prisma.$executeRaw`
-        UPDATE trips
-        SET start_time = ${String(body.start_time)}, updated_at = NOW(3)
-        WHERE tripId = ${tripId}
-      `;
-      updateCount++;
+      data.startTime = new Date(String(body.start_time));
     }
 
     if (body.end_time !== undefined) {
-      await prisma.$executeRaw`
-        UPDATE trips
-        SET end_time = ${String(body.end_time)}, updated_at = NOW(3)
-        WHERE tripId = ${tripId}
-      `;
-      updateCount++;
+      data.endTime = parseOptionalDateTime(body.end_time) ?? null;
     }
 
     if (body.status !== undefined) {
-      await prisma.$executeRaw`
-        UPDATE trips
-        SET status = ${String(body.status).toUpperCase()}, updated_at = NOW(3)
-        WHERE tripId = ${tripId}
-      `;
-      updateCount++;
+      const status = String(body.status).toUpperCase();
+      data.status =
+        status === "ACTIVE"
+          ? "ACTIVE"
+          : status === "DELAYED"
+            ? "DELAYED"
+            : status === "COMPLETED"
+              ? "COMPLETED"
+              : status === "CANCELLED"
+                ? "CANCELLED"
+                : "SCHEDULED";
     }
 
     if (body.remarks !== undefined) {
-      await prisma.$executeRaw`
-        UPDATE trips
-        SET remarks = ${body.remarks === null ? null : String(body.remarks).trim()}, updated_at = NOW(3)
-        WHERE tripId = ${tripId}
-      `;
-      updateCount++;
+      data.remarks = body.remarks === null ? null : String(body.remarks).trim();
     }
 
-    if (updateCount === 0) {
+    if (Object.keys(data).length === 0) {
       return NextResponse.json(
         { success: false, message: "No trip updates provided." },
         { status: 400 },
       );
     }
 
-    const rows = await prisma.$queryRaw<
-      Array<{
-        tripId: string;
-        scheduleId: string;
-        startTime: string;
-        endTime: string;
-        status: TripStatus;
-        remarks: string | null;
-      }>
-    >`
-      SELECT tripId, schedule_id AS scheduleId, start_time AS startTime, end_time AS endTime, status, remarks
-      FROM trips
-      WHERE tripId = ${tripId}
-      LIMIT 1
-    `;
-
-    const trip = rows[0];
-    if (!trip) {
-      return NextResponse.json(
-        { success: false, message: "Trip not found." },
-        { status: 404 },
-      );
-    }
+    const trip = await prisma.trip.update({
+      where: {
+        tripId,
+      },
+      data,
+      include: {
+        schedule: {
+          select: { scheduleId: true },
+        },
+      },
+    });
 
     return NextResponse.json({ success: true, trip: serializeTrip(trip) });
   } catch (error) {
