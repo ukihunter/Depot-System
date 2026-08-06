@@ -1,15 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export function serializeSchedule(schedule: any) {
+function parseScheduleDate(value: string) {
+  return new Date(`${value}T00:00:00.000Z`);
+}
+
+function combineDateAndTime(date: Date, time: string) {
+  const datePart = date.toISOString().split("T")[0];
+  const normalizedTime = time.length === 5 ? `${time}:00` : time;
+  return new Date(`${datePart}T${normalizedTime}.000Z`);
+}
+
+function formatTime(value: Date) {
+  return value.toISOString().slice(11, 16);
+}
+
+export function serializeSchedule(schedule: {
+  scheduleId: string;
+  depotId: number;
+  route: { routeId: string };
+  vehicle: { vehicleId: string };
+  driver: { driverId: string };
+  departureTime: Date;
+  arrivalTime: Date;
+  scheduleDate: Date;
+  status: "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
+}) {
   return {
     schedule_id: schedule.scheduleId,
     depot_id: schedule.depotId,
-    route_id: schedule.routeId,
-    vehicle_id: schedule.vehicleId,
-    driver_id: schedule.driverId,
-    departure_time: schedule.departureTime,
-    arrival_time: schedule.arrivalTime,
+    route_id: schedule.route.routeId,
+    vehicle_id: schedule.vehicle.vehicleId,
+    driver_id: schedule.driver.driverId,
+    departure_time: formatTime(schedule.departureTime),
+    arrival_time: formatTime(schedule.arrivalTime),
     schedule_date: schedule.scheduleDate.toISOString().split("T")[0],
     status:
       schedule.status === "SCHEDULED"
@@ -36,6 +60,17 @@ export async function GET(request: NextRequest) {
           : {
               depotId,
             },
+      include: {
+        route: {
+          select: { routeId: true },
+        },
+        vehicle: {
+          select: { vehicleId: true },
+        },
+        driver: {
+          select: { driverId: true },
+        },
+      },
       orderBy: {
         createdAt: "desc",
       },
@@ -131,22 +166,39 @@ export async function POST(request: NextRequest) {
     const schedule = await prisma.schedule.create({
       data: {
         depotId: numericDepotId,
-        routeId: String(route_id),
-        vehicleId: String(vehicle_id),
-        driverId: String(driver_id),
-        departureTime: String(departure_time),
-        arrivalTime: String(arrival_time),
-        scheduleDate: new Date(`${schedule_date}T00:00:00.000Z`),
+        routeId: routeExists.id,
+        vehicleId: vehicleExists.id,
+        driverId: driverExists.id,
+        departureTime: combineDateAndTime(
+          parseScheduleDate(String(schedule_date)),
+          String(departure_time),
+        ),
+        arrivalTime: combineDateAndTime(
+          parseScheduleDate(String(schedule_date)),
+          String(arrival_time),
+        ),
+        scheduleDate: parseScheduleDate(String(schedule_date)),
         status:
-          status === "Active"
+          String(status).toUpperCase() === "ACTIVE"
             ? "ACTIVE"
-            : status === "Delayed"
+            : String(status).toUpperCase() === "DELAYED"
               ? "DELAYED"
-              : status === "Completed"
+              : String(status).toUpperCase() === "COMPLETED"
                 ? "COMPLETED"
-                : status === "Cancelled"
+                : String(status).toUpperCase() === "CANCELLED"
                   ? "CANCELLED"
                   : "SCHEDULED",
+      },
+      include: {
+        route: {
+          select: { routeId: true },
+        },
+        vehicle: {
+          select: { vehicleId: true },
+        },
+        driver: {
+          select: { driverId: true },
+        },
       },
     });
 

@@ -1,21 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@/generated/prisma/client";
-import { randomUUID } from "node:crypto";
+
+function formatDateTime(value: Date | null) {
+  return value ? value.toISOString() : "";
+}
+
+function parseDateTime(value: string) {
+  return new Date(value);
+}
+
+function parseOptionalDateTime(value: unknown) {
+  if (value === undefined || value === null || String(value).trim() === "") {
+    return null;
+  }
+
+  return new Date(String(value));
+}
 
 function serializeTrip(trip: {
   tripId: string;
-  scheduleId: string;
-  startTime: string;
-  endTime: string;
+  schedule: { scheduleId: string };
+  startTime: Date;
+  endTime: Date | null;
   status: "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
   remarks: string | null;
 }) {
   return {
     trip_id: trip.tripId,
-    schedule_id: trip.scheduleId,
-    start_time: trip.startTime,
-    end_time: trip.endTime,
+    schedule_id: trip.schedule.scheduleId,
+    start_time: formatDateTime(trip.startTime),
+    end_time: formatDateTime(trip.endTime),
     status:
       trip.status === "ACTIVE"
         ? "Active"
@@ -35,27 +49,24 @@ export async function GET(request: NextRequest) {
     const depotIdParam = request.nextUrl.searchParams.get("depotId");
     const depotId = depotIdParam === null ? undefined : Number(depotIdParam);
 
-    const depotFilter =
-      depotId === undefined
-        ? Prisma.empty
-        : Prisma.sql`WHERE s.depotId = ${depotId}`;
-
-    const trips = await prisma.$queryRaw<
-      Array<{
-        tripId: string;
-        scheduleId: string;
-        startTime: string;
-        endTime: string;
-        status: "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
-        remarks: string | null;
-      }>
-    >(Prisma.sql`
-      SELECT t.tripId, t.schedule_id AS scheduleId, t.start_time AS startTime, t.end_time AS endTime, t.status, t.remarks
-      FROM trips t
-      INNER JOIN schedules s ON s.scheduleId = t.schedule_id
-      ${depotFilter}
-      ORDER BY t.created_at DESC
-    `);
+    const trips = await prisma.trip.findMany({
+      where:
+        depotId === undefined
+          ? undefined
+          : {
+              schedule: {
+                depotId,
+              },
+            },
+      include: {
+        schedule: {
+          select: { scheduleId: true },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     return NextResponse.json({
       success: true,
@@ -75,7 +86,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const scheduleId = String(body.schedule_id ?? "").trim();
     const startTime = String(body.start_time ?? "").trim();
-    const endTime = String(body.end_time ?? "").trim();
+    const endTime = body.end_time;
     const status = String(body.status ?? "SCHEDULED").toUpperCase();
     const remarks =
       body.remarks === undefined ? null : String(body.remarks).trim();
@@ -87,36 +98,42 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const tripId = randomUUID().replace(/-/g, "");
+    const schedule = await prisma.schedule.findUnique({
+      where: {
+        scheduleId,
+      },
+    });
 
-    await prisma.$executeRaw`
-      INSERT INTO trips (tripId, schedule_id, start_time, end_time, status, remarks, created_at, updated_at)
-      VALUES (${tripId}, ${scheduleId}, ${startTime}, ${endTime}, ${status}, ${remarks}, NOW(3), NOW(3))
-    `;
-
-    const rows = await prisma.$queryRaw<
-      Array<{
-        tripId: string;
-        scheduleId: string;
-        startTime: string;
-        endTime: string;
-        status: "SCHEDULED" | "ACTIVE" | "DELAYED" | "COMPLETED" | "CANCELLED";
-        remarks: string | null;
-      }>
-    >`
-      SELECT tripId, schedule_id AS scheduleId, start_time AS startTime, end_time AS endTime, status, remarks
-      FROM trips
-      WHERE tripId = ${tripId}
-      LIMIT 1
-    `;
-
-    const trip = rows[0] ?? null;
-    if (!trip) {
+    if (!schedule) {
       return NextResponse.json(
-        { success: false, message: "Failed to create trip." },
-        { status: 500 },
+        { success: false, message: "Schedule not found." },
+        { status: 404 },
       );
     }
+
+    const trip = await prisma.trip.create({
+      data: {
+        scheduleId: schedule.id,
+        startTime: parseDateTime(startTime),
+        endTime: parseOptionalDateTime(endTime),
+        status:
+          status === "ACTIVE"
+            ? "ACTIVE"
+            : status === "DELAYED"
+              ? "DELAYED"
+              : status === "COMPLETED"
+                ? "COMPLETED"
+                : status === "CANCELLED"
+                  ? "CANCELLED"
+                  : "SCHEDULED",
+        remarks,
+      },
+      include: {
+        schedule: {
+          select: { scheduleId: true },
+        },
+      },
+    });
 
     return NextResponse.json(
       { success: true, trip: serializeTrip(trip) },
