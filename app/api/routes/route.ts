@@ -14,7 +14,9 @@ function serializeRoute(route: any) {
   const stops = Array.isArray(route.stops)
     ? route.stops
         .map((stop: any) =>
-          typeof stop === "string" ? stop : stop?.stopName ?? stop?.name ?? "",
+          typeof stop === "string"
+            ? stop
+            : (stop?.stopName ?? stop?.name ?? ""),
         )
         .filter((stop: string) => stop.length > 0)
     : [];
