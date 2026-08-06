@@ -397,11 +397,17 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  Depot: 'Depot',
   User: 'User',
   Driver: 'Driver',
   Vehicle: 'Vehicle',
   Route: 'Route',
-  Schedule: 'Schedule'
+  RouteStop: 'RouteStop',
+  Schedule: 'Schedule',
+  Trip: 'Trip',
+  FuelLog: 'FuelLog',
+  MaintenanceRecord: 'MaintenanceRecord',
+  AuditLog: 'AuditLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,10 +423,76 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "driver" | "vehicle" | "route" | "schedule"
+    modelProps: "depot" | "user" | "driver" | "vehicle" | "route" | "routeStop" | "schedule" | "trip" | "fuelLog" | "maintenanceRecord" | "auditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    Depot: {
+      payload: Prisma.$DepotPayload<ExtArgs>
+      fields: Prisma.DepotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DepotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DepotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepotPayload>
+        }
+        findFirst: {
+          args: Prisma.DepotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DepotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepotPayload>
+        }
+        findMany: {
+          args: Prisma.DepotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepotPayload>[]
+        }
+        create: {
+          args: Prisma.DepotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepotPayload>
+        }
+        createMany: {
+          args: Prisma.DepotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.DepotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepotPayload>
+        }
+        update: {
+          args: Prisma.DepotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepotPayload>
+        }
+        deleteMany: {
+          args: Prisma.DepotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DepotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.DepotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepotPayload>
+        }
+        aggregate: {
+          args: Prisma.DepotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDepot>
+        }
+        groupBy: {
+          args: Prisma.DepotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DepotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DepotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DepotCountAggregateOutputType> | number
+        }
+      }
+    }
     User: {
       payload: Prisma.$UserPayload<ExtArgs>
       fields: Prisma.UserFieldRefs
@@ -685,6 +757,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RouteStop: {
+      payload: Prisma.$RouteStopPayload<ExtArgs>
+      fields: Prisma.RouteStopFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RouteStopFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RouteStopPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RouteStopFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RouteStopPayload>
+        }
+        findFirst: {
+          args: Prisma.RouteStopFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RouteStopPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RouteStopFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RouteStopPayload>
+        }
+        findMany: {
+          args: Prisma.RouteStopFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RouteStopPayload>[]
+        }
+        create: {
+          args: Prisma.RouteStopCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RouteStopPayload>
+        }
+        createMany: {
+          args: Prisma.RouteStopCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.RouteStopDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RouteStopPayload>
+        }
+        update: {
+          args: Prisma.RouteStopUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RouteStopPayload>
+        }
+        deleteMany: {
+          args: Prisma.RouteStopDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RouteStopUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.RouteStopUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RouteStopPayload>
+        }
+        aggregate: {
+          args: Prisma.RouteStopAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRouteStop>
+        }
+        groupBy: {
+          args: Prisma.RouteStopGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RouteStopGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RouteStopCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RouteStopCountAggregateOutputType> | number
+        }
+      }
+    }
     Schedule: {
       payload: Prisma.$SchedulePayload<ExtArgs>
       fields: Prisma.ScheduleFieldRefs
@@ -751,6 +889,270 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Trip: {
+      payload: Prisma.$TripPayload<ExtArgs>
+      fields: Prisma.TripFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TripFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TripFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripPayload>
+        }
+        findFirst: {
+          args: Prisma.TripFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TripFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripPayload>
+        }
+        findMany: {
+          args: Prisma.TripFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripPayload>[]
+        }
+        create: {
+          args: Prisma.TripCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripPayload>
+        }
+        createMany: {
+          args: Prisma.TripCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.TripDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripPayload>
+        }
+        update: {
+          args: Prisma.TripUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripPayload>
+        }
+        deleteMany: {
+          args: Prisma.TripDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TripUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.TripUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripPayload>
+        }
+        aggregate: {
+          args: Prisma.TripAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTrip>
+        }
+        groupBy: {
+          args: Prisma.TripGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TripGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TripCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TripCountAggregateOutputType> | number
+        }
+      }
+    }
+    FuelLog: {
+      payload: Prisma.$FuelLogPayload<ExtArgs>
+      fields: Prisma.FuelLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FuelLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FuelLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FuelLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FuelLogPayload>
+        }
+        findFirst: {
+          args: Prisma.FuelLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FuelLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FuelLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FuelLogPayload>
+        }
+        findMany: {
+          args: Prisma.FuelLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FuelLogPayload>[]
+        }
+        create: {
+          args: Prisma.FuelLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FuelLogPayload>
+        }
+        createMany: {
+          args: Prisma.FuelLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.FuelLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FuelLogPayload>
+        }
+        update: {
+          args: Prisma.FuelLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FuelLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.FuelLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FuelLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.FuelLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FuelLogPayload>
+        }
+        aggregate: {
+          args: Prisma.FuelLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFuelLog>
+        }
+        groupBy: {
+          args: Prisma.FuelLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FuelLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FuelLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FuelLogCountAggregateOutputType> | number
+        }
+      }
+    }
+    MaintenanceRecord: {
+      payload: Prisma.$MaintenanceRecordPayload<ExtArgs>
+      fields: Prisma.MaintenanceRecordFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MaintenanceRecordFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaintenanceRecordPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MaintenanceRecordFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaintenanceRecordPayload>
+        }
+        findFirst: {
+          args: Prisma.MaintenanceRecordFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaintenanceRecordPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MaintenanceRecordFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaintenanceRecordPayload>
+        }
+        findMany: {
+          args: Prisma.MaintenanceRecordFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaintenanceRecordPayload>[]
+        }
+        create: {
+          args: Prisma.MaintenanceRecordCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaintenanceRecordPayload>
+        }
+        createMany: {
+          args: Prisma.MaintenanceRecordCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.MaintenanceRecordDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaintenanceRecordPayload>
+        }
+        update: {
+          args: Prisma.MaintenanceRecordUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaintenanceRecordPayload>
+        }
+        deleteMany: {
+          args: Prisma.MaintenanceRecordDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MaintenanceRecordUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.MaintenanceRecordUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MaintenanceRecordPayload>
+        }
+        aggregate: {
+          args: Prisma.MaintenanceRecordAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMaintenanceRecord>
+        }
+        groupBy: {
+          args: Prisma.MaintenanceRecordGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MaintenanceRecordGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MaintenanceRecordCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MaintenanceRecordCountAggregateOutputType> | number
+        }
+      }
+    }
+    AuditLog: {
+      payload: Prisma.$AuditLogPayload<ExtArgs>
+      fields: Prisma.AuditLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AuditLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AuditLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        findFirst: {
+          args: Prisma.AuditLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AuditLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        findMany: {
+          args: Prisma.AuditLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+        }
+        create: {
+          args: Prisma.AuditLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        createMany: {
+          args: Prisma.AuditLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.AuditLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        update: {
+          args: Prisma.AuditLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.AuditLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AuditLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.AuditLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditLogPayload>
+        }
+        aggregate: {
+          args: Prisma.AuditLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAuditLog>
+        }
+        groupBy: {
+          args: Prisma.AuditLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuditLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AuditLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuditLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -790,15 +1192,36 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const DepotScalarFieldEnum = {
+  id: 'id',
+  depotCode: 'depotCode',
+  name: 'name',
+  code: 'code',
+  address: 'address',
+  phone: 'phone',
+  email: 'email',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type DepotScalarFieldEnum = (typeof DepotScalarFieldEnum)[keyof typeof DepotScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   fullName: 'fullName',
   email: 'email',
   username: 'username',
   password: 'password',
   role: 'role',
+  status: 'status',
+  depotId: 'depotId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -807,16 +1230,17 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const DriverScalarFieldEnum = {
   id: 'id',
   driverId: 'driverId',
-  name: 'name',
+  depotId: 'depotId',
+  fullName: 'fullName',
   nic: 'nic',
   phone: 'phone',
   address: 'address',
   licenseNumber: 'licenseNumber',
   licenseExpiry: 'licenseExpiry',
-  workingHours: 'workingHours',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type DriverScalarFieldEnum = (typeof DriverScalarFieldEnum)[keyof typeof DriverScalarFieldEnum]
@@ -825,6 +1249,7 @@ export type DriverScalarFieldEnum = (typeof DriverScalarFieldEnum)[keyof typeof 
 export const VehicleScalarFieldEnum = {
   id: 'id',
   vehicleId: 'vehicleId',
+  depotId: 'depotId',
   registrationNumber: 'registrationNumber',
   vehicleType: 'vehicleType',
   seatingCapacity: 'seatingCapacity',
@@ -832,7 +1257,8 @@ export const VehicleScalarFieldEnum = {
   fuelType: 'fuelType',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
@@ -841,23 +1267,36 @@ export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeo
 export const RouteScalarFieldEnum = {
   id: 'id',
   routeId: 'routeId',
+  depotId: 'depotId',
   routeName: 'routeName',
   startLocation: 'startLocation',
   endLocation: 'endLocation',
-  stops: 'stops',
   distance: 'distance',
   estimatedDuration: 'estimatedDuration',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type RouteScalarFieldEnum = (typeof RouteScalarFieldEnum)[keyof typeof RouteScalarFieldEnum]
 
 
+export const RouteStopScalarFieldEnum = {
+  id: 'id',
+  routeId: 'routeId',
+  stopName: 'stopName',
+  stopOrder: 'stopOrder',
+  createdAt: 'createdAt'
+} as const
+
+export type RouteStopScalarFieldEnum = (typeof RouteStopScalarFieldEnum)[keyof typeof RouteStopScalarFieldEnum]
+
+
 export const ScheduleScalarFieldEnum = {
   id: 'id',
   scheduleId: 'scheduleId',
+  depotId: 'depotId',
   routeId: 'routeId',
   vehicleId: 'vehicleId',
   driverId: 'driverId',
@@ -872,29 +1311,74 @@ export const ScheduleScalarFieldEnum = {
 export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
 
 
+export const TripScalarFieldEnum = {
+  id: 'id',
+  tripId: 'tripId',
+  scheduleId: 'scheduleId',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  status: 'status',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TripScalarFieldEnum = (typeof TripScalarFieldEnum)[keyof typeof TripScalarFieldEnum]
+
+
+export const FuelLogScalarFieldEnum = {
+  id: 'id',
+  fuelId: 'fuelId',
+  depotId: 'depotId',
+  vehicleId: 'vehicleId',
+  date: 'date',
+  liters: 'liters',
+  cost: 'cost',
+  distanceCovered: 'distanceCovered',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FuelLogScalarFieldEnum = (typeof FuelLogScalarFieldEnum)[keyof typeof FuelLogScalarFieldEnum]
+
+
+export const MaintenanceRecordScalarFieldEnum = {
+  id: 'id',
+  maintenanceId: 'maintenanceId',
+  depotId: 'depotId',
+  vehicleId: 'vehicleId',
+  maintenanceType: 'maintenanceType',
+  serviceDate: 'serviceDate',
+  nextServiceDate: 'nextServiceDate',
+  cost: 'cost',
+  remarks: 'remarks',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MaintenanceRecordScalarFieldEnum = (typeof MaintenanceRecordScalarFieldEnum)[keyof typeof MaintenanceRecordScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  entity: 'entity',
+  entityId: 'entityId',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
-export const UserOrderByRelevanceFieldEnum = {
-  fullName: 'fullName',
-  email: 'email',
-  username: 'username',
-  password: 'password'
-} as const
-
-export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
 
 
 export const NullsOrder = {
@@ -905,9 +1389,32 @@ export const NullsOrder = {
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
+export const DepotOrderByRelevanceFieldEnum = {
+  depotCode: 'depotCode',
+  name: 'name',
+  code: 'code',
+  address: 'address',
+  phone: 'phone',
+  email: 'email'
+} as const
+
+export type DepotOrderByRelevanceFieldEnum = (typeof DepotOrderByRelevanceFieldEnum)[keyof typeof DepotOrderByRelevanceFieldEnum]
+
+
+export const UserOrderByRelevanceFieldEnum = {
+  userId: 'userId',
+  fullName: 'fullName',
+  email: 'email',
+  username: 'username',
+  password: 'password'
+} as const
+
+export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
+
+
 export const DriverOrderByRelevanceFieldEnum = {
   driverId: 'driverId',
-  name: 'name',
+  fullName: 'fullName',
   nic: 'nic',
   phone: 'phone',
   address: 'address',
@@ -925,23 +1432,6 @@ export const VehicleOrderByRelevanceFieldEnum = {
 export type VehicleOrderByRelevanceFieldEnum = (typeof VehicleOrderByRelevanceFieldEnum)[keyof typeof VehicleOrderByRelevanceFieldEnum]
 
 
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
 export const RouteOrderByRelevanceFieldEnum = {
   routeId: 'routeId',
   routeName: 'routeName',
@@ -952,16 +1442,51 @@ export const RouteOrderByRelevanceFieldEnum = {
 export type RouteOrderByRelevanceFieldEnum = (typeof RouteOrderByRelevanceFieldEnum)[keyof typeof RouteOrderByRelevanceFieldEnum]
 
 
+export const RouteStopOrderByRelevanceFieldEnum = {
+  stopName: 'stopName'
+} as const
+
+export type RouteStopOrderByRelevanceFieldEnum = (typeof RouteStopOrderByRelevanceFieldEnum)[keyof typeof RouteStopOrderByRelevanceFieldEnum]
+
+
 export const ScheduleOrderByRelevanceFieldEnum = {
-  scheduleId: 'scheduleId',
-  routeId: 'routeId',
-  vehicleId: 'vehicleId',
-  driverId: 'driverId',
-  departureTime: 'departureTime',
-  arrivalTime: 'arrivalTime'
+  scheduleId: 'scheduleId'
 } as const
 
 export type ScheduleOrderByRelevanceFieldEnum = (typeof ScheduleOrderByRelevanceFieldEnum)[keyof typeof ScheduleOrderByRelevanceFieldEnum]
+
+
+export const TripOrderByRelevanceFieldEnum = {
+  tripId: 'tripId',
+  remarks: 'remarks'
+} as const
+
+export type TripOrderByRelevanceFieldEnum = (typeof TripOrderByRelevanceFieldEnum)[keyof typeof TripOrderByRelevanceFieldEnum]
+
+
+export const FuelLogOrderByRelevanceFieldEnum = {
+  fuelId: 'fuelId'
+} as const
+
+export type FuelLogOrderByRelevanceFieldEnum = (typeof FuelLogOrderByRelevanceFieldEnum)[keyof typeof FuelLogOrderByRelevanceFieldEnum]
+
+
+export const MaintenanceRecordOrderByRelevanceFieldEnum = {
+  maintenanceId: 'maintenanceId',
+  remarks: 'remarks'
+} as const
+
+export type MaintenanceRecordOrderByRelevanceFieldEnum = (typeof MaintenanceRecordOrderByRelevanceFieldEnum)[keyof typeof MaintenanceRecordOrderByRelevanceFieldEnum]
+
+
+export const AuditLogOrderByRelevanceFieldEnum = {
+  action: 'action',
+  entity: 'entity',
+  entityId: 'entityId',
+  description: 'description'
+} as const
+
+export type AuditLogOrderByRelevanceFieldEnum = (typeof AuditLogOrderByRelevanceFieldEnum)[keyof typeof AuditLogOrderByRelevanceFieldEnum]
 
 
 
@@ -985,9 +1510,9 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
 
 
 /**
- * Reference to a field of type 'UserRole'
+ * Reference to a field of type 'Boolean'
  */
-export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -995,6 +1520,20 @@ export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'UserRole'
+ */
+export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+    
+
+
+/**
+ * Reference to a field of type 'UserStatus'
+ */
+export type EnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus'>
     
 
 
@@ -1013,6 +1552,13 @@ export type EnumVehicleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
  * Reference to a field of type 'FuelType'
  */
 export type EnumFuelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FuelType'>
@@ -1027,27 +1573,6 @@ export type EnumVehicleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 
 
 /**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
  * Reference to a field of type 'RouteStatus'
  */
 export type EnumRouteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RouteStatus'>
@@ -1058,6 +1583,27 @@ export type EnumRouteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'ScheduleStatus'
  */
 export type EnumScheduleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ScheduleStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TripStatus'
+ */
+export type EnumTripStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TripStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceType'
+ */
+export type EnumMaintenanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceType'>
+    
+
+
+/**
+ * Reference to a field of type 'MaintenanceStatus'
+ */
+export type EnumMaintenanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaintenanceStatus'>
     
 
 /**
@@ -1211,11 +1757,17 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
  */
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
+  depot?: Prisma.DepotOmit
   user?: Prisma.UserOmit
   driver?: Prisma.DriverOmit
   vehicle?: Prisma.VehicleOmit
   route?: Prisma.RouteOmit
+  routeStop?: Prisma.RouteStopOmit
   schedule?: Prisma.ScheduleOmit
+  trip?: Prisma.TripOmit
+  fuelLog?: Prisma.FuelLogOmit
+  maintenanceRecord?: Prisma.MaintenanceRecordOmit
+  auditLog?: Prisma.AuditLogOmit
 }
 
 /* Types for Logging */

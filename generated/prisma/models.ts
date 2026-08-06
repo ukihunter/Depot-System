@@ -8,9 +8,15 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Depot'
 export type * from './models/User'
 export type * from './models/Driver'
 export type * from './models/Vehicle'
 export type * from './models/Route'
+export type * from './models/RouteStop'
 export type * from './models/Schedule'
+export type * from './models/Trip'
+export type * from './models/FuelLog'
+export type * from './models/MaintenanceRecord'
+export type * from './models/AuditLog'
 export type * from './commonInputTypes'

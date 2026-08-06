@@ -45,7 +45,7 @@ export default function DriversModule({
     "Active",
   );
 
-  const canWrite = userRole === "Admin";
+  const canWrite = userRole === "MAIN_ADMIN" || userRole === "DEPOT_ADMIN";
 
   // System Date is June 14, 2026
   const CURRENT_TIME = new Date("2026-06-14");

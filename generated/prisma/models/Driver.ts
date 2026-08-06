@@ -28,114 +28,120 @@ export type AggregateDriver = {
 
 export type DriverAvgAggregateOutputType = {
   id: number | null
-  workingHours: number | null
+  depotId: number | null
 }
 
 export type DriverSumAggregateOutputType = {
   id: number | null
-  workingHours: number | null
+  depotId: number | null
 }
 
 export type DriverMinAggregateOutputType = {
   id: number | null
   driverId: string | null
-  name: string | null
+  depotId: number | null
+  fullName: string | null
   nic: string | null
   phone: string | null
   address: string | null
   licenseNumber: string | null
   licenseExpiry: Date | null
-  workingHours: number | null
   status: $Enums.DriverStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type DriverMaxAggregateOutputType = {
   id: number | null
   driverId: string | null
-  name: string | null
+  depotId: number | null
+  fullName: string | null
   nic: string | null
   phone: string | null
   address: string | null
   licenseNumber: string | null
   licenseExpiry: Date | null
-  workingHours: number | null
   status: $Enums.DriverStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type DriverCountAggregateOutputType = {
   id: number
   driverId: number
-  name: number
+  depotId: number
+  fullName: number
   nic: number
   phone: number
   address: number
   licenseNumber: number
   licenseExpiry: number
-  workingHours: number
   status: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
   _all: number
 }
 
 
 export type DriverAvgAggregateInputType = {
   id?: true
-  workingHours?: true
+  depotId?: true
 }
 
 export type DriverSumAggregateInputType = {
   id?: true
-  workingHours?: true
+  depotId?: true
 }
 
 export type DriverMinAggregateInputType = {
   id?: true
   driverId?: true
-  name?: true
+  depotId?: true
+  fullName?: true
   nic?: true
   phone?: true
   address?: true
   licenseNumber?: true
   licenseExpiry?: true
-  workingHours?: true
   status?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
 }
 
 export type DriverMaxAggregateInputType = {
   id?: true
   driverId?: true
-  name?: true
+  depotId?: true
+  fullName?: true
   nic?: true
   phone?: true
   address?: true
   licenseNumber?: true
   licenseExpiry?: true
-  workingHours?: true
   status?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
 }
 
 export type DriverCountAggregateInputType = {
   id?: true
   driverId?: true
-  name?: true
+  depotId?: true
+  fullName?: true
   nic?: true
   phone?: true
   address?: true
   licenseNumber?: true
   licenseExpiry?: true
-  workingHours?: true
   status?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -228,16 +234,17 @@ export type DriverGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type DriverGroupByOutputType = {
   id: number
   driverId: string
-  name: string
+  depotId: number
+  fullName: string
   nic: string
   phone: string
   address: string | null
   licenseNumber: string
   licenseExpiry: Date
-  workingHours: number
   status: $Enums.DriverStatus
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
   _count: DriverCountAggregateOutputType | null
   _avg: DriverAvgAggregateOutputType | null
   _sum: DriverSumAggregateOutputType | null
@@ -266,32 +273,36 @@ export type DriverWhereInput = {
   NOT?: Prisma.DriverWhereInput | Prisma.DriverWhereInput[]
   id?: Prisma.IntFilter<"Driver"> | number
   driverId?: Prisma.StringFilter<"Driver"> | string
-  name?: Prisma.StringFilter<"Driver"> | string
+  depotId?: Prisma.IntFilter<"Driver"> | number
+  fullName?: Prisma.StringFilter<"Driver"> | string
   nic?: Prisma.StringFilter<"Driver"> | string
   phone?: Prisma.StringFilter<"Driver"> | string
   address?: Prisma.StringNullableFilter<"Driver"> | string | null
   licenseNumber?: Prisma.StringFilter<"Driver"> | string
   licenseExpiry?: Prisma.DateTimeFilter<"Driver"> | Date | string
-  workingHours?: Prisma.IntFilter<"Driver"> | number
   status?: Prisma.EnumDriverStatusFilter<"Driver"> | $Enums.DriverStatus
   createdAt?: Prisma.DateTimeFilter<"Driver"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Driver"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Driver"> | Date | string | null
+  depot?: Prisma.XOR<Prisma.DepotScalarRelationFilter, Prisma.DepotWhereInput>
   schedules?: Prisma.ScheduleListRelationFilter
 }
 
 export type DriverOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   driverId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
   nic?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseExpiry?: Prisma.SortOrder
-  workingHours?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  depot?: Prisma.DepotOrderByWithRelationInput
   schedules?: Prisma.ScheduleOrderByRelationAggregateInput
   _relevance?: Prisma.DriverOrderByRelevanceInput
 }
@@ -304,30 +315,33 @@ export type DriverWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.DriverWhereInput | Prisma.DriverWhereInput[]
   OR?: Prisma.DriverWhereInput[]
   NOT?: Prisma.DriverWhereInput | Prisma.DriverWhereInput[]
-  name?: Prisma.StringFilter<"Driver"> | string
+  depotId?: Prisma.IntFilter<"Driver"> | number
+  fullName?: Prisma.StringFilter<"Driver"> | string
   phone?: Prisma.StringFilter<"Driver"> | string
   address?: Prisma.StringNullableFilter<"Driver"> | string | null
   licenseExpiry?: Prisma.DateTimeFilter<"Driver"> | Date | string
-  workingHours?: Prisma.IntFilter<"Driver"> | number
   status?: Prisma.EnumDriverStatusFilter<"Driver"> | $Enums.DriverStatus
   createdAt?: Prisma.DateTimeFilter<"Driver"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Driver"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Driver"> | Date | string | null
+  depot?: Prisma.XOR<Prisma.DepotScalarRelationFilter, Prisma.DepotWhereInput>
   schedules?: Prisma.ScheduleListRelationFilter
 }, "id" | "driverId" | "nic" | "licenseNumber">
 
 export type DriverOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   driverId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
   nic?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseExpiry?: Prisma.SortOrder
-  workingHours?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.DriverCountOrderByAggregateInput
   _avg?: Prisma.DriverAvgOrderByAggregateInput
   _max?: Prisma.DriverMaxOrderByAggregateInput
@@ -341,122 +355,139 @@ export type DriverScalarWhereWithAggregatesInput = {
   NOT?: Prisma.DriverScalarWhereWithAggregatesInput | Prisma.DriverScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Driver"> | number
   driverId?: Prisma.StringWithAggregatesFilter<"Driver"> | string
-  name?: Prisma.StringWithAggregatesFilter<"Driver"> | string
+  depotId?: Prisma.IntWithAggregatesFilter<"Driver"> | number
+  fullName?: Prisma.StringWithAggregatesFilter<"Driver"> | string
   nic?: Prisma.StringWithAggregatesFilter<"Driver"> | string
   phone?: Prisma.StringWithAggregatesFilter<"Driver"> | string
   address?: Prisma.StringNullableWithAggregatesFilter<"Driver"> | string | null
   licenseNumber?: Prisma.StringWithAggregatesFilter<"Driver"> | string
   licenseExpiry?: Prisma.DateTimeWithAggregatesFilter<"Driver"> | Date | string
-  workingHours?: Prisma.IntWithAggregatesFilter<"Driver"> | number
   status?: Prisma.EnumDriverStatusWithAggregatesFilter<"Driver"> | $Enums.DriverStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Driver"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Driver"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Driver"> | Date | string | null
 }
 
 export type DriverCreateInput = {
   driverId?: string
-  name: string
+  fullName: string
   nic: string
   phone: string
   address?: string | null
   licenseNumber: string
   licenseExpiry: Date | string
-  workingHours?: number
   status?: $Enums.DriverStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  depot: Prisma.DepotCreateNestedOneWithoutDriversInput
   schedules?: Prisma.ScheduleCreateNestedManyWithoutDriverInput
 }
 
 export type DriverUncheckedCreateInput = {
   id?: number
   driverId?: string
-  name: string
+  depotId: number
+  fullName: string
   nic: string
   phone: string
   address?: string | null
   licenseNumber: string
   licenseExpiry: Date | string
-  workingHours?: number
   status?: $Enums.DriverStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutDriverInput
 }
 
 export type DriverUpdateInput = {
   driverId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
   nic?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseExpiry?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workingHours?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDriverStatusFieldUpdateOperationsInput | $Enums.DriverStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  depot?: Prisma.DepotUpdateOneRequiredWithoutDriversNestedInput
   schedules?: Prisma.ScheduleUpdateManyWithoutDriverNestedInput
 }
 
 export type DriverUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   driverId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  depotId?: Prisma.IntFieldUpdateOperationsInput | number
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
   nic?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseExpiry?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workingHours?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDriverStatusFieldUpdateOperationsInput | $Enums.DriverStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutDriverNestedInput
 }
 
 export type DriverCreateManyInput = {
   id?: number
   driverId?: string
-  name: string
+  depotId: number
+  fullName: string
   nic: string
   phone: string
   address?: string | null
   licenseNumber: string
   licenseExpiry: Date | string
-  workingHours?: number
   status?: $Enums.DriverStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type DriverUpdateManyMutationInput = {
   driverId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
   nic?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseExpiry?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workingHours?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDriverStatusFieldUpdateOperationsInput | $Enums.DriverStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type DriverUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   driverId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  depotId?: Prisma.IntFieldUpdateOperationsInput | number
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
   nic?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseExpiry?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workingHours?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDriverStatusFieldUpdateOperationsInput | $Enums.DriverStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type DriverListRelationFilter = {
+  every?: Prisma.DriverWhereInput
+  some?: Prisma.DriverWhereInput
+  none?: Prisma.DriverWhereInput
+}
+
+export type DriverOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type DriverOrderByRelevanceInput = {
@@ -468,56 +499,59 @@ export type DriverOrderByRelevanceInput = {
 export type DriverCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   driverId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
   nic?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseExpiry?: Prisma.SortOrder
-  workingHours?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type DriverAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  workingHours?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
 }
 
 export type DriverMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   driverId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
   nic?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseExpiry?: Prisma.SortOrder
-  workingHours?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type DriverMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   driverId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
+  fullName?: Prisma.SortOrder
   nic?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseExpiry?: Prisma.SortOrder
-  workingHours?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type DriverSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  workingHours?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
 }
 
 export type DriverScalarRelationFilter = {
@@ -525,8 +559,46 @@ export type DriverScalarRelationFilter = {
   isNot?: Prisma.DriverWhereInput
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type DriverCreateNestedManyWithoutDepotInput = {
+  create?: Prisma.XOR<Prisma.DriverCreateWithoutDepotInput, Prisma.DriverUncheckedCreateWithoutDepotInput> | Prisma.DriverCreateWithoutDepotInput[] | Prisma.DriverUncheckedCreateWithoutDepotInput[]
+  connectOrCreate?: Prisma.DriverCreateOrConnectWithoutDepotInput | Prisma.DriverCreateOrConnectWithoutDepotInput[]
+  createMany?: Prisma.DriverCreateManyDepotInputEnvelope
+  connect?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+}
+
+export type DriverUncheckedCreateNestedManyWithoutDepotInput = {
+  create?: Prisma.XOR<Prisma.DriverCreateWithoutDepotInput, Prisma.DriverUncheckedCreateWithoutDepotInput> | Prisma.DriverCreateWithoutDepotInput[] | Prisma.DriverUncheckedCreateWithoutDepotInput[]
+  connectOrCreate?: Prisma.DriverCreateOrConnectWithoutDepotInput | Prisma.DriverCreateOrConnectWithoutDepotInput[]
+  createMany?: Prisma.DriverCreateManyDepotInputEnvelope
+  connect?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+}
+
+export type DriverUpdateManyWithoutDepotNestedInput = {
+  create?: Prisma.XOR<Prisma.DriverCreateWithoutDepotInput, Prisma.DriverUncheckedCreateWithoutDepotInput> | Prisma.DriverCreateWithoutDepotInput[] | Prisma.DriverUncheckedCreateWithoutDepotInput[]
+  connectOrCreate?: Prisma.DriverCreateOrConnectWithoutDepotInput | Prisma.DriverCreateOrConnectWithoutDepotInput[]
+  upsert?: Prisma.DriverUpsertWithWhereUniqueWithoutDepotInput | Prisma.DriverUpsertWithWhereUniqueWithoutDepotInput[]
+  createMany?: Prisma.DriverCreateManyDepotInputEnvelope
+  set?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+  disconnect?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+  delete?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+  connect?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+  update?: Prisma.DriverUpdateWithWhereUniqueWithoutDepotInput | Prisma.DriverUpdateWithWhereUniqueWithoutDepotInput[]
+  updateMany?: Prisma.DriverUpdateManyWithWhereWithoutDepotInput | Prisma.DriverUpdateManyWithWhereWithoutDepotInput[]
+  deleteMany?: Prisma.DriverScalarWhereInput | Prisma.DriverScalarWhereInput[]
+}
+
+export type DriverUncheckedUpdateManyWithoutDepotNestedInput = {
+  create?: Prisma.XOR<Prisma.DriverCreateWithoutDepotInput, Prisma.DriverUncheckedCreateWithoutDepotInput> | Prisma.DriverCreateWithoutDepotInput[] | Prisma.DriverUncheckedCreateWithoutDepotInput[]
+  connectOrCreate?: Prisma.DriverCreateOrConnectWithoutDepotInput | Prisma.DriverCreateOrConnectWithoutDepotInput[]
+  upsert?: Prisma.DriverUpsertWithWhereUniqueWithoutDepotInput | Prisma.DriverUpsertWithWhereUniqueWithoutDepotInput[]
+  createMany?: Prisma.DriverCreateManyDepotInputEnvelope
+  set?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+  disconnect?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+  delete?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+  connect?: Prisma.DriverWhereUniqueInput | Prisma.DriverWhereUniqueInput[]
+  update?: Prisma.DriverUpdateWithWhereUniqueWithoutDepotInput | Prisma.DriverUpdateWithWhereUniqueWithoutDepotInput[]
+  updateMany?: Prisma.DriverUpdateManyWithWhereWithoutDepotInput | Prisma.DriverUpdateManyWithWhereWithoutDepotInput[]
+  deleteMany?: Prisma.DriverScalarWhereInput | Prisma.DriverScalarWhereInput[]
 }
 
 export type EnumDriverStatusFieldUpdateOperationsInput = {
@@ -547,33 +619,111 @@ export type DriverUpdateOneRequiredWithoutSchedulesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DriverUpdateToOneWithWhereWithoutSchedulesInput, Prisma.DriverUpdateWithoutSchedulesInput>, Prisma.DriverUncheckedUpdateWithoutSchedulesInput>
 }
 
-export type DriverCreateWithoutSchedulesInput = {
+export type DriverCreateWithoutDepotInput = {
   driverId?: string
-  name: string
+  fullName: string
   nic: string
   phone: string
   address?: string | null
   licenseNumber: string
   licenseExpiry: Date | string
-  workingHours?: number
   status?: $Enums.DriverStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutDriverInput
+}
+
+export type DriverUncheckedCreateWithoutDepotInput = {
+  id?: number
+  driverId?: string
+  fullName: string
+  nic: string
+  phone: string
+  address?: string | null
+  licenseNumber: string
+  licenseExpiry: Date | string
+  status?: $Enums.DriverStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutDriverInput
+}
+
+export type DriverCreateOrConnectWithoutDepotInput = {
+  where: Prisma.DriverWhereUniqueInput
+  create: Prisma.XOR<Prisma.DriverCreateWithoutDepotInput, Prisma.DriverUncheckedCreateWithoutDepotInput>
+}
+
+export type DriverCreateManyDepotInputEnvelope = {
+  data: Prisma.DriverCreateManyDepotInput | Prisma.DriverCreateManyDepotInput[]
+  skipDuplicates?: boolean
+}
+
+export type DriverUpsertWithWhereUniqueWithoutDepotInput = {
+  where: Prisma.DriverWhereUniqueInput
+  update: Prisma.XOR<Prisma.DriverUpdateWithoutDepotInput, Prisma.DriverUncheckedUpdateWithoutDepotInput>
+  create: Prisma.XOR<Prisma.DriverCreateWithoutDepotInput, Prisma.DriverUncheckedCreateWithoutDepotInput>
+}
+
+export type DriverUpdateWithWhereUniqueWithoutDepotInput = {
+  where: Prisma.DriverWhereUniqueInput
+  data: Prisma.XOR<Prisma.DriverUpdateWithoutDepotInput, Prisma.DriverUncheckedUpdateWithoutDepotInput>
+}
+
+export type DriverUpdateManyWithWhereWithoutDepotInput = {
+  where: Prisma.DriverScalarWhereInput
+  data: Prisma.XOR<Prisma.DriverUpdateManyMutationInput, Prisma.DriverUncheckedUpdateManyWithoutDepotInput>
+}
+
+export type DriverScalarWhereInput = {
+  AND?: Prisma.DriverScalarWhereInput | Prisma.DriverScalarWhereInput[]
+  OR?: Prisma.DriverScalarWhereInput[]
+  NOT?: Prisma.DriverScalarWhereInput | Prisma.DriverScalarWhereInput[]
+  id?: Prisma.IntFilter<"Driver"> | number
+  driverId?: Prisma.StringFilter<"Driver"> | string
+  depotId?: Prisma.IntFilter<"Driver"> | number
+  fullName?: Prisma.StringFilter<"Driver"> | string
+  nic?: Prisma.StringFilter<"Driver"> | string
+  phone?: Prisma.StringFilter<"Driver"> | string
+  address?: Prisma.StringNullableFilter<"Driver"> | string | null
+  licenseNumber?: Prisma.StringFilter<"Driver"> | string
+  licenseExpiry?: Prisma.DateTimeFilter<"Driver"> | Date | string
+  status?: Prisma.EnumDriverStatusFilter<"Driver"> | $Enums.DriverStatus
+  createdAt?: Prisma.DateTimeFilter<"Driver"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Driver"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Driver"> | Date | string | null
+}
+
+export type DriverCreateWithoutSchedulesInput = {
+  driverId?: string
+  fullName: string
+  nic: string
+  phone: string
+  address?: string | null
+  licenseNumber: string
+  licenseExpiry: Date | string
+  status?: $Enums.DriverStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  depot: Prisma.DepotCreateNestedOneWithoutDriversInput
 }
 
 export type DriverUncheckedCreateWithoutSchedulesInput = {
   id?: number
   driverId?: string
-  name: string
+  depotId: number
+  fullName: string
   nic: string
   phone: string
   address?: string | null
   licenseNumber: string
   licenseExpiry: Date | string
-  workingHours?: number
   status?: $Enums.DriverStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type DriverCreateOrConnectWithoutSchedulesInput = {
@@ -594,31 +744,94 @@ export type DriverUpdateToOneWithWhereWithoutSchedulesInput = {
 
 export type DriverUpdateWithoutSchedulesInput = {
   driverId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
   nic?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseExpiry?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workingHours?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDriverStatusFieldUpdateOperationsInput | $Enums.DriverStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  depot?: Prisma.DepotUpdateOneRequiredWithoutDriversNestedInput
 }
 
 export type DriverUncheckedUpdateWithoutSchedulesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   driverId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  depotId?: Prisma.IntFieldUpdateOperationsInput | number
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
   nic?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseExpiry?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workingHours?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDriverStatusFieldUpdateOperationsInput | $Enums.DriverStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type DriverCreateManyDepotInput = {
+  id?: number
+  driverId?: string
+  fullName: string
+  nic: string
+  phone: string
+  address?: string | null
+  licenseNumber: string
+  licenseExpiry: Date | string
+  status?: $Enums.DriverStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type DriverUpdateWithoutDepotInput = {
+  driverId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  nic?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  licenseExpiry?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumDriverStatusFieldUpdateOperationsInput | $Enums.DriverStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  schedules?: Prisma.ScheduleUpdateManyWithoutDriverNestedInput
+}
+
+export type DriverUncheckedUpdateWithoutDepotInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  driverId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  nic?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  licenseExpiry?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumDriverStatusFieldUpdateOperationsInput | $Enums.DriverStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutDriverNestedInput
+}
+
+export type DriverUncheckedUpdateManyWithoutDepotInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  driverId?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  nic?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  licenseExpiry?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumDriverStatusFieldUpdateOperationsInput | $Enums.DriverStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -655,16 +868,18 @@ export type DriverCountOutputTypeCountSchedulesArgs<ExtArgs extends runtime.Type
 export type DriverSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   driverId?: boolean
-  name?: boolean
+  depotId?: boolean
+  fullName?: boolean
   nic?: boolean
   phone?: boolean
   address?: boolean
   licenseNumber?: boolean
   licenseExpiry?: boolean
-  workingHours?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  depot?: boolean | Prisma.DepotDefaultArgs<ExtArgs>
   schedules?: boolean | Prisma.Driver$schedulesArgs<ExtArgs>
   _count?: boolean | Prisma.DriverCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["driver"]>
@@ -674,20 +889,22 @@ export type DriverSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type DriverSelectScalar = {
   id?: boolean
   driverId?: boolean
-  name?: boolean
+  depotId?: boolean
+  fullName?: boolean
   nic?: boolean
   phone?: boolean
   address?: boolean
   licenseNumber?: boolean
   licenseExpiry?: boolean
-  workingHours?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
 }
 
-export type DriverOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "driverId" | "name" | "nic" | "phone" | "address" | "licenseNumber" | "licenseExpiry" | "workingHours" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["driver"]>
+export type DriverOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "driverId" | "depotId" | "fullName" | "nic" | "phone" | "address" | "licenseNumber" | "licenseExpiry" | "status" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["driver"]>
 export type DriverInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  depot?: boolean | Prisma.DepotDefaultArgs<ExtArgs>
   schedules?: boolean | Prisma.Driver$schedulesArgs<ExtArgs>
   _count?: boolean | Prisma.DriverCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -695,21 +912,23 @@ export type DriverInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type $DriverPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Driver"
   objects: {
+    depot: Prisma.$DepotPayload<ExtArgs>
     schedules: Prisma.$SchedulePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     driverId: string
-    name: string
+    depotId: number
+    fullName: string
     nic: string
     phone: string
     address: string | null
     licenseNumber: string
     licenseExpiry: Date
-    workingHours: number
     status: $Enums.DriverStatus
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
   }, ExtArgs["result"]["driver"]>
   composites: {}
 }
@@ -1050,6 +1269,7 @@ readonly fields: DriverFieldRefs;
  */
 export interface Prisma__DriverClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  depot<T extends Prisma.DepotDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DepotDefaultArgs<ExtArgs>>): Prisma.Prisma__DepotClient<runtime.Types.Result.GetResult<Prisma.$DepotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   schedules<T extends Prisma.Driver$schedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Driver$schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1082,16 +1302,17 @@ export interface Prisma__DriverClient<T, Null = never, ExtArgs extends runtime.T
 export interface DriverFieldRefs {
   readonly id: Prisma.FieldRef<"Driver", 'Int'>
   readonly driverId: Prisma.FieldRef<"Driver", 'String'>
-  readonly name: Prisma.FieldRef<"Driver", 'String'>
+  readonly depotId: Prisma.FieldRef<"Driver", 'Int'>
+  readonly fullName: Prisma.FieldRef<"Driver", 'String'>
   readonly nic: Prisma.FieldRef<"Driver", 'String'>
   readonly phone: Prisma.FieldRef<"Driver", 'String'>
   readonly address: Prisma.FieldRef<"Driver", 'String'>
   readonly licenseNumber: Prisma.FieldRef<"Driver", 'String'>
   readonly licenseExpiry: Prisma.FieldRef<"Driver", 'DateTime'>
-  readonly workingHours: Prisma.FieldRef<"Driver", 'Int'>
   readonly status: Prisma.FieldRef<"Driver", 'DriverStatus'>
   readonly createdAt: Prisma.FieldRef<"Driver", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Driver", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Driver", 'DateTime'>
 }
     
 

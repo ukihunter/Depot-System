@@ -59,7 +59,37 @@ import type {
   Vehicle,
 } from "../type";
 
-type AppRole = "Admin" | "Supervisor" | "Staff" | "User";
+type AppRole =
+  | "MAIN_ADMIN"
+  | "DEPOT_ADMIN"
+  | "SUPERVISOR"
+  | "OPERATIONAL_STAFF";
+const permissions: Record<AppRole, readonly string[]> = {
+  MAIN_ADMIN: [
+    "dashboard",
+    "users",
+    "depots",
+    "routes",
+    "drivers",
+    "vehicles",
+    "schedules",
+    "operations",
+    "reports",
+    "settings",
+  ],
+  DEPOT_ADMIN: [
+    "dashboard",
+    "users",
+    "routes",
+    "drivers",
+    "vehicles",
+    "schedules",
+    "operations",
+    "reports",
+  ],
+  SUPERVISOR: ["dashboard", "schedules", "operations", "reports"],
+  OPERATIONAL_STAFF: ["operations", "schedules"],
+};
 type AuthTab = "login" | "register";
 type Theme = "light" | "dark";
 type AppTab =
@@ -78,6 +108,7 @@ type AuthUser = {
   email: string;
   username: string;
   role: AppRole;
+  depot_id: number | null;
 };
 
 const initialRoutes: Route[] = [
@@ -185,17 +216,54 @@ function createId(prefix: string) {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
-function toAppRole(role: string): AppRole {
+const appTabs = new Set<AppTab>([
+  "dashboard",
+  "routes",
+  "drivers",
+  "vehicles",
+  "schedules",
+  "operations",
+  "reports",
+  "settings",
+]);
+
+function normalizeRole(role: string): AppRole {
   switch (role.toUpperCase()) {
+    case "MAIN_ADMIN":
     case "ADMIN":
-      return "Admin";
+      return "MAIN_ADMIN";
+    case "DEPOT_ADMIN":
+      return "DEPOT_ADMIN";
     case "SUPERVISOR":
-      return "Supervisor";
+      return "SUPERVISOR";
+    case "OPERATIONAL_STAFF":
     case "STAFF":
-      return "Staff";
+    case "USER":
+      return "OPERATIONAL_STAFF";
     default:
-      return "User";
+      return "OPERATIONAL_STAFF";
   }
+}
+
+function formatRoleLabel(role: AppRole) {
+  return role
+    .replaceAll("_", " ")
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function canAccessTab(role: AppRole, tab: AppTab) {
+  return permissions[role].includes(tab);
+}
+
+function getFirstAccessibleTab(role: AppRole): AppTab {
+  for (const tab of permissions[role]) {
+    if (appTabs.has(tab as AppTab)) {
+      return tab as AppTab;
+    }
+  }
+
+  return "dashboard";
 }
 
 function normalizeUser(user: {
@@ -204,16 +272,17 @@ function normalizeUser(user: {
   email: string;
   username: string;
   role: string;
+  depot_id: number | null;
 }): AuthUser {
   return {
     id: user.id,
     full_name: user.full_name,
     email: user.email,
     username: user.username,
-    role: toAppRole(user.role),
+    role: normalizeRole(user.role),
+    depot_id: user.depot_id,
   };
 }
-
 function App() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -263,7 +332,9 @@ function App() {
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [forgotPasswordUser, setForgotPasswordUser] = useState("");
 
-  const [activeTab, setActiveTab] = useState<AppTab>("dashboard");
+  const [activeTab, setActiveTab] = useState<AppTab>(() =>
+    currentUser ? getFirstAccessibleTab(currentUser.role) : "dashboard",
+  );
   const [depotName, setDepotName] = useState("Colombo Central Transit Depot");
   const [operatingHours, setOperatingHours] = useState("24/7 operations");
   const [saveSuccessMsg, setSaveSuccessMsg] = useState("");
@@ -346,7 +417,10 @@ function App() {
         const data = await getRoutes();
         if (!cancelled) setRoutes(data);
       } catch (error) {
-        if (!cancelled) setRoutesError(error instanceof Error ? error.message : "Failed to load routes.");
+        if (!cancelled)
+          setRoutesError(
+            error instanceof Error ? error.message : "Failed to load routes.",
+          );
       } finally {
         if (!cancelled) setRoutesLoading(false);
       }
@@ -359,7 +433,12 @@ function App() {
         const data = await getSchedules();
         if (!cancelled) setSchedules(data);
       } catch (error) {
-        if (!cancelled) setSchedulesError(error instanceof Error ? error.message : "Failed to load schedules.");
+        if (!cancelled)
+          setSchedulesError(
+            error instanceof Error
+              ? error.message
+              : "Failed to load schedules.",
+          );
       } finally {
         if (!cancelled) setSchedulesLoading(false);
       }
@@ -372,7 +451,12 @@ function App() {
           cache: "no-store",
         });
         const data = await response.json();
-        if (!cancelled && response.ok && data.success && Array.isArray(data.trips)) {
+        if (
+          !cancelled &&
+          response.ok &&
+          data.success &&
+          Array.isArray(data.trips)
+        ) {
           setTrips(data.trips);
         }
       } catch (error) {
@@ -458,6 +542,7 @@ function App() {
       const user = normalizeUser(data.user);
       setCurrentUser(user);
       persistUser(user);
+      setActiveTab(getFirstAccessibleTab(user.role));
       setPassword("");
     } catch (error) {
       console.error("Login failed:", error);
@@ -493,6 +578,7 @@ function App() {
       const user = normalizeUser(data.user);
       setCurrentUser(user);
       persistUser(user);
+      setActiveTab(getFirstAccessibleTab(user.role));
       setRegFullName("");
       setRegEmail("");
       setRegUsername("");
@@ -544,7 +630,9 @@ function App() {
       setRoutes((prev) => [created, ...prev]);
     } catch (error) {
       console.error("Failed to create route:", error);
-      setRoutesError(error instanceof Error ? error.message : "Failed to create route.");
+      setRoutesError(
+        error instanceof Error ? error.message : "Failed to create route.",
+      );
     }
   };
 
@@ -555,11 +643,13 @@ function App() {
     try {
       const updated = await updateRoute(routeId, updates);
       setRoutes((prev) =>
-        prev.map((r) => (r.route_id === updated.route_id ? updated : r))
+        prev.map((r) => (r.route_id === updated.route_id ? updated : r)),
       );
     } catch (error) {
       console.error("Failed to update route:", error);
-      setRoutesError(error instanceof Error ? error.message : "Failed to update route.");
+      setRoutesError(
+        error instanceof Error ? error.message : "Failed to update route.",
+      );
     }
   };
 
@@ -573,7 +663,9 @@ function App() {
       setRoutes((prev) => prev.filter((item) => item.route_id !== routeId));
     } catch (error) {
       console.error("Failed to delete route:", error);
-      setRoutesError(error instanceof Error ? error.message : "Failed to delete route.");
+      setRoutesError(
+        error instanceof Error ? error.message : "Failed to delete route.",
+      );
     }
   };
 
@@ -709,7 +801,9 @@ function App() {
       setSchedules((prev) => [created, ...prev]);
     } catch (error) {
       console.error("Failed to create schedule:", error);
-      setSchedulesError(error instanceof Error ? error.message : "Failed to create schedule.");
+      setSchedulesError(
+        error instanceof Error ? error.message : "Failed to create schedule.",
+      );
     }
   };
 
@@ -720,11 +814,13 @@ function App() {
     try {
       const updated = await updateSchedule(scheduleId, updates);
       setSchedules((prev) =>
-        prev.map((s) => (s.schedule_id === updated.schedule_id ? updated : s))
+        prev.map((s) => (s.schedule_id === updated.schedule_id ? updated : s)),
       );
     } catch (error) {
       console.error("Failed to update schedule:", error);
-      setSchedulesError(error instanceof Error ? error.message : "Failed to update schedule.");
+      setSchedulesError(
+        error instanceof Error ? error.message : "Failed to update schedule.",
+      );
     }
   };
 
@@ -735,10 +831,14 @@ function App() {
     if (!confirmed) return;
     try {
       await deleteSchedule(scheduleId);
-      setSchedules((prev) => prev.filter((item) => item.schedule_id !== scheduleId));
+      setSchedules((prev) =>
+        prev.filter((item) => item.schedule_id !== scheduleId),
+      );
     } catch (error) {
       console.error("Failed to delete schedule:", error);
-      setSchedulesError(error instanceof Error ? error.message : "Failed to delete schedule.");
+      setSchedulesError(
+        error instanceof Error ? error.message : "Failed to delete schedule.",
+      );
     }
   };
 
@@ -911,7 +1011,7 @@ function App() {
           </button>
         </div>
 
-        <div className="mx-auto flex min-h-screen max-w-6xl items-center px-4 py-10 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+        <div className="mx-auto  flex min-h-screen max-w-6xl items-center px-4 py-10 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
           <div className="hidden rounded-4xl bg-linear-to-br from-slate-950 via-slate-900 to-slate-800 p-10 text-white shadow-2xl lg:block">
             <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
@@ -1167,7 +1267,7 @@ function App() {
           <div className="hidden text-right sm:block">
             <div className="text-xs font-bold">{currentUser.full_name}</div>
             <div className="text-[10px] uppercase tracking-wide text-slate-500">
-              {currentUser.role} Account
+              {formatRoleLabel(currentUser.role)} Account
             </div>
           </div>
           <button
@@ -1194,7 +1294,7 @@ function App() {
       <div className="flex flex-1 flex-col md:flex-row">
         <aside className="w-full border-b border-slate-200 bg-white p-4 md:w-64 md:border-b-0 md:border-r dark:border-slate-800 dark:bg-slate-900">
           <div className="space-y-1 text-xs font-semibold">
-            {currentUser.role === "Admin" && (
+            {canAccessTab(currentUser.role, "dashboard") && (
               <button
                 type="button"
                 onClick={() => setActiveTab("dashboard")}
@@ -1203,14 +1303,16 @@ function App() {
                 <LayoutDashboard className="h-4 w-4" /> Dashboard
               </button>
             )}
-            <button
-              type="button"
-              onClick={() => setActiveTab("routes")}
-              className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 ${activeTab === "routes" ? "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300" : "text-slate-600"}`}
-            >
-              <Calendar className="h-4 w-4" /> Routes
-            </button>
-            {currentUser.role === "Admin" && (
+            {canAccessTab(currentUser.role, "routes") && (
+              <button
+                type="button"
+                onClick={() => setActiveTab("routes")}
+                className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 ${activeTab === "routes" ? "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300" : "text-slate-600"}`}
+              >
+                <Calendar className="h-4 w-4" /> Routes
+              </button>
+            )}
+            {canAccessTab(currentUser.role, "drivers") && (
               <>
                 <button
                   type="button"
@@ -1228,9 +1330,7 @@ function App() {
                 </button>
               </>
             )}
-            {(currentUser.role === "Admin" ||
-              currentUser.role === "Supervisor" ||
-              currentUser.role === "User") && (
+            {canAccessTab(currentUser.role, "schedules") && (
               <button
                 type="button"
                 onClick={() => setActiveTab("schedules")}
@@ -1239,7 +1339,7 @@ function App() {
                 <Calendar className="h-4 w-4" /> Schedules
               </button>
             )}
-            {(currentUser.role === "Admin" || currentUser.role === "Staff") && (
+            {canAccessTab(currentUser.role, "operations") && (
               <button
                 type="button"
                 onClick={() => setActiveTab("operations")}
@@ -1248,8 +1348,7 @@ function App() {
                 <Zap className="h-4 w-4" /> Operations
               </button>
             )}
-            {(currentUser.role === "Admin" ||
-              currentUser.role === "Supervisor") && (
+            {canAccessTab(currentUser.role, "reports") && (
               <button
                 type="button"
                 onClick={() => setActiveTab("reports")}
@@ -1260,7 +1359,7 @@ function App() {
             )}
           </div>
 
-          {currentUser.role === "Admin" && (
+          {canAccessTab(currentUser.role, "settings") && (
             <button
               type="button"
               onClick={() => setActiveTab("settings")}

@@ -43,7 +43,7 @@ export default function VehiclesModule({
   const [fuelType, setFuelType] = useState<Vehicle["fuel_type"]>("Diesel");
   const [status, setStatus] = useState<Vehicle["status"]>("Available");
 
-  const canWrite = userRole === "Admin";
+  const canWrite = userRole === "MAIN_ADMIN" || userRole === "DEPOT_ADMIN";
 
   const openAddModal = () => {
     setEditingVehicle(null);

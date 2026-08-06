@@ -64,7 +64,10 @@ export default function SchedulesModule({
   const [aiLoading, setAiLoading] = useState(false);
   const [aiRecommendation, setAiRecommendation] = useState("");
 
-  const canWrite = userRole === "Admin" || userRole === "Supervisor";
+  const canWrite =
+    userRole === "MAIN_ADMIN" ||
+    userRole === "DEPOT_ADMIN" ||
+    userRole === "SUPERVISOR";
 
   // Helper: check overlap between two time slots [A, B] and [C, D]
   const timesOverlap = (

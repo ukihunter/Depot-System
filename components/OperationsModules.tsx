@@ -83,7 +83,10 @@ export default function OperationsModules(props: OperationsModulesProps) {
   const [maintCost, setMaintCost] = useState(450);
   const [maintRemarks, setMaintRemarks] = useState("");
 
-  const canWrite = userRole === "Admin" || userRole === "Staff";
+  const canWrite =
+    userRole === "MAIN_ADMIN" ||
+    userRole === "DEPOT_ADMIN" ||
+    userRole === "OPERATIONAL_STAFF";
 
   // Fuel Efficiency Calcs
   const getFuelEfficiency = (liters: number, distance: number) => {

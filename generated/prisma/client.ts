@@ -31,8 +31,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Depots
+ * const depots = await prisma.depot.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -41,6 +41,11 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model Depot
+ * 
+ */
+export type Depot = Prisma.DepotModel
 /**
  * Model User
  * 
@@ -62,7 +67,32 @@ export type Vehicle = Prisma.VehicleModel
  */
 export type Route = Prisma.RouteModel
 /**
+ * Model RouteStop
+ * 
+ */
+export type RouteStop = Prisma.RouteStopModel
+/**
  * Model Schedule
  * 
  */
 export type Schedule = Prisma.ScheduleModel
+/**
+ * Model Trip
+ * 
+ */
+export type Trip = Prisma.TripModel
+/**
+ * Model FuelLog
+ * 
+ */
+export type FuelLog = Prisma.FuelLogModel
+/**
+ * Model MaintenanceRecord
+ * 
+ */
+export type MaintenanceRecord = Prisma.MaintenanceRecordModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel

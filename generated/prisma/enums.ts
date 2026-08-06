@@ -10,22 +10,42 @@
 */
 
 export const UserRole = {
-  ADMIN: 'ADMIN',
+  MAIN_ADMIN: 'MAIN_ADMIN',
+  DEPOT_ADMIN: 'DEPOT_ADMIN',
   SUPERVISOR: 'SUPERVISOR',
-  STAFF: 'STAFF',
-  USER: 'USER'
+  OPERATIONAL_STAFF: 'OPERATIONAL_STAFF'
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
+export const UserStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  SUSPENDED: 'SUSPENDED'
+} as const
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
 export const DriverStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
+  ON_LEAVE: 'ON_LEAVE',
   ON_TRIP: 'ON_TRIP'
 } as const
 
 export type DriverStatus = (typeof DriverStatus)[keyof typeof DriverStatus]
+
+
+export const VehicleStatus = {
+  AVAILABLE: 'AVAILABLE',
+  ON_TRIP: 'ON_TRIP',
+  MAINTENANCE: 'MAINTENANCE',
+  OUT_OF_SERVICE: 'OUT_OF_SERVICE'
+} as const
+
+export type VehicleStatus = (typeof VehicleStatus)[keyof typeof VehicleStatus]
 
 
 export const VehicleType = {
@@ -42,20 +62,11 @@ export type VehicleType = (typeof VehicleType)[keyof typeof VehicleType]
 export const FuelType = {
   DIESEL: 'DIESEL',
   ELECTRIC: 'ELECTRIC',
-  CNG: 'CNG',
-  HYBRID: 'HYBRID'
+  HYBRID: 'HYBRID',
+  CNG: 'CNG'
 } as const
 
 export type FuelType = (typeof FuelType)[keyof typeof FuelType]
-
-
-export const VehicleStatus = {
-  AVAILABLE: 'AVAILABLE',
-  MAINTENANCE: 'MAINTENANCE',
-  ON_TRIP: 'ON_TRIP'
-} as const
-
-export type VehicleStatus = (typeof VehicleStatus)[keyof typeof VehicleStatus]
 
 
 export const RouteStatus = {
@@ -75,3 +86,33 @@ export const ScheduleStatus = {
 } as const
 
 export type ScheduleStatus = (typeof ScheduleStatus)[keyof typeof ScheduleStatus]
+
+
+export const TripStatus = {
+  SCHEDULED: 'SCHEDULED',
+  ACTIVE: 'ACTIVE',
+  DELAYED: 'DELAYED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type TripStatus = (typeof TripStatus)[keyof typeof TripStatus]
+
+
+export const MaintenanceType = {
+  SCHEDULED: 'SCHEDULED',
+  CORRECTIVE: 'CORRECTIVE',
+  EMERGENCY: 'EMERGENCY'
+} as const
+
+export type MaintenanceType = (typeof MaintenanceType)[keyof typeof MaintenanceType]
+
+
+export const MaintenanceStatus = {
+  SCHEDULED: 'SCHEDULED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type MaintenanceStatus = (typeof MaintenanceStatus)[keyof typeof MaintenanceStatus]

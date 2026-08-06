@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import argon2 from "argon2";
+import { UserRole } from "@/generated/prisma/browser";
 
 export async function POST(request: Request) {
   try {
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
         email,
         username,
         password: hashedPassword,
-        role: "USER",
+        role: UserRole.OPERATIONAL_STAFF,
       },
     });
 

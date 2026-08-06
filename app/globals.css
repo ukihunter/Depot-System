@@ -3990,14 +3990,14 @@ textarea,
 }
 .dark {
   color: #f1f5f9;
-  background-color: #0f172a;
+  background-color: #222a0f;
 }
 .dark .bg-slate-50 {
-  background-color: #0f172a !important;
+  background-color: #262f44 !important;
 }
 .dark .bg-slate-100,
 .dark .bg-white {
-  background-color: #1e293b !important;
+  background-color: #090e14 !important;
 }
 .dark .bg-slate-50\/50 {
   background-color: #0f172a80 !important;

@@ -172,7 +172,7 @@ export default function RoutesModule({
 
   const [leafletLoaded, setLeafletLoaded] = useState(false);
 
-  const canWrite = userRole === "Admin" || userRole === "ADMIN";
+  const canWrite = userRole === "MAIN_ADMIN" || userRole === "DEPOT_ADMIN";
 
   // ============================================================
   // LOAD LEAFLET

@@ -51,11 +51,17 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Depot: 'Depot',
   User: 'User',
   Driver: 'Driver',
   Vehicle: 'Vehicle',
   Route: 'Route',
-  Schedule: 'Schedule'
+  RouteStop: 'RouteStop',
+  Schedule: 'Schedule',
+  Trip: 'Trip',
+  FuelLog: 'FuelLog',
+  MaintenanceRecord: 'MaintenanceRecord',
+  AuditLog: 'AuditLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -74,15 +80,36 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const DepotScalarFieldEnum = {
+  id: 'id',
+  depotCode: 'depotCode',
+  name: 'name',
+  code: 'code',
+  address: 'address',
+  phone: 'phone',
+  email: 'email',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type DepotScalarFieldEnum = (typeof DepotScalarFieldEnum)[keyof typeof DepotScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   fullName: 'fullName',
   email: 'email',
   username: 'username',
   password: 'password',
   role: 'role',
+  status: 'status',
+  depotId: 'depotId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -91,16 +118,17 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const DriverScalarFieldEnum = {
   id: 'id',
   driverId: 'driverId',
-  name: 'name',
+  depotId: 'depotId',
+  fullName: 'fullName',
   nic: 'nic',
   phone: 'phone',
   address: 'address',
   licenseNumber: 'licenseNumber',
   licenseExpiry: 'licenseExpiry',
-  workingHours: 'workingHours',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type DriverScalarFieldEnum = (typeof DriverScalarFieldEnum)[keyof typeof DriverScalarFieldEnum]
@@ -109,6 +137,7 @@ export type DriverScalarFieldEnum = (typeof DriverScalarFieldEnum)[keyof typeof 
 export const VehicleScalarFieldEnum = {
   id: 'id',
   vehicleId: 'vehicleId',
+  depotId: 'depotId',
   registrationNumber: 'registrationNumber',
   vehicleType: 'vehicleType',
   seatingCapacity: 'seatingCapacity',
@@ -116,7 +145,8 @@ export const VehicleScalarFieldEnum = {
   fuelType: 'fuelType',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
@@ -125,23 +155,36 @@ export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeo
 export const RouteScalarFieldEnum = {
   id: 'id',
   routeId: 'routeId',
+  depotId: 'depotId',
   routeName: 'routeName',
   startLocation: 'startLocation',
   endLocation: 'endLocation',
-  stops: 'stops',
   distance: 'distance',
   estimatedDuration: 'estimatedDuration',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type RouteScalarFieldEnum = (typeof RouteScalarFieldEnum)[keyof typeof RouteScalarFieldEnum]
 
 
+export const RouteStopScalarFieldEnum = {
+  id: 'id',
+  routeId: 'routeId',
+  stopName: 'stopName',
+  stopOrder: 'stopOrder',
+  createdAt: 'createdAt'
+} as const
+
+export type RouteStopScalarFieldEnum = (typeof RouteStopScalarFieldEnum)[keyof typeof RouteStopScalarFieldEnum]
+
+
 export const ScheduleScalarFieldEnum = {
   id: 'id',
   scheduleId: 'scheduleId',
+  depotId: 'depotId',
   routeId: 'routeId',
   vehicleId: 'vehicleId',
   driverId: 'driverId',
@@ -156,29 +199,74 @@ export const ScheduleScalarFieldEnum = {
 export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
 
 
+export const TripScalarFieldEnum = {
+  id: 'id',
+  tripId: 'tripId',
+  scheduleId: 'scheduleId',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  status: 'status',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TripScalarFieldEnum = (typeof TripScalarFieldEnum)[keyof typeof TripScalarFieldEnum]
+
+
+export const FuelLogScalarFieldEnum = {
+  id: 'id',
+  fuelId: 'fuelId',
+  depotId: 'depotId',
+  vehicleId: 'vehicleId',
+  date: 'date',
+  liters: 'liters',
+  cost: 'cost',
+  distanceCovered: 'distanceCovered',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FuelLogScalarFieldEnum = (typeof FuelLogScalarFieldEnum)[keyof typeof FuelLogScalarFieldEnum]
+
+
+export const MaintenanceRecordScalarFieldEnum = {
+  id: 'id',
+  maintenanceId: 'maintenanceId',
+  depotId: 'depotId',
+  vehicleId: 'vehicleId',
+  maintenanceType: 'maintenanceType',
+  serviceDate: 'serviceDate',
+  nextServiceDate: 'nextServiceDate',
+  cost: 'cost',
+  remarks: 'remarks',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MaintenanceRecordScalarFieldEnum = (typeof MaintenanceRecordScalarFieldEnum)[keyof typeof MaintenanceRecordScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  entity: 'entity',
+  entityId: 'entityId',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
-export const UserOrderByRelevanceFieldEnum = {
-  fullName: 'fullName',
-  email: 'email',
-  username: 'username',
-  password: 'password'
-} as const
-
-export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
 
 
 export const NullsOrder = {
@@ -189,9 +277,32 @@ export const NullsOrder = {
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
+export const DepotOrderByRelevanceFieldEnum = {
+  depotCode: 'depotCode',
+  name: 'name',
+  code: 'code',
+  address: 'address',
+  phone: 'phone',
+  email: 'email'
+} as const
+
+export type DepotOrderByRelevanceFieldEnum = (typeof DepotOrderByRelevanceFieldEnum)[keyof typeof DepotOrderByRelevanceFieldEnum]
+
+
+export const UserOrderByRelevanceFieldEnum = {
+  userId: 'userId',
+  fullName: 'fullName',
+  email: 'email',
+  username: 'username',
+  password: 'password'
+} as const
+
+export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
+
+
 export const DriverOrderByRelevanceFieldEnum = {
   driverId: 'driverId',
-  name: 'name',
+  fullName: 'fullName',
   nic: 'nic',
   phone: 'phone',
   address: 'address',
@@ -209,23 +320,6 @@ export const VehicleOrderByRelevanceFieldEnum = {
 export type VehicleOrderByRelevanceFieldEnum = (typeof VehicleOrderByRelevanceFieldEnum)[keyof typeof VehicleOrderByRelevanceFieldEnum]
 
 
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
 export const RouteOrderByRelevanceFieldEnum = {
   routeId: 'routeId',
   routeName: 'routeName',
@@ -236,14 +330,49 @@ export const RouteOrderByRelevanceFieldEnum = {
 export type RouteOrderByRelevanceFieldEnum = (typeof RouteOrderByRelevanceFieldEnum)[keyof typeof RouteOrderByRelevanceFieldEnum]
 
 
+export const RouteStopOrderByRelevanceFieldEnum = {
+  stopName: 'stopName'
+} as const
+
+export type RouteStopOrderByRelevanceFieldEnum = (typeof RouteStopOrderByRelevanceFieldEnum)[keyof typeof RouteStopOrderByRelevanceFieldEnum]
+
+
 export const ScheduleOrderByRelevanceFieldEnum = {
-  scheduleId: 'scheduleId',
-  routeId: 'routeId',
-  vehicleId: 'vehicleId',
-  driverId: 'driverId',
-  departureTime: 'departureTime',
-  arrivalTime: 'arrivalTime'
+  scheduleId: 'scheduleId'
 } as const
 
 export type ScheduleOrderByRelevanceFieldEnum = (typeof ScheduleOrderByRelevanceFieldEnum)[keyof typeof ScheduleOrderByRelevanceFieldEnum]
+
+
+export const TripOrderByRelevanceFieldEnum = {
+  tripId: 'tripId',
+  remarks: 'remarks'
+} as const
+
+export type TripOrderByRelevanceFieldEnum = (typeof TripOrderByRelevanceFieldEnum)[keyof typeof TripOrderByRelevanceFieldEnum]
+
+
+export const FuelLogOrderByRelevanceFieldEnum = {
+  fuelId: 'fuelId'
+} as const
+
+export type FuelLogOrderByRelevanceFieldEnum = (typeof FuelLogOrderByRelevanceFieldEnum)[keyof typeof FuelLogOrderByRelevanceFieldEnum]
+
+
+export const MaintenanceRecordOrderByRelevanceFieldEnum = {
+  maintenanceId: 'maintenanceId',
+  remarks: 'remarks'
+} as const
+
+export type MaintenanceRecordOrderByRelevanceFieldEnum = (typeof MaintenanceRecordOrderByRelevanceFieldEnum)[keyof typeof MaintenanceRecordOrderByRelevanceFieldEnum]
+
+
+export const AuditLogOrderByRelevanceFieldEnum = {
+  action: 'action',
+  entity: 'entity',
+  entityId: 'entityId',
+  description: 'description'
+} as const
+
+export type AuditLogOrderByRelevanceFieldEnum = (typeof AuditLogOrderByRelevanceFieldEnum)[keyof typeof AuditLogOrderByRelevanceFieldEnum]
 

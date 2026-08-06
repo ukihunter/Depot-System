@@ -28,12 +28,14 @@ export type AggregateVehicle = {
 
 export type VehicleAvgAggregateOutputType = {
   id: number | null
+  depotId: number | null
   seatingCapacity: number | null
   mileage: number | null
 }
 
 export type VehicleSumAggregateOutputType = {
   id: number | null
+  depotId: number | null
   seatingCapacity: number | null
   mileage: number | null
 }
@@ -41,6 +43,7 @@ export type VehicleSumAggregateOutputType = {
 export type VehicleMinAggregateOutputType = {
   id: number | null
   vehicleId: string | null
+  depotId: number | null
   registrationNumber: string | null
   vehicleType: $Enums.VehicleType | null
   seatingCapacity: number | null
@@ -49,11 +52,13 @@ export type VehicleMinAggregateOutputType = {
   status: $Enums.VehicleStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type VehicleMaxAggregateOutputType = {
   id: number | null
   vehicleId: string | null
+  depotId: number | null
   registrationNumber: string | null
   vehicleType: $Enums.VehicleType | null
   seatingCapacity: number | null
@@ -62,11 +67,13 @@ export type VehicleMaxAggregateOutputType = {
   status: $Enums.VehicleStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type VehicleCountAggregateOutputType = {
   id: number
   vehicleId: number
+  depotId: number
   registrationNumber: number
   vehicleType: number
   seatingCapacity: number
@@ -75,18 +82,21 @@ export type VehicleCountAggregateOutputType = {
   status: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
   _all: number
 }
 
 
 export type VehicleAvgAggregateInputType = {
   id?: true
+  depotId?: true
   seatingCapacity?: true
   mileage?: true
 }
 
 export type VehicleSumAggregateInputType = {
   id?: true
+  depotId?: true
   seatingCapacity?: true
   mileage?: true
 }
@@ -94,6 +104,7 @@ export type VehicleSumAggregateInputType = {
 export type VehicleMinAggregateInputType = {
   id?: true
   vehicleId?: true
+  depotId?: true
   registrationNumber?: true
   vehicleType?: true
   seatingCapacity?: true
@@ -102,11 +113,13 @@ export type VehicleMinAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
 }
 
 export type VehicleMaxAggregateInputType = {
   id?: true
   vehicleId?: true
+  depotId?: true
   registrationNumber?: true
   vehicleType?: true
   seatingCapacity?: true
@@ -115,11 +128,13 @@ export type VehicleMaxAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
 }
 
 export type VehicleCountAggregateInputType = {
   id?: true
   vehicleId?: true
+  depotId?: true
   registrationNumber?: true
   vehicleType?: true
   seatingCapacity?: true
@@ -128,6 +143,7 @@ export type VehicleCountAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -220,6 +236,7 @@ export type VehicleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type VehicleGroupByOutputType = {
   id: number
   vehicleId: string
+  depotId: number
   registrationNumber: string
   vehicleType: $Enums.VehicleType
   seatingCapacity: number
@@ -228,6 +245,7 @@ export type VehicleGroupByOutputType = {
   status: $Enums.VehicleStatus
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
   _count: VehicleCountAggregateOutputType | null
   _avg: VehicleAvgAggregateOutputType | null
   _sum: VehicleSumAggregateOutputType | null
@@ -256,20 +274,26 @@ export type VehicleWhereInput = {
   NOT?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
   id?: Prisma.IntFilter<"Vehicle"> | number
   vehicleId?: Prisma.StringFilter<"Vehicle"> | string
+  depotId?: Prisma.IntFilter<"Vehicle"> | number
   registrationNumber?: Prisma.StringFilter<"Vehicle"> | string
   vehicleType?: Prisma.EnumVehicleTypeFilter<"Vehicle"> | $Enums.VehicleType
   seatingCapacity?: Prisma.IntFilter<"Vehicle"> | number
-  mileage?: Prisma.IntFilter<"Vehicle"> | number
+  mileage?: Prisma.FloatFilter<"Vehicle"> | number
   fuelType?: Prisma.EnumFuelTypeFilter<"Vehicle"> | $Enums.FuelType
   status?: Prisma.EnumVehicleStatusFilter<"Vehicle"> | $Enums.VehicleStatus
   createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Vehicle"> | Date | string | null
+  depot?: Prisma.XOR<Prisma.DepotScalarRelationFilter, Prisma.DepotWhereInput>
   schedules?: Prisma.ScheduleListRelationFilter
+  fuelLogs?: Prisma.FuelLogListRelationFilter
+  maintenanceRecords?: Prisma.MaintenanceRecordListRelationFilter
 }
 
 export type VehicleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
   registrationNumber?: Prisma.SortOrder
   vehicleType?: Prisma.SortOrder
   seatingCapacity?: Prisma.SortOrder
@@ -278,7 +302,11 @@ export type VehicleOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  depot?: Prisma.DepotOrderByWithRelationInput
   schedules?: Prisma.ScheduleOrderByRelationAggregateInput
+  fuelLogs?: Prisma.FuelLogOrderByRelationAggregateInput
+  maintenanceRecords?: Prisma.MaintenanceRecordOrderByRelationAggregateInput
   _relevance?: Prisma.VehicleOrderByRelevanceInput
 }
 
@@ -289,19 +317,25 @@ export type VehicleWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
   OR?: Prisma.VehicleWhereInput[]
   NOT?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
+  depotId?: Prisma.IntFilter<"Vehicle"> | number
   vehicleType?: Prisma.EnumVehicleTypeFilter<"Vehicle"> | $Enums.VehicleType
   seatingCapacity?: Prisma.IntFilter<"Vehicle"> | number
-  mileage?: Prisma.IntFilter<"Vehicle"> | number
+  mileage?: Prisma.FloatFilter<"Vehicle"> | number
   fuelType?: Prisma.EnumFuelTypeFilter<"Vehicle"> | $Enums.FuelType
   status?: Prisma.EnumVehicleStatusFilter<"Vehicle"> | $Enums.VehicleStatus
   createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Vehicle"> | Date | string | null
+  depot?: Prisma.XOR<Prisma.DepotScalarRelationFilter, Prisma.DepotWhereInput>
   schedules?: Prisma.ScheduleListRelationFilter
+  fuelLogs?: Prisma.FuelLogListRelationFilter
+  maintenanceRecords?: Prisma.MaintenanceRecordListRelationFilter
 }, "id" | "vehicleId" | "registrationNumber">
 
 export type VehicleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
   registrationNumber?: Prisma.SortOrder
   vehicleType?: Prisma.SortOrder
   seatingCapacity?: Prisma.SortOrder
@@ -310,6 +344,7 @@ export type VehicleOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.VehicleCountOrderByAggregateInput
   _avg?: Prisma.VehicleAvgOrderByAggregateInput
   _max?: Prisma.VehicleMaxOrderByAggregateInput
@@ -323,41 +358,51 @@ export type VehicleScalarWhereWithAggregatesInput = {
   NOT?: Prisma.VehicleScalarWhereWithAggregatesInput | Prisma.VehicleScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Vehicle"> | number
   vehicleId?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
+  depotId?: Prisma.IntWithAggregatesFilter<"Vehicle"> | number
   registrationNumber?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
   vehicleType?: Prisma.EnumVehicleTypeWithAggregatesFilter<"Vehicle"> | $Enums.VehicleType
   seatingCapacity?: Prisma.IntWithAggregatesFilter<"Vehicle"> | number
-  mileage?: Prisma.IntWithAggregatesFilter<"Vehicle"> | number
+  mileage?: Prisma.FloatWithAggregatesFilter<"Vehicle"> | number
   fuelType?: Prisma.EnumFuelTypeWithAggregatesFilter<"Vehicle"> | $Enums.FuelType
   status?: Prisma.EnumVehicleStatusWithAggregatesFilter<"Vehicle"> | $Enums.VehicleStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Vehicle"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Vehicle"> | Date | string | null
 }
 
 export type VehicleCreateInput = {
   vehicleId?: string
   registrationNumber: string
   vehicleType: $Enums.VehicleType
-  seatingCapacity?: number
-  mileage?: number
+  seatingCapacity: number
+  mileage: number
   fuelType: $Enums.FuelType
   status?: $Enums.VehicleStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  depot: Prisma.DepotCreateNestedOneWithoutVehiclesInput
   schedules?: Prisma.ScheduleCreateNestedManyWithoutVehicleInput
+  fuelLogs?: Prisma.FuelLogCreateNestedManyWithoutVehicleInput
+  maintenanceRecords?: Prisma.MaintenanceRecordCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUncheckedCreateInput = {
   id?: number
   vehicleId?: string
+  depotId: number
   registrationNumber: string
   vehicleType: $Enums.VehicleType
-  seatingCapacity?: number
-  mileage?: number
+  seatingCapacity: number
+  mileage: number
   fuelType: $Enums.FuelType
   status?: $Enums.VehicleStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutVehicleInput
+  fuelLogs?: Prisma.FuelLogUncheckedCreateNestedManyWithoutVehicleInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUncheckedCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUpdateInput = {
@@ -365,39 +410,49 @@ export type VehicleUpdateInput = {
   registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
   seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
-  mileage?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
   fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  depot?: Prisma.DepotUpdateOneRequiredWithoutVehiclesNestedInput
   schedules?: Prisma.ScheduleUpdateManyWithoutVehicleNestedInput
+  fuelLogs?: Prisma.FuelLogUpdateManyWithoutVehicleNestedInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  depotId?: Prisma.IntFieldUpdateOperationsInput | number
   registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
   seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
-  mileage?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
   fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutVehicleNestedInput
+  fuelLogs?: Prisma.FuelLogUncheckedUpdateManyWithoutVehicleNestedInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleCreateManyInput = {
   id?: number
   vehicleId?: string
+  depotId: number
   registrationNumber: string
   vehicleType: $Enums.VehicleType
-  seatingCapacity?: number
-  mileage?: number
+  seatingCapacity: number
+  mileage: number
   fuelType: $Enums.FuelType
   status?: $Enums.VehicleStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type VehicleUpdateManyMutationInput = {
@@ -405,24 +460,37 @@ export type VehicleUpdateManyMutationInput = {
   registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
   seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
-  mileage?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
   fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type VehicleUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  depotId?: Prisma.IntFieldUpdateOperationsInput | number
   registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
   seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
-  mileage?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
   fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type VehicleListRelationFilter = {
+  every?: Prisma.VehicleWhereInput
+  some?: Prisma.VehicleWhereInput
+  none?: Prisma.VehicleWhereInput
+}
+
+export type VehicleOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type VehicleOrderByRelevanceInput = {
@@ -434,6 +502,7 @@ export type VehicleOrderByRelevanceInput = {
 export type VehicleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
   registrationNumber?: Prisma.SortOrder
   vehicleType?: Prisma.SortOrder
   seatingCapacity?: Prisma.SortOrder
@@ -442,10 +511,12 @@ export type VehicleCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type VehicleAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
   seatingCapacity?: Prisma.SortOrder
   mileage?: Prisma.SortOrder
 }
@@ -453,6 +524,7 @@ export type VehicleAvgOrderByAggregateInput = {
 export type VehicleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
   registrationNumber?: Prisma.SortOrder
   vehicleType?: Prisma.SortOrder
   seatingCapacity?: Prisma.SortOrder
@@ -461,11 +533,13 @@ export type VehicleMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type VehicleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
   registrationNumber?: Prisma.SortOrder
   vehicleType?: Prisma.SortOrder
   seatingCapacity?: Prisma.SortOrder
@@ -474,10 +548,12 @@ export type VehicleMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type VehicleSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  depotId?: Prisma.SortOrder
   seatingCapacity?: Prisma.SortOrder
   mileage?: Prisma.SortOrder
 }
@@ -487,8 +563,58 @@ export type VehicleScalarRelationFilter = {
   isNot?: Prisma.VehicleWhereInput
 }
 
+export type VehicleCreateNestedManyWithoutDepotInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutDepotInput, Prisma.VehicleUncheckedCreateWithoutDepotInput> | Prisma.VehicleCreateWithoutDepotInput[] | Prisma.VehicleUncheckedCreateWithoutDepotInput[]
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutDepotInput | Prisma.VehicleCreateOrConnectWithoutDepotInput[]
+  createMany?: Prisma.VehicleCreateManyDepotInputEnvelope
+  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+}
+
+export type VehicleUncheckedCreateNestedManyWithoutDepotInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutDepotInput, Prisma.VehicleUncheckedCreateWithoutDepotInput> | Prisma.VehicleCreateWithoutDepotInput[] | Prisma.VehicleUncheckedCreateWithoutDepotInput[]
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutDepotInput | Prisma.VehicleCreateOrConnectWithoutDepotInput[]
+  createMany?: Prisma.VehicleCreateManyDepotInputEnvelope
+  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+}
+
+export type VehicleUpdateManyWithoutDepotNestedInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutDepotInput, Prisma.VehicleUncheckedCreateWithoutDepotInput> | Prisma.VehicleCreateWithoutDepotInput[] | Prisma.VehicleUncheckedCreateWithoutDepotInput[]
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutDepotInput | Prisma.VehicleCreateOrConnectWithoutDepotInput[]
+  upsert?: Prisma.VehicleUpsertWithWhereUniqueWithoutDepotInput | Prisma.VehicleUpsertWithWhereUniqueWithoutDepotInput[]
+  createMany?: Prisma.VehicleCreateManyDepotInputEnvelope
+  set?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  disconnect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  delete?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  update?: Prisma.VehicleUpdateWithWhereUniqueWithoutDepotInput | Prisma.VehicleUpdateWithWhereUniqueWithoutDepotInput[]
+  updateMany?: Prisma.VehicleUpdateManyWithWhereWithoutDepotInput | Prisma.VehicleUpdateManyWithWhereWithoutDepotInput[]
+  deleteMany?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
+}
+
+export type VehicleUncheckedUpdateManyWithoutDepotNestedInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutDepotInput, Prisma.VehicleUncheckedCreateWithoutDepotInput> | Prisma.VehicleCreateWithoutDepotInput[] | Prisma.VehicleUncheckedCreateWithoutDepotInput[]
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutDepotInput | Prisma.VehicleCreateOrConnectWithoutDepotInput[]
+  upsert?: Prisma.VehicleUpsertWithWhereUniqueWithoutDepotInput | Prisma.VehicleUpsertWithWhereUniqueWithoutDepotInput[]
+  createMany?: Prisma.VehicleCreateManyDepotInputEnvelope
+  set?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  disconnect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  delete?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  update?: Prisma.VehicleUpdateWithWhereUniqueWithoutDepotInput | Prisma.VehicleUpdateWithWhereUniqueWithoutDepotInput[]
+  updateMany?: Prisma.VehicleUpdateManyWithWhereWithoutDepotInput | Prisma.VehicleUpdateManyWithWhereWithoutDepotInput[]
+  deleteMany?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
+}
+
 export type EnumVehicleTypeFieldUpdateOperationsInput = {
   set?: $Enums.VehicleType
+}
+
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type EnumFuelTypeFieldUpdateOperationsInput = {
@@ -513,29 +639,142 @@ export type VehicleUpdateOneRequiredWithoutSchedulesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.VehicleUpdateToOneWithWhereWithoutSchedulesInput, Prisma.VehicleUpdateWithoutSchedulesInput>, Prisma.VehicleUncheckedUpdateWithoutSchedulesInput>
 }
 
-export type VehicleCreateWithoutSchedulesInput = {
+export type VehicleCreateNestedOneWithoutFuelLogsInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutFuelLogsInput, Prisma.VehicleUncheckedCreateWithoutFuelLogsInput>
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutFuelLogsInput
+  connect?: Prisma.VehicleWhereUniqueInput
+}
+
+export type VehicleUpdateOneRequiredWithoutFuelLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutFuelLogsInput, Prisma.VehicleUncheckedCreateWithoutFuelLogsInput>
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutFuelLogsInput
+  upsert?: Prisma.VehicleUpsertWithoutFuelLogsInput
+  connect?: Prisma.VehicleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VehicleUpdateToOneWithWhereWithoutFuelLogsInput, Prisma.VehicleUpdateWithoutFuelLogsInput>, Prisma.VehicleUncheckedUpdateWithoutFuelLogsInput>
+}
+
+export type VehicleCreateNestedOneWithoutMaintenanceRecordsInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutMaintenanceRecordsInput, Prisma.VehicleUncheckedCreateWithoutMaintenanceRecordsInput>
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutMaintenanceRecordsInput
+  connect?: Prisma.VehicleWhereUniqueInput
+}
+
+export type VehicleUpdateOneRequiredWithoutMaintenanceRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutMaintenanceRecordsInput, Prisma.VehicleUncheckedCreateWithoutMaintenanceRecordsInput>
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutMaintenanceRecordsInput
+  upsert?: Prisma.VehicleUpsertWithoutMaintenanceRecordsInput
+  connect?: Prisma.VehicleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VehicleUpdateToOneWithWhereWithoutMaintenanceRecordsInput, Prisma.VehicleUpdateWithoutMaintenanceRecordsInput>, Prisma.VehicleUncheckedUpdateWithoutMaintenanceRecordsInput>
+}
+
+export type VehicleCreateWithoutDepotInput = {
   vehicleId?: string
   registrationNumber: string
   vehicleType: $Enums.VehicleType
-  seatingCapacity?: number
-  mileage?: number
+  seatingCapacity: number
+  mileage: number
   fuelType: $Enums.FuelType
   status?: $Enums.VehicleStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutVehicleInput
+  fuelLogs?: Prisma.FuelLogCreateNestedManyWithoutVehicleInput
+  maintenanceRecords?: Prisma.MaintenanceRecordCreateNestedManyWithoutVehicleInput
+}
+
+export type VehicleUncheckedCreateWithoutDepotInput = {
+  id?: number
+  vehicleId?: string
+  registrationNumber: string
+  vehicleType: $Enums.VehicleType
+  seatingCapacity: number
+  mileage: number
+  fuelType: $Enums.FuelType
+  status?: $Enums.VehicleStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutVehicleInput
+  fuelLogs?: Prisma.FuelLogUncheckedCreateNestedManyWithoutVehicleInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUncheckedCreateNestedManyWithoutVehicleInput
+}
+
+export type VehicleCreateOrConnectWithoutDepotInput = {
+  where: Prisma.VehicleWhereUniqueInput
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutDepotInput, Prisma.VehicleUncheckedCreateWithoutDepotInput>
+}
+
+export type VehicleCreateManyDepotInputEnvelope = {
+  data: Prisma.VehicleCreateManyDepotInput | Prisma.VehicleCreateManyDepotInput[]
+  skipDuplicates?: boolean
+}
+
+export type VehicleUpsertWithWhereUniqueWithoutDepotInput = {
+  where: Prisma.VehicleWhereUniqueInput
+  update: Prisma.XOR<Prisma.VehicleUpdateWithoutDepotInput, Prisma.VehicleUncheckedUpdateWithoutDepotInput>
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutDepotInput, Prisma.VehicleUncheckedCreateWithoutDepotInput>
+}
+
+export type VehicleUpdateWithWhereUniqueWithoutDepotInput = {
+  where: Prisma.VehicleWhereUniqueInput
+  data: Prisma.XOR<Prisma.VehicleUpdateWithoutDepotInput, Prisma.VehicleUncheckedUpdateWithoutDepotInput>
+}
+
+export type VehicleUpdateManyWithWhereWithoutDepotInput = {
+  where: Prisma.VehicleScalarWhereInput
+  data: Prisma.XOR<Prisma.VehicleUpdateManyMutationInput, Prisma.VehicleUncheckedUpdateManyWithoutDepotInput>
+}
+
+export type VehicleScalarWhereInput = {
+  AND?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
+  OR?: Prisma.VehicleScalarWhereInput[]
+  NOT?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
+  id?: Prisma.IntFilter<"Vehicle"> | number
+  vehicleId?: Prisma.StringFilter<"Vehicle"> | string
+  depotId?: Prisma.IntFilter<"Vehicle"> | number
+  registrationNumber?: Prisma.StringFilter<"Vehicle"> | string
+  vehicleType?: Prisma.EnumVehicleTypeFilter<"Vehicle"> | $Enums.VehicleType
+  seatingCapacity?: Prisma.IntFilter<"Vehicle"> | number
+  mileage?: Prisma.FloatFilter<"Vehicle"> | number
+  fuelType?: Prisma.EnumFuelTypeFilter<"Vehicle"> | $Enums.FuelType
+  status?: Prisma.EnumVehicleStatusFilter<"Vehicle"> | $Enums.VehicleStatus
+  createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Vehicle"> | Date | string | null
+}
+
+export type VehicleCreateWithoutSchedulesInput = {
+  vehicleId?: string
+  registrationNumber: string
+  vehicleType: $Enums.VehicleType
+  seatingCapacity: number
+  mileage: number
+  fuelType: $Enums.FuelType
+  status?: $Enums.VehicleStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  depot: Prisma.DepotCreateNestedOneWithoutVehiclesInput
+  fuelLogs?: Prisma.FuelLogCreateNestedManyWithoutVehicleInput
+  maintenanceRecords?: Prisma.MaintenanceRecordCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUncheckedCreateWithoutSchedulesInput = {
   id?: number
   vehicleId?: string
+  depotId: number
   registrationNumber: string
   vehicleType: $Enums.VehicleType
-  seatingCapacity?: number
-  mileage?: number
+  seatingCapacity: number
+  mileage: number
   fuelType: $Enums.FuelType
   status?: $Enums.VehicleStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  fuelLogs?: Prisma.FuelLogUncheckedCreateNestedManyWithoutVehicleInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUncheckedCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleCreateOrConnectWithoutSchedulesInput = {
@@ -559,24 +798,257 @@ export type VehicleUpdateWithoutSchedulesInput = {
   registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
   seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
-  mileage?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
   fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  depot?: Prisma.DepotUpdateOneRequiredWithoutVehiclesNestedInput
+  fuelLogs?: Prisma.FuelLogUpdateManyWithoutVehicleNestedInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateWithoutSchedulesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  depotId?: Prisma.IntFieldUpdateOperationsInput | number
   registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
   seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
-  mileage?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
   fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
   status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fuelLogs?: Prisma.FuelLogUncheckedUpdateManyWithoutVehicleNestedInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUncheckedUpdateManyWithoutVehicleNestedInput
+}
+
+export type VehicleCreateWithoutFuelLogsInput = {
+  vehicleId?: string
+  registrationNumber: string
+  vehicleType: $Enums.VehicleType
+  seatingCapacity: number
+  mileage: number
+  fuelType: $Enums.FuelType
+  status?: $Enums.VehicleStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  depot: Prisma.DepotCreateNestedOneWithoutVehiclesInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutVehicleInput
+  maintenanceRecords?: Prisma.MaintenanceRecordCreateNestedManyWithoutVehicleInput
+}
+
+export type VehicleUncheckedCreateWithoutFuelLogsInput = {
+  id?: number
+  vehicleId?: string
+  depotId: number
+  registrationNumber: string
+  vehicleType: $Enums.VehicleType
+  seatingCapacity: number
+  mileage: number
+  fuelType: $Enums.FuelType
+  status?: $Enums.VehicleStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutVehicleInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUncheckedCreateNestedManyWithoutVehicleInput
+}
+
+export type VehicleCreateOrConnectWithoutFuelLogsInput = {
+  where: Prisma.VehicleWhereUniqueInput
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutFuelLogsInput, Prisma.VehicleUncheckedCreateWithoutFuelLogsInput>
+}
+
+export type VehicleUpsertWithoutFuelLogsInput = {
+  update: Prisma.XOR<Prisma.VehicleUpdateWithoutFuelLogsInput, Prisma.VehicleUncheckedUpdateWithoutFuelLogsInput>
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutFuelLogsInput, Prisma.VehicleUncheckedCreateWithoutFuelLogsInput>
+  where?: Prisma.VehicleWhereInput
+}
+
+export type VehicleUpdateToOneWithWhereWithoutFuelLogsInput = {
+  where?: Prisma.VehicleWhereInput
+  data: Prisma.XOR<Prisma.VehicleUpdateWithoutFuelLogsInput, Prisma.VehicleUncheckedUpdateWithoutFuelLogsInput>
+}
+
+export type VehicleUpdateWithoutFuelLogsInput = {
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
+  fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
+  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  depot?: Prisma.DepotUpdateOneRequiredWithoutVehiclesNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutVehicleNestedInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUpdateManyWithoutVehicleNestedInput
+}
+
+export type VehicleUncheckedUpdateWithoutFuelLogsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  depotId?: Prisma.IntFieldUpdateOperationsInput | number
+  registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
+  fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
+  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutVehicleNestedInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUncheckedUpdateManyWithoutVehicleNestedInput
+}
+
+export type VehicleCreateWithoutMaintenanceRecordsInput = {
+  vehicleId?: string
+  registrationNumber: string
+  vehicleType: $Enums.VehicleType
+  seatingCapacity: number
+  mileage: number
+  fuelType: $Enums.FuelType
+  status?: $Enums.VehicleStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  depot: Prisma.DepotCreateNestedOneWithoutVehiclesInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutVehicleInput
+  fuelLogs?: Prisma.FuelLogCreateNestedManyWithoutVehicleInput
+}
+
+export type VehicleUncheckedCreateWithoutMaintenanceRecordsInput = {
+  id?: number
+  vehicleId?: string
+  depotId: number
+  registrationNumber: string
+  vehicleType: $Enums.VehicleType
+  seatingCapacity: number
+  mileage: number
+  fuelType: $Enums.FuelType
+  status?: $Enums.VehicleStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutVehicleInput
+  fuelLogs?: Prisma.FuelLogUncheckedCreateNestedManyWithoutVehicleInput
+}
+
+export type VehicleCreateOrConnectWithoutMaintenanceRecordsInput = {
+  where: Prisma.VehicleWhereUniqueInput
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutMaintenanceRecordsInput, Prisma.VehicleUncheckedCreateWithoutMaintenanceRecordsInput>
+}
+
+export type VehicleUpsertWithoutMaintenanceRecordsInput = {
+  update: Prisma.XOR<Prisma.VehicleUpdateWithoutMaintenanceRecordsInput, Prisma.VehicleUncheckedUpdateWithoutMaintenanceRecordsInput>
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutMaintenanceRecordsInput, Prisma.VehicleUncheckedCreateWithoutMaintenanceRecordsInput>
+  where?: Prisma.VehicleWhereInput
+}
+
+export type VehicleUpdateToOneWithWhereWithoutMaintenanceRecordsInput = {
+  where?: Prisma.VehicleWhereInput
+  data: Prisma.XOR<Prisma.VehicleUpdateWithoutMaintenanceRecordsInput, Prisma.VehicleUncheckedUpdateWithoutMaintenanceRecordsInput>
+}
+
+export type VehicleUpdateWithoutMaintenanceRecordsInput = {
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
+  fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
+  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  depot?: Prisma.DepotUpdateOneRequiredWithoutVehiclesNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutVehicleNestedInput
+  fuelLogs?: Prisma.FuelLogUpdateManyWithoutVehicleNestedInput
+}
+
+export type VehicleUncheckedUpdateWithoutMaintenanceRecordsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  depotId?: Prisma.IntFieldUpdateOperationsInput | number
+  registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
+  fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
+  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutVehicleNestedInput
+  fuelLogs?: Prisma.FuelLogUncheckedUpdateManyWithoutVehicleNestedInput
+}
+
+export type VehicleCreateManyDepotInput = {
+  id?: number
+  vehicleId?: string
+  registrationNumber: string
+  vehicleType: $Enums.VehicleType
+  seatingCapacity: number
+  mileage: number
+  fuelType: $Enums.FuelType
+  status?: $Enums.VehicleStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type VehicleUpdateWithoutDepotInput = {
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
+  fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
+  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  schedules?: Prisma.ScheduleUpdateManyWithoutVehicleNestedInput
+  fuelLogs?: Prisma.FuelLogUpdateManyWithoutVehicleNestedInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUpdateManyWithoutVehicleNestedInput
+}
+
+export type VehicleUncheckedUpdateWithoutDepotInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
+  fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
+  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutVehicleNestedInput
+  fuelLogs?: Prisma.FuelLogUncheckedUpdateManyWithoutVehicleNestedInput
+  maintenanceRecords?: Prisma.MaintenanceRecordUncheckedUpdateManyWithoutVehicleNestedInput
+}
+
+export type VehicleUncheckedUpdateManyWithoutDepotInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
+  registrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleType?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  seatingCapacity?: Prisma.IntFieldUpdateOperationsInput | number
+  mileage?: Prisma.FloatFieldUpdateOperationsInput | number
+  fuelType?: Prisma.EnumFuelTypeFieldUpdateOperationsInput | $Enums.FuelType
+  status?: Prisma.EnumVehicleStatusFieldUpdateOperationsInput | $Enums.VehicleStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -586,10 +1058,14 @@ export type VehicleUncheckedUpdateWithoutSchedulesInput = {
 
 export type VehicleCountOutputType = {
   schedules: number
+  fuelLogs: number
+  maintenanceRecords: number
 }
 
 export type VehicleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   schedules?: boolean | VehicleCountOutputTypeCountSchedulesArgs
+  fuelLogs?: boolean | VehicleCountOutputTypeCountFuelLogsArgs
+  maintenanceRecords?: boolean | VehicleCountOutputTypeCountMaintenanceRecordsArgs
 }
 
 /**
@@ -609,10 +1085,25 @@ export type VehicleCountOutputTypeCountSchedulesArgs<ExtArgs extends runtime.Typ
   where?: Prisma.ScheduleWhereInput
 }
 
+/**
+ * VehicleCountOutputType without action
+ */
+export type VehicleCountOutputTypeCountFuelLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FuelLogWhereInput
+}
+
+/**
+ * VehicleCountOutputType without action
+ */
+export type VehicleCountOutputTypeCountMaintenanceRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MaintenanceRecordWhereInput
+}
+
 
 export type VehicleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   vehicleId?: boolean
+  depotId?: boolean
   registrationNumber?: boolean
   vehicleType?: boolean
   seatingCapacity?: boolean
@@ -621,7 +1112,11 @@ export type VehicleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  depot?: boolean | Prisma.DepotDefaultArgs<ExtArgs>
   schedules?: boolean | Prisma.Vehicle$schedulesArgs<ExtArgs>
+  fuelLogs?: boolean | Prisma.Vehicle$fuelLogsArgs<ExtArgs>
+  maintenanceRecords?: boolean | Prisma.Vehicle$maintenanceRecordsArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle"]>
 
@@ -630,6 +1125,7 @@ export type VehicleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type VehicleSelectScalar = {
   id?: boolean
   vehicleId?: boolean
+  depotId?: boolean
   registrationNumber?: boolean
   vehicleType?: boolean
   seatingCapacity?: boolean
@@ -638,22 +1134,30 @@ export type VehicleSelectScalar = {
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
 }
 
-export type VehicleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "vehicleId" | "registrationNumber" | "vehicleType" | "seatingCapacity" | "mileage" | "fuelType" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["vehicle"]>
+export type VehicleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "vehicleId" | "depotId" | "registrationNumber" | "vehicleType" | "seatingCapacity" | "mileage" | "fuelType" | "status" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["vehicle"]>
 export type VehicleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  depot?: boolean | Prisma.DepotDefaultArgs<ExtArgs>
   schedules?: boolean | Prisma.Vehicle$schedulesArgs<ExtArgs>
+  fuelLogs?: boolean | Prisma.Vehicle$fuelLogsArgs<ExtArgs>
+  maintenanceRecords?: boolean | Prisma.Vehicle$maintenanceRecordsArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $VehiclePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Vehicle"
   objects: {
+    depot: Prisma.$DepotPayload<ExtArgs>
     schedules: Prisma.$SchedulePayload<ExtArgs>[]
+    fuelLogs: Prisma.$FuelLogPayload<ExtArgs>[]
+    maintenanceRecords: Prisma.$MaintenanceRecordPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     vehicleId: string
+    depotId: number
     registrationNumber: string
     vehicleType: $Enums.VehicleType
     seatingCapacity: number
@@ -662,6 +1166,7 @@ export type $VehiclePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     status: $Enums.VehicleStatus
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
   }, ExtArgs["result"]["vehicle"]>
   composites: {}
 }
@@ -1002,7 +1507,10 @@ readonly fields: VehicleFieldRefs;
  */
 export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  depot<T extends Prisma.DepotDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DepotDefaultArgs<ExtArgs>>): Prisma.Prisma__DepotClient<runtime.Types.Result.GetResult<Prisma.$DepotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   schedules<T extends Prisma.Vehicle$schedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  fuelLogs<T extends Prisma.Vehicle$fuelLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$fuelLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FuelLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  maintenanceRecords<T extends Prisma.Vehicle$maintenanceRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$maintenanceRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaintenanceRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1034,14 +1542,16 @@ export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends runtime.
 export interface VehicleFieldRefs {
   readonly id: Prisma.FieldRef<"Vehicle", 'Int'>
   readonly vehicleId: Prisma.FieldRef<"Vehicle", 'String'>
+  readonly depotId: Prisma.FieldRef<"Vehicle", 'Int'>
   readonly registrationNumber: Prisma.FieldRef<"Vehicle", 'String'>
   readonly vehicleType: Prisma.FieldRef<"Vehicle", 'VehicleType'>
   readonly seatingCapacity: Prisma.FieldRef<"Vehicle", 'Int'>
-  readonly mileage: Prisma.FieldRef<"Vehicle", 'Int'>
+  readonly mileage: Prisma.FieldRef<"Vehicle", 'Float'>
   readonly fuelType: Prisma.FieldRef<"Vehicle", 'FuelType'>
   readonly status: Prisma.FieldRef<"Vehicle", 'VehicleStatus'>
   readonly createdAt: Prisma.FieldRef<"Vehicle", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Vehicle", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Vehicle", 'DateTime'>
 }
     
 
@@ -1411,6 +1921,54 @@ export type Vehicle$schedulesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.ScheduleScalarFieldEnum | Prisma.ScheduleScalarFieldEnum[]
+}
+
+/**
+ * Vehicle.fuelLogs
+ */
+export type Vehicle$fuelLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FuelLog
+   */
+  select?: Prisma.FuelLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FuelLog
+   */
+  omit?: Prisma.FuelLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FuelLogInclude<ExtArgs> | null
+  where?: Prisma.FuelLogWhereInput
+  orderBy?: Prisma.FuelLogOrderByWithRelationInput | Prisma.FuelLogOrderByWithRelationInput[]
+  cursor?: Prisma.FuelLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FuelLogScalarFieldEnum | Prisma.FuelLogScalarFieldEnum[]
+}
+
+/**
+ * Vehicle.maintenanceRecords
+ */
+export type Vehicle$maintenanceRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MaintenanceRecord
+   */
+  select?: Prisma.MaintenanceRecordSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MaintenanceRecord
+   */
+  omit?: Prisma.MaintenanceRecordOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MaintenanceRecordInclude<ExtArgs> | null
+  where?: Prisma.MaintenanceRecordWhereInput
+  orderBy?: Prisma.MaintenanceRecordOrderByWithRelationInput | Prisma.MaintenanceRecordOrderByWithRelationInput[]
+  cursor?: Prisma.MaintenanceRecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MaintenanceRecordScalarFieldEnum | Prisma.MaintenanceRecordScalarFieldEnum[]
 }
 
 /**
