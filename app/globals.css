@@ -3955,7 +3955,7 @@ textarea,
 .dark .glass-panel {
   -webkit-backdrop-filter: blur(14px) !important;
   backdrop-filter: blur(14px) !important;
-  background: #0f172aad !important;
+  background: #202123 !important;
   border: 1px solid #33415580 !important;
 }
 .hover-lift {
@@ -3993,7 +3993,7 @@ textarea,
   background-color: #222a0f;
 }
 .dark .bg-slate-50 {
-  background-color: #262f44 !important;
+  background-color: #17181a !important;
 }
 .dark .bg-slate-100,
 .dark .bg-white {

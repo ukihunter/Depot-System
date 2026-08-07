@@ -1355,7 +1355,10 @@ function App() {
   }
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      <header className="flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <header
+        className="flex h-16 items-center justify-between gap-4 border-b border-slate-200 px-6 shadow-sm dark:border-slate-800 text-white "
+        style={{ backgroundColor: "#202123", opacity: 1 }}
+      >
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-600 text-white">
             <Bus className="h-5 w-5" />
@@ -1397,8 +1400,14 @@ function App() {
       </header>
 
       <div className="flex flex-1 flex-col md:flex-row">
-        <aside className="w-full border-b border-slate-200 bg-white p-4 md:w-64 md:border-b-0 md:border-r dark:border-slate-800 dark:bg-slate-900">
-          <div className="space-y-1 text-xs font-semibold">
+        <aside
+          className="w-full border-b border-slate-200 p-4 md:w-64 md:border-b-0 md:border-r dark:border-slate-800 rounded-tr-2xl rounded-br-2xl "
+          style={{ backgroundColor: "#202123" }}
+        >
+          <div
+            className="space-y-1 text-xs font-semibold"
+            style={{ color: "white" }}
+          >
             {canAccessTab(currentUser.role, "dashboard") && (
               <button
                 type="button"
