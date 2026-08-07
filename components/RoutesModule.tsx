@@ -752,7 +752,7 @@ export default function RoutesModule({
       {(error || successMessage) && (
         <div className="lg:col-span-12">
           {error && (
-            <div className="flex items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="flex items-center justify-between gap-3 rounded-xl border border-[#b85454]/40 bg-[#b85454]/10 px-4 py-3 text-sm text-[#b85454]">
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
@@ -761,7 +761,7 @@ export default function RoutesModule({
               <button
                 type="button"
                 onClick={() => setError(null)}
-                className="text-red-500 hover:text-red-700"
+                className="text-[#b85454] hover:opacity-80"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -769,7 +769,7 @@ export default function RoutesModule({
           )}
 
           {successMessage && (
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            <div className="rounded-xl border border-[#5fa87a]/40 bg-[#5fa87a]/10 px-4 py-3 text-sm text-[#5fa87a]">
               {successMessage}
             </div>
           )}
@@ -780,10 +780,10 @@ export default function RoutesModule({
       {/* ROUTE LIST */}
       {/* ====================================================== */}
 
-      <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col min-h-[400px]">
-        <div className="p-4 border-b border-slate-200 flex items-center justify-between gap-4">
+      <div className="lg:col-span-5 glass-panel rounded-2xl overflow-hidden flex flex-col min-h-[400px]">
+        <div className="p-4 border-b border-[#27323a] flex items-center justify-between gap-4">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#8a96a0] absolute left-3 top-1/2 -translate-y-1/2" />
 
             <input
               id="input-search-routes"
@@ -791,7 +791,7 @@ export default function RoutesModule({
               placeholder="Search depot routes or stops..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full text-xs pl-9 pr-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
+              className="input-field w-full pl-9"
             />
           </div>
 
@@ -800,7 +800,7 @@ export default function RoutesModule({
               id="btn-create-route"
               type="button"
               onClick={openCreateModal}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-xl flex items-center gap-1 text-xs font-semibold shadow-sm transition-colors cursor-pointer whitespace-nowrap"
+              className="btn-primary text-xs whitespace-nowrap"
             >
               <Plus className="w-4 h-4" />
               Add Route
@@ -808,19 +808,19 @@ export default function RoutesModule({
           )}
         </div>
 
-        <div className="px-4 py-2 border-b border-slate-100 bg-slate-50 text-[10px] text-slate-500 font-mono">
+        <div className="px-4 py-2 border-b border-[#27323a] bg-[#141a1f] text-[10px] text-[#8a96a0] font-mono">
           {filteredRoutes.length} route
           {filteredRoutes.length === 1 ? "" : "s"} found
         </div>
 
-        <div className="flex-1 overflow-y-auto divide-y divide-slate-100 max-h-[520px]">
+        <div className="flex-1 overflow-y-auto divide-y divide-[#27323a] max-h-[520px]">
           {filteredRoutes.length === 0 ? (
-            <div className="p-10 text-center text-slate-500 text-xs">
-              <RouteIcon className="w-8 h-8 mx-auto mb-3 text-slate-300" />
+            <div className="p-10 text-center text-[#8a96a0] text-xs">
+              <RouteIcon className="w-8 h-8 mx-auto mb-3 text-[#56636d]" />
 
               {routes.length === 0 ? (
                 <>
-                  <p className="font-semibold text-slate-700">
+                  <p className="font-semibold text-[#ede9e3]">
                     No routes available
                   </p>
                   <p className="mt-1">
@@ -829,7 +829,7 @@ export default function RoutesModule({
                 </>
               ) : (
                 <>
-                  <p className="font-semibold text-slate-700">
+                  <p className="font-semibold text-[#ede9e3]">
                     No routes found
                   </p>
                   <p className="mt-1">Try changing your search query.</p>
@@ -853,43 +853,43 @@ export default function RoutesModule({
                   onClick={() => setSelectedRoute(route)}
                   className={`p-4 cursor-pointer transition-all flex items-center justify-between ${
                     isSelected
-                      ? "bg-blue-50/70 border-l-4 border-blue-600"
-                      : "hover:bg-slate-50 border-l-4 border-transparent"
+                      ? "bg-[#6b8f3c]/15 border-l-4 border-[#6b8f3c]"
+                      : "hover:bg-[#1a2228] border-l-4 border-transparent"
                   }`}
                 >
                   <div className="space-y-1 min-w-0">
-                    <h4 className="font-bold text-slate-800 text-sm truncate">
+                    <h4 className="font-bold text-[#ede9e3] text-sm truncate">
                       {route.route_name}
                     </h4>
 
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono min-w-0">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <div className="flex items-center gap-1.5 text-xs text-[#8a96a0] font-mono min-w-0">
+                      <MapPin className="w-3.5 h-3.5 text-[#6b8f3c] shrink-0" />
 
                       <span className="truncate">{route.start_location}</span>
 
-                      <span className="text-slate-300">→</span>
+                      <span className="text-[#56636d]">→</span>
 
                       <span className="truncate">{route.end_location}</span>
                     </div>
 
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
-                      <span className="bg-slate-100 text-slate-600 text-[10px] px-2 py-0.5 rounded font-bold font-mono">
+                      <span className="bg-[#12181d] border border-[#27323a] text-[#ede9e3] text-[10px] px-2 py-0.5 rounded font-bold font-mono">
                         {route.distance} KM
                       </span>
 
-                      <span className="bg-slate-100 text-slate-600 text-[10px] px-2 py-0.5 rounded font-bold font-mono">
+                      <span className="bg-[#12181d] border border-[#27323a] text-[#ede9e3] text-[10px] px-2 py-0.5 rounded font-bold font-mono">
                         {route.estimated_duration} MINS
                       </span>
 
-                      <span className="bg-slate-100 text-slate-600 text-[10px] px-2 py-0.5 rounded font-bold">
+                      <span className="bg-[#12181d] border border-[#27323a] text-[#c49a5c] text-[10px] px-2 py-0.5 rounded font-bold">
                         {routeStops.length} STOPS
                       </span>
 
                       <span
-                        className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${
+                        className={`badge ${
                           routeStatus === "Active"
-                            ? "bg-emerald-100 text-emerald-800"
-                            : "bg-red-100 text-red-800"
+                            ? "badge-success"
+                            : "badge-danger"
                         }`}
                       >
                         {routeStatus}
@@ -905,7 +905,7 @@ export default function RoutesModule({
                       id={`btn-view-${route.route_id}`}
                       type="button"
                       onClick={() => setSelectedRoute(route)}
-                      className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded"
+                      className="p-1.5 text-[#8a96a0] hover:text-[#ede9e3] hover:bg-[#1a2228] rounded"
                       title="View route"
                     >
                       <Eye className="w-3.5 h-3.5" />
@@ -918,7 +918,7 @@ export default function RoutesModule({
                           type="button"
                           disabled={isDeleting}
                           onClick={() => openEditModal(route)}
-                          className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded disabled:opacity-50"
+                          className="p-1.5 text-[#8a96a0] hover:text-[#6b8f3c] hover:bg-[#6b8f3c]/10 rounded disabled:opacity-50"
                           title="Edit route"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
@@ -929,7 +929,7 @@ export default function RoutesModule({
                           type="button"
                           disabled={isDeleting}
                           onClick={() => handleDelete(route)}
-                          className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded disabled:opacity-50"
+                          className="p-1.5 text-[#8a96a0] hover:text-[#b85454] hover:bg-[#b85454]/10 rounded disabled:opacity-50"
                           title="Delete route"
                         >
                           {isDeleting ? (
@@ -954,11 +954,11 @@ export default function RoutesModule({
 
       <div className="lg:col-span-7 space-y-6 flex flex-col">
         {!activeRoute ? (
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm min-h-[500px] flex items-center justify-center">
-            <div className="text-center text-slate-500">
-              <MapPin className="w-10 h-10 mx-auto mb-3 text-slate-300" />
+          <div className="glass-panel rounded-2xl min-h-[500px] flex items-center justify-center">
+            <div className="text-center text-[#8a96a0]">
+              <MapPin className="w-10 h-10 mx-auto mb-3 text-[#56636d]" />
 
-              <p className="font-semibold text-slate-700">Select a route</p>
+              <p className="font-semibold text-[#ede9e3]">Select a route</p>
 
               <p className="text-xs mt-1">
                 Route details and map navigation will appear here.
@@ -966,51 +966,51 @@ export default function RoutesModule({
             </div>
           </div>
         ) : (
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex-1 flex flex-col gap-4">
+          <div className="glass-panel rounded-2xl p-5 flex-1 flex flex-col gap-4">
             {/* Route Header */}
-            <div className="flex items-start justify-between border-b pb-3 border-slate-100 gap-4">
+            <div className="flex items-start justify-between border-b pb-3 border-[#27323a] gap-4">
               <div className="space-y-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
-                    className={`border text-[10px] px-2 py-0.5 rounded font-mono font-bold uppercase flex items-center gap-1 ${
+                    className={`badge ${
                       normalizeStatus(activeRoute.status) === "Active"
-                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                        : "bg-slate-100 text-slate-600 border-slate-200"
+                        ? "badge-success"
+                        : "badge-danger"
                     }`}
                   >
                     <span
                       className={`w-1.5 h-1.5 rounded-full ${
                         normalizeStatus(activeRoute.status) === "Active"
-                          ? "bg-emerald-500 animate-pulse"
-                          : "bg-slate-400"
+                          ? "bg-[#5fa87a] animate-pulse"
+                          : "bg-[#b85454]"
                       }`}
                     />
 
                     {normalizeStatus(activeRoute.status)}
                   </span>
 
-                  <span className="bg-blue-50 text-blue-800 border border-blue-200 text-[10px] px-2 py-0.5 rounded font-bold font-mono">
+                  <span className="badge badge-amber font-mono">
                     ID: {activeRoute.route_id}
                   </span>
                 </div>
 
-                <h3 className="font-bold text-slate-950 text-base">
+                <h3 className="font-bold text-[#ede9e3] text-base">
                   {activeRoute.route_name}
                 </h3>
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-[#8a96a0]">
                   Connecting Terminal {activeRoute.start_location} and Hub{" "}
                   {activeRoute.end_location}
                 </p>
               </div>
 
               <div className="text-right shrink-0">
-                <span className="block text-xl font-black text-blue-600 font-mono">
+                <span className="block text-xl font-black text-[#6b8f3c] font-mono">
                   {activeRoute.distance}{" "}
                   <span className="text-xs font-semibold">KM</span>
                 </span>
 
-                <span className="block text-[10px] text-slate-400 font-mono">
+                <span className="block text-[10px] text-[#8a96a0] font-mono">
                   Est. Duration: {activeRoute.estimated_duration} mins
                 </span>
               </div>
@@ -1018,14 +1018,14 @@ export default function RoutesModule({
 
             {/* Map */}
             <div
-              className="bg-slate-950 rounded-xl relative overflow-hidden flex-1 min-h-[300px] border border-slate-800"
+              className="bg-[#0b0f12] rounded-xl relative overflow-hidden flex-1 min-h-[300px] border border-[#27323a]"
               id="map-simulation-container"
             >
               <div ref={mapRef} className="w-full h-full min-h-[300px] z-0" />
 
               {!leafletLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-slate-950/90 z-20">
-                  <div className="text-center text-slate-400">
+                <div className="absolute inset-0 flex items-center justify-center bg-[#0b0f12]/90 z-20">
+                  <div className="text-center text-[#8a96a0]">
                     <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
                     <span className="text-xs">Loading map...</span>
                   </div>
@@ -1033,8 +1033,8 @@ export default function RoutesModule({
               )}
 
               {/* HUD */}
-              <div className="absolute top-3 left-3 bg-slate-950/85 backdrop-blur-md border border-slate-800 rounded-xl p-2.5 text-[10px] text-slate-300 font-mono space-y-1 z-10 shadow-lg pointer-events-none">
-                <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+              <div className="absolute top-3 left-3 bg-[#0b0f12]/90 backdrop-blur-md border border-[#27323a] rounded-xl p-2.5 text-[10px] text-[#ede9e3] font-mono space-y-1 z-10 shadow-lg pointer-events-none">
+                <div className="flex items-center gap-1.5 text-[#5fa87a] font-bold">
                   <Compass
                     className="w-3.5 h-3.5 animate-spin"
                     style={{
@@ -1044,16 +1044,16 @@ export default function RoutesModule({
                   <span>GPS TRACKING ONLINE</span>
                 </div>
 
-                <div className="text-slate-400">
+                <div className="text-[#8a96a0]">
                   STATIONS:{" "}
-                  <span className="text-white font-bold">
+                  <span className="text-[#ede9e3] font-bold">
                     {activeRoute.stops.length + 2} UNITS
                   </span>
                 </div>
 
-                <div className="text-slate-400">
+                <div className="text-[#8a96a0]">
                   DISTANCE:{" "}
-                  <span className="text-cyan-400 font-bold">
+                  <span className="text-[#c49a5c] font-bold">
                     {activeRoute.distance} KM
                   </span>
                 </div>
@@ -1066,17 +1066,17 @@ export default function RoutesModule({
                   onClick={() =>
                     setMapTileStyle(mapTileStyle === "dark" ? "light" : "dark")
                   }
-                  className="bg-slate-950/85 hover:bg-slate-900 text-slate-200 backdrop-blur-md border border-slate-800 rounded-xl px-2.5 py-1.5 text-[10px] font-bold font-mono flex items-center gap-1.5 shadow-md cursor-pointer transition-transform hover:scale-105"
+                  className="bg-[#0b0f12]/90 hover:bg-[#141a1f] text-[#ede9e3] backdrop-blur-md border border-[#27323a] rounded-xl px-2.5 py-1.5 text-[10px] font-bold font-mono flex items-center gap-1.5 shadow-md cursor-pointer transition-transform hover:scale-105"
                 >
-                  <Layers className="w-3.5 h-3.5 text-blue-400" />
+                  <Layers className="w-3.5 h-3.5 text-[#6b8f3c]" />
 
                   {mapTileStyle === "dark" ? "Dark Theme Map" : "Street Map"}
                 </button>
               </div>
 
               {/* Stop Strip */}
-              <div className="absolute bottom-3 left-3 right-3 bg-slate-950/90 backdrop-blur-md border border-slate-800 rounded-xl p-2 z-10 shadow-lg text-[10px] font-mono text-slate-300 flex items-center justify-between gap-2 overflow-x-auto">
-                <div className="flex items-center gap-1 text-amber-400 font-bold shrink-0">
+              <div className="absolute bottom-3 left-3 right-3 bg-[#0b0f12]/90 backdrop-blur-md border border-[#27323a] rounded-xl p-2 z-10 shadow-lg text-[10px] font-mono text-[#ede9e3] flex items-center justify-between gap-2 overflow-x-auto">
+                <div className="flex items-center gap-1 text-[#c49a5c] font-bold shrink-0">
                   <MapPin className="w-3.5 h-3.5" />
                   STOPS ON PATH:
                 </div>
@@ -1093,7 +1093,7 @@ export default function RoutesModule({
                         activeRoute.start_location,
                       )
                     }
-                    className="bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer hover:bg-emerald-800/80 shrink-0"
+                    className="bg-[#5fa87a]/20 border border-[#5fa87a]/40 text-[#5fa87a] px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer hover:bg-[#5fa87a]/30 shrink-0"
                   >
                     DEP: {activeRoute.start_location}
                   </span>
@@ -1111,7 +1111,7 @@ export default function RoutesModule({
                           stop,
                         )
                       }
-                      className="bg-amber-950/80 border border-amber-700/60 text-amber-300 px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer hover:bg-amber-800/80 shrink-0"
+                      className="bg-[#c49a5c]/20 border border-[#c49a5c]/40 text-[#c49a5c] px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer hover:bg-[#c49a5c]/30 shrink-0"
                     >
                       {index + 1}. {stop}
                     </span>
@@ -1128,7 +1128,7 @@ export default function RoutesModule({
                         activeRoute.end_location,
                       )
                     }
-                    className="bg-rose-950/80 border border-rose-700/60 text-rose-300 px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer hover:bg-rose-800/80 shrink-0"
+                    className="bg-[#b85454]/20 border border-[#b85454]/40 text-[#b85454] px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer hover:bg-[#b85454]/30 shrink-0"
                   >
                     ARR: {activeRoute.end_location}
                   </span>
@@ -1138,8 +1138,8 @@ export default function RoutesModule({
 
             {/* Stops */}
             <div className="space-y-2">
-              <h4 className="font-bold text-slate-800 text-xs flex items-center gap-1 uppercase tracking-wider">
-                <Navigation className="w-3.5 h-3.5 text-blue-600" />
+              <h4 className="font-bold text-[#ede9e3] text-xs flex items-center gap-1 uppercase tracking-wider">
+                <Navigation className="w-3.5 h-3.5 text-[#6b8f3c]" />
                 Passenger Transit Terminals ({activeRoute.stops.length + 2}{" "}
                 stations)
               </h4>
@@ -1156,13 +1156,13 @@ export default function RoutesModule({
                       activeRoute.start_location,
                     )
                   }
-                  className="p-2 border border-emerald-200 bg-emerald-50/60 hover:bg-emerald-100/80 rounded-xl text-center cursor-pointer transition-colors"
+                  className="p-2 border border-[#5fa87a]/40 bg-[#5fa87a]/10 hover:bg-[#5fa87a]/20 rounded-xl text-center cursor-pointer transition-colors"
                 >
-                  <span className="block text-[8px] text-emerald-600 font-bold font-mono">
+                  <span className="block text-[8px] text-[#5fa87a] font-bold font-mono">
                     DEP: 0 KM
                   </span>
 
-                  <span className="block text-xs font-bold text-slate-800 truncate">
+                  <span className="block text-xs font-bold text-[#ede9e3] truncate">
                     {activeRoute.start_location}
                   </span>
                 </div>
@@ -1180,13 +1180,13 @@ export default function RoutesModule({
                         stop,
                       )
                     }
-                    className="p-2 border border-amber-200 bg-amber-50/60 hover:bg-amber-100/80 rounded-xl text-center cursor-pointer transition-colors"
+                    className="p-2 border border-[#c49a5c]/40 bg-[#c49a5c]/10 hover:bg-[#c49a5c]/20 rounded-xl text-center cursor-pointer transition-colors"
                   >
-                    <span className="block text-[8px] text-amber-600 font-bold font-mono">
+                    <span className="block text-[8px] text-[#c49a5c] font-bold font-mono">
                       STOP {index + 1}
                     </span>
 
-                    <span className="block text-xs font-bold text-slate-700 truncate">
+                    <span className="block text-xs font-bold text-[#ede9e3] truncate">
                       {stop}
                     </span>
                   </div>
@@ -1203,13 +1203,13 @@ export default function RoutesModule({
                       activeRoute.end_location,
                     )
                   }
-                  className="p-2 border border-rose-200 bg-rose-50/60 hover:bg-rose-100/80 rounded-xl text-center cursor-pointer transition-colors"
+                  className="p-2 border border-[#b85454]/40 bg-[#b85454]/10 hover:bg-[#b85454]/20 rounded-xl text-center cursor-pointer transition-colors"
                 >
-                  <span className="block text-[8px] text-rose-600 font-bold font-mono">
+                  <span className="block text-[8px] text-[#b85454] font-bold font-mono">
                     ARRIVAL HUB
                   </span>
 
-                  <span className="block text-xs font-bold text-slate-800 truncate">
+                  <span className="block text-xs font-bold text-[#ede9e3] truncate">
                     {activeRoute.end_location}
                   </span>
                 </div>
@@ -1225,15 +1225,15 @@ export default function RoutesModule({
 
       {showModal && (
         <div
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50"
+          className="modal-overlay animate-fade-in"
           id="modal-container-routes"
         >
-          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-xl overflow-hidden flex flex-col p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b pb-3 border-slate-100">
-              <h3 className="font-bold text-slate-950 text-base">
+          <div className="modal-content space-y-4">
+            <div className="flex items-center justify-between border-b border-[#27323a] pb-3">
+              <h3 className="font-bold text-[#ede9e3] text-base">
                 {editingRoute
-                  ? `Edit Route: ${editingRoute.route_name}`
-                  : "Create New Public Transport Route"}
+                  ? `Configure Route: ${editingRoute.route_name}`
+                  : "Create New Transit Route"}
               </h3>
 
               <button
@@ -1241,14 +1241,14 @@ export default function RoutesModule({
                 type="button"
                 onClick={closeModal}
                 disabled={isSaving}
-                className="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700 transition-colors disabled:opacity-50"
+                className="p-1 rounded-lg text-[#8a96a0] hover:text-[#ede9e3]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {error && (
-              <div className="flex gap-2 items-start rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2 text-xs">
+              <div className="flex gap-2 items-start rounded-lg bg-[#b85454]/10 border border-[#b85454]/30 text-[#b85454] px-3 py-2 text-xs">
                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
 
                 <span>{error}</span>
@@ -1261,7 +1261,7 @@ export default function RoutesModule({
                 <div className="space-y-1 md:col-span-2">
                   <label
                     htmlFor="route-form-name"
-                    className="font-semibold text-slate-700"
+                    className="font-semibold text-[#8a96a0]"
                   >
                     Route Code / Name
                   </label>
@@ -1274,7 +1274,7 @@ export default function RoutesModule({
                     placeholder="e.g. Route 460 - Express Hub to Terminal C"
                     value={routeName}
                     onChange={(e) => setRouteName(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium disabled:bg-slate-50"
+                    className="input-field w-full font-medium"
                   />
                 </div>
 
@@ -1282,7 +1282,7 @@ export default function RoutesModule({
                 <div className="space-y-1">
                   <label
                     htmlFor="route-form-origin"
-                    className="font-semibold text-slate-700"
+                    className="font-semibold text-[#8a96a0]"
                   >
                     Start Location
                   </label>
@@ -1295,7 +1295,7 @@ export default function RoutesModule({
                     placeholder="e.g. Main Depot"
                     value={startLoc}
                     onChange={(e) => setStartLoc(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium disabled:bg-slate-50"
+                    className="input-field w-full font-medium"
                   />
                 </div>
 
@@ -1303,7 +1303,7 @@ export default function RoutesModule({
                 <div className="space-y-1">
                   <label
                     htmlFor="route-form-destination"
-                    className="font-semibold text-slate-700"
+                    className="font-semibold text-[#8a96a0]"
                   >
                     End Location
                   </label>
@@ -1316,7 +1316,7 @@ export default function RoutesModule({
                     placeholder="e.g. Central Station"
                     value={endLoc}
                     onChange={(e) => setEndLoc(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium disabled:bg-slate-50"
+                    className="input-field w-full font-medium"
                   />
                 </div>
 
@@ -1324,7 +1324,7 @@ export default function RoutesModule({
                 <div className="space-y-1">
                   <label
                     htmlFor="route-form-distance"
-                    className="font-semibold text-slate-700"
+                    className="font-semibold text-[#8a96a0]"
                   >
                     Total Distance (KM)
                   </label>
@@ -1338,7 +1338,7 @@ export default function RoutesModule({
                     disabled={isSaving}
                     value={distance}
                     onChange={(e) => setDistance(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono font-semibold disabled:bg-slate-50"
+                    className="input-field w-full font-mono font-semibold"
                   />
                 </div>
 
@@ -1346,7 +1346,7 @@ export default function RoutesModule({
                 <div className="space-y-1">
                   <label
                     htmlFor="route-form-duration"
-                    className="font-semibold text-slate-700"
+                    className="font-semibold text-[#8a96a0]"
                   >
                     Estimated Duration (Minutes)
                   </label>
@@ -1359,7 +1359,7 @@ export default function RoutesModule({
                     disabled={isSaving}
                     value={duration}
                     onChange={(e) => setDuration(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono font-semibold disabled:bg-slate-50"
+                    className="input-field w-full font-mono font-semibold"
                   />
                 </div>
 
@@ -1367,7 +1367,7 @@ export default function RoutesModule({
                 <div className="space-y-1 md:col-span-2">
                   <label
                     htmlFor="route-form-status"
-                    className="font-semibold text-slate-700"
+                    className="font-semibold text-[#8a96a0]"
                   >
                     Route Status
                   </label>
@@ -1379,7 +1379,7 @@ export default function RoutesModule({
                     onChange={(e) =>
                       setStatus(e.target.value as "Active" | "Inactive")
                     }
-                    className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold disabled:bg-slate-50"
+                    className="input-field w-full font-semibold"
                   >
                     <option value="Active">Active</option>
 
@@ -1392,8 +1392,8 @@ export default function RoutesModule({
               {/* STOPS */}
               {/* ================================================= */}
 
-              <div className="space-y-2 border-t pt-3 border-slate-100">
-                <label className="font-semibold text-slate-700 block">
+              <div className="space-y-2 border-t pt-3 border-[#27323a]">
+                <label className="font-semibold text-[#8a96a0] block">
                   Configured Stops
                 </label>
 
@@ -1411,7 +1411,7 @@ export default function RoutesModule({
                         handleAddStop();
                       }
                     }}
-                    className="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium disabled:bg-slate-50"
+                    className="input-field flex-1 font-medium"
                   />
 
                   <button
@@ -1419,7 +1419,7 @@ export default function RoutesModule({
                     type="button"
                     disabled={isSaving}
                     onClick={handleAddStop}
-                    className="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-lg font-bold disabled:opacity-50"
+                    className="btn-secondary px-3 py-1.5"
                   >
                     Add Stop
                   </button>
@@ -1427,16 +1427,16 @@ export default function RoutesModule({
 
                 <div className="flex flex-wrap gap-1.5 max-h-[120px] overflow-y-auto py-1">
                   {stopsList.length === 0 ? (
-                    <span className="text-[10px] text-slate-400 italic">
+                    <span className="text-[10px] text-[#8a96a0] italic">
                       No intermediate stops configured.
                     </span>
                   ) : (
                     stopsList.map((stop, index) => (
                       <span
                         key={`${stop}-${index}`}
-                        className="flex items-center gap-1 bg-slate-100 border border-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-medium text-[10px]"
+                        className="flex items-center gap-1 bg-[#12181d] border border-[#27323a] text-[#ede9e3] px-2 py-0.5 rounded-md font-medium text-[10px]"
                       >
-                        <span className="text-slate-400">{index + 1}.</span>
+                        <span className="text-[#8a96a0]">{index + 1}.</span>
 
                         {stop}
 
@@ -1444,7 +1444,7 @@ export default function RoutesModule({
                           type="button"
                           disabled={isSaving}
                           onClick={() => handleRemoveStop(index)}
-                          className="text-red-500 hover:text-red-700 font-bold ml-0.5 disabled:opacity-50"
+                          className="text-[#b85454] hover:opacity-80 font-bold ml-0.5"
                         >
                           ×
                         </button>
@@ -1458,13 +1458,13 @@ export default function RoutesModule({
               {/* ACTIONS */}
               {/* ================================================= */}
 
-              <div className="flex items-center justify-end gap-3 border-t pt-3 border-slate-100">
+              <div className="flex items-center justify-end gap-3 border-t pt-3 border-[#27323a]">
                 <button
                   id="btn-route-modal-cancel"
                   type="button"
                   onClick={closeModal}
                   disabled={isSaving}
-                  className="px-4 py-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-all font-semibold disabled:opacity-50"
+                  className="btn-secondary"
                 >
                   Cancel
                 </button>
@@ -1473,7 +1473,7 @@ export default function RoutesModule({
                   id="btn-route-modal-save"
                   type="submit"
                   disabled={isSaving}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition-all font-semibold disabled:opacity-60 flex items-center gap-2"
+                  className="btn-primary"
                 >
                   {isSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
 

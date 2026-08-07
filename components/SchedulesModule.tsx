@@ -253,16 +253,16 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
   return (
     <div id="schedules-module-root" className="space-y-6">
       {/* Filtering and Mode strip */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 glass-panel p-4 rounded-2xl">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex border border-slate-200 rounded-lg overflow-hidden bg-slate-50 p-0.5">
+          <div className="flex border border-[#27323a] rounded-xl overflow-hidden bg-[#12181d] p-1">
             <button
               id="btn-timeline-daily"
               onClick={() => setTimelineMode("Daily")}
-              className={`px-3 py-1 text-xs font-semibold rounded-md ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 timelineMode === "Daily"
-                  ? "bg-white text-slate-800 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800"
+                  ? "bg-[#6b8f3c] text-white shadow-sm"
+                  : "text-[#8a96a0] hover:text-[#ede9e3]"
               }`}
             >
               Daily Timetable
@@ -270,10 +270,10 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
             <button
               id="btn-timeline-weekly"
               onClick={() => setTimelineMode("Weekly")}
-              className={`px-3 py-1 text-xs font-semibold rounded-md ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 timelineMode === "Weekly"
-                  ? "bg-white text-slate-800 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800"
+                  ? "bg-[#6b8f3c] text-white shadow-sm"
+                  : "text-[#8a96a0] hover:text-[#ede9e3]"
               }`}
             >
               Weekly Shift view
@@ -281,10 +281,10 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
             <button
               id="btn-timeline-all"
               onClick={() => setTimelineMode("All")}
-              className={`px-3 py-1 text-xs font-semibold rounded-md ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 timelineMode === "All"
-                  ? "bg-white text-slate-800 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800"
+                  ? "bg-[#6b8f3c] text-white shadow-sm"
+                  : "text-[#8a96a0] hover:text-[#ede9e3]"
               }`}
             >
               All Shifts Log
@@ -292,14 +292,14 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
           </div>
 
           {timelineMode !== "All" && (
-            <div className="flex items-center gap-1.5 text-xs text-slate-650">
-              <Calendar className="w-4 h-4 text-slate-400" />
+            <div className="flex items-center gap-1.5 text-xs text-[#8a96a0]">
+              <Calendar className="w-4 h-4 text-[#8a96a0]" />
               <input
                 id="input-filter-date"
                 type="date"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
-                className="border border-slate-200 rounded-lg p-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono font-bold"
+                className="input-field py-1 font-mono font-bold"
               />
             </div>
           )}
@@ -317,7 +317,7 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                 setSelectedVehicleId(vehicles[0].vehicle_id);
               setShowModal(true);
             }}
-            className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-semibold shadow-sm transition-colors"
+            className="btn-primary w-full md:w-auto text-xs"
           >
             <Plus className="w-4 h-4" />
             Assign Route Shift
@@ -327,13 +327,13 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
 
       {/* Main Timetable grid display */}
       <div
-        className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden"
+        className="glass-panel rounded-2xl overflow-hidden"
         id="timetable-scroller"
       >
         <div className="max-w-full overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-slate-50/75 text-slate-500 font-bold border-b border-slate-200 font-mono text-[11px]">
+              <tr className="bg-[#141a1f] text-[#8a96a0] font-bold border-b border-[#27323a] font-mono text-[11px]">
                 <th className="p-4">TIME FRAMING</th>
                 <th className="p-4">ROUTE</th>
                 <th className="p-4">ASSIGNED DRIVER</th>
@@ -343,12 +343,12 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                 <th className="p-4 text-right">CONTROLS</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-150">
+            <tbody className="divide-y divide-[#27323a]">
               {filteredSchedules.length === 0 ? (
                 <tr>
                   <td
                     colSpan={7}
-                    className="p-12 text-center text-slate-500 font-semibold"
+                    className="p-12 text-center text-[#8a96a0] font-semibold"
                   >
                     No timetabled shifts are active for this range.
                   </td>
@@ -367,10 +367,10 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                     <tr
                       key={s.schedule_id}
                       id={`row-schedule-${s.schedule_id}`}
-                      className="hover:bg-slate-50/40"
+                      className="hover:bg-[#1a2228]/50 transition-colors"
                     >
-                      <td className="p-4 font-bold font-mono text-slate-800">
-                        <div className="flex items-center gap-1.5 text-blue-700 bg-blue-50 border border-blue-100/55 px-2.5 py-1.5 rounded-lg w-max shadow-sm">
+                      <td className="p-4 font-bold font-mono text-[#ede9e3]">
+                        <div className="flex items-center gap-1.5 text-[#8bb552] bg-[#6b8f3c]/15 border border-[#6b8f3c]/30 px-2.5 py-1.5 rounded-lg w-max shadow-sm">
                           <Clock className="w-3.5 h-3.5" />
                           <span>
                             {s.departure_time} - {s.arrival_time}
@@ -379,51 +379,51 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                       </td>
                       <td className="p-4">
                         <div className="space-y-0.5">
-                          <span className="font-bold text-slate-850 block">
+                          <span className="font-bold text-[#ede9e3] block">
                             {route?.route_name || "Unmapped"}
                           </span>
-                          <span className="text-[10px] text-slate-400 font-mono block">
+                          <span className="text-[10px] text-[#8a96a0] font-mono block">
                             ID: {s.route_id}
                           </span>
                         </div>
                       </td>
                       <td className="p-4">
                         <div className="space-y-0.5">
-                          <span className="font-semibold text-slate-800 flex items-center gap-1 text-[11px]">
-                            <User className="w-3 h-3 text-slate-400" />
+                          <span className="font-semibold text-[#ede9e3] flex items-center gap-1 text-[11px]">
+                            <User className="w-3 h-3 text-[#8a96a0]" />
                             {driver?.name || "Suspended File"}
                           </span>
-                          <span className="text-[10px] text-slate-400 font-mono block">
+                          <span className="text-[10px] text-[#8a96a0] font-mono block">
                             D/L: {driver?.license_number}
                           </span>
                         </div>
                       </td>
-                      <td className="p-4 font-mono font-semibold text-slate-700">
+                      <td className="p-4 font-mono font-semibold text-[#ede9e3]">
                         <div className="space-y-0.5">
-                          <span className="text-slate-850 flex items-center gap-1 font-bold">
-                            <Bus className="w-3.5 h-3.5 text-slate-400" />
+                          <span className="text-[#ede9e3] flex items-center gap-1 font-bold">
+                            <Bus className="w-3.5 h-3.5 text-[#8a96a0]" />
                             {bus?.registration_number || "No Assignment"}
                           </span>
-                          <span className="text-[9px] text-blue-600 bg-blue-50 border px-1 rounded-sm block w-max font-bold">
+                          <span className="text-[9px] text-[#c49a5c] bg-[#c49a5c]/15 border border-[#c49a5c]/30 px-1.5 rounded block w-max font-bold">
                             {bus?.vehicle_type}
                           </span>
                         </div>
                       </td>
-                      <td className="p-4 font-mono text-slate-500 font-semibold">
+                      <td className="p-4 font-mono text-[#8a96a0] font-semibold">
                         {s.schedule_date}
                       </td>
                       <td className="p-4 text-center">
                         <span
-                          className={`text-[10px] px-2.5 py-1 rounded-full font-extrabold uppercase ${
+                          className={`badge ${
                             s.status === "Scheduled"
-                              ? "bg-slate-100 text-slate-600"
+                              ? "badge-primary"
                               : s.status === "Active"
-                                ? "bg-blue-100 text-blue-800 animate-pulse"
+                                ? "badge-success animate-pulse"
                                 : s.status === "Completed"
-                                  ? "bg-emerald-100 text-emerald-800"
+                                  ? "badge-success"
                                   : s.status === "Delayed"
-                                    ? "bg-amber-100 text-amber-800"
-                                    : "bg-red-100 text-red-800"
+                                    ? "badge-warning"
+                                    : "badge-danger"
                           }`}
                         >
                           {s.status}
@@ -437,7 +437,7 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                                 <button
                                   id={`btn-start-${s.schedule_id}`}
                                   onClick={() => handleStartTrip(s.schedule_id)}
-                                  className="bg-emerald-550 text-white hover:bg-emerald-600 font-bold px-2 py-1.5 rounded-lg text-[10px] shadow-xs flex items-center gap-0.5 cursor-pointer"
+                                  className="btn-primary py-1 px-2 text-[10px]"
                                 >
                                   Dispatch
                                 </button>
@@ -446,37 +446,37 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                                   onClick={() =>
                                     handleCancelTrip(s.schedule_id)
                                   }
-                                  className="bg-white hover:bg-red-50 text-red-650 border border-red-200 font-semibold px-2 py-1.5 rounded-lg text-[10px] cursor-pointer"
+                                  className="btn-secondary py-1 px-2 text-[10px]"
                                 >
                                   Cancel
                                 </button>
                               </>
                             )}
                             {s.status === "Active" && (
-                              <span className="text-[10px] text-emerald-600 font-extrabold animate-pulse">
+                              <span className="text-[10px] text-[#5fa87a] font-extrabold animate-pulse">
                                 DISPATCHED
                               </span>
                             )}
                             {s.status === "Completed" && (
-                              <span className="text-[10px] text-slate-400 font-semibold">
+                              <span className="text-[10px] text-[#8a96a0] font-semibold">
                                 Shift Completed
                               </span>
                             )}
                             {s.status === "Cancelled" && (
-                              <span className="text-[10px] text-red-400 line-through">
+                              <span className="text-[10px] text-[#b85454] line-through">
                                 Cancelled
                               </span>
                             )}
                             <button
                               id={`btn-del-shift-${s.schedule_id}`}
                               onClick={() => onDeleteSchedule(s.schedule_id)}
-                              className="bg-slate-50 hover:bg-red-50 text-slate-350 hover:text-red-600 p-1.5 rounded-lg border border-slate-200 cursor-pointer"
+                              className="p-1.5 rounded-lg border border-[#b85454]/30 bg-[#b85454]/10 text-[#b85454] hover:bg-[#b85454]/20 transition-colors"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         ) : (
-                          <span className="text-[10px] text-slate-400 font-mono font-semibold">
+                          <span className="text-[10px] text-[#8a96a0] font-mono font-semibold">
                             Read-Only
                           </span>
                         )}
@@ -493,18 +493,18 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
       {/* Timetable Configuration modal */}
       {showModal && (
         <div
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in"
+          className="modal-overlay animate-fade-in"
           id="modal-container-schedule"
         >
-          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-xl shadow-xl overflow-hidden flex flex-col p-6 space-y-4">
-            <div className="flex items-center justify-between border-b pb-3 border-slate-100">
-              <h3 className="font-bold text-slate-950 text-base">
+          <div className="modal-content space-y-4 max-w-xl">
+            <div className="flex items-center justify-between border-b pb-3 border-[#27323a]">
+              <h3 className="font-bold text-[#ede9e3] text-base">
                 Assign Route Shift & Timeline Check
               </h3>
               <button
                 id="btn-close-schedule-modal"
                 onClick={() => setShowModal(false)}
-                className="p-1 hover:bg-slate-150 rounded-lg text-slate-400 hover:text-slate-700 transition-colors"
+                className="p-1 rounded-lg text-[#8a96a0] hover:text-[#ede9e3] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -516,14 +516,14 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Target Route
                   </label>
                   <select
                     id="schedule-form-route"
                     value={selectedRouteId}
                     onChange={(e) => setSelectedRouteId(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"
+                    className="input-field w-full font-semibold"
                   >
                     {routes.map((r) => (
                       <option key={r.route_id} value={r.route_id}>
@@ -534,7 +534,7 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Shift Date
                   </label>
                   <input
@@ -542,19 +542,19 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                     type="date"
                     value={sDate}
                     onChange={(e) => setSDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold font-mono"
+                    className="input-field w-full font-semibold font-mono"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Assigned Driver
                   </label>
                   <select
                     id="schedule-form-driver"
                     value={selectedDriverId}
                     onChange={(e) => setSelectedDriverId(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"
+                    className="input-field w-full font-semibold"
                   >
                     {drivers.map((d) => (
                       <option key={d.driver_id} value={d.driver_id}>
@@ -565,14 +565,14 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Assigned Fleet Bus
                   </label>
                   <select
                     id="schedule-form-vehicle"
                     value={selectedVehicleId}
                     onChange={(e) => setSelectedVehicleId(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"
+                    className="input-field w-full font-semibold"
                   >
                     {vehicles.map((v) => (
                       <option key={v.vehicle_id} value={v.vehicle_id}>
@@ -583,7 +583,7 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Planned Departure Time
                   </label>
                   <input
@@ -591,12 +591,12 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                     type="time"
                     value={depTime}
                     onChange={(e) => setDepTime(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold font-mono"
+                    className="input-field w-full font-semibold font-mono"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Planned Arrival Time
                   </label>
                   <input
@@ -604,7 +604,7 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                     type="time"
                     value={arrTime}
                     onChange={(e) => setArrTime(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold font-mono"
+                    className="input-field w-full font-semibold font-mono"
                   />
                 </div>
               </div>
@@ -612,35 +612,35 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
               {/* Automatic conflict block banner */}
               {conflicts.length > 0 && (
                 <div
-                  className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-3"
+                  className="bg-[#b85454]/10 border border-[#b85454]/30 rounded-xl p-4 space-y-3"
                   id="conflict-error-box"
                 >
-                  <div className="flex items-start gap-2 text-red-800">
-                    <ShieldAlert className="w-5 h-5 text-red-650 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2 text-[#b85454]">
+                    <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
                     <div>
                       <h4 className="font-bold text-xs uppercase tracking-wider">
                         Critical overlap block triggered
                       </h4>
-                      <p className="text-[10px] text-red-600 mt-0.5">
+                      <p className="text-[10px] opacity-80 mt-0.5">
                         Relational checks failed. Re-assignment or optimizer
                         recommended.
                       </p>
                     </div>
                   </div>
-                  <ul className="list-disc list-inside text-[11px] text-red-700 space-y-1.5 pl-1 bg-white/40 p-2 rounded-lg border border-red-100">
+                  <ul className="list-disc list-inside text-[11px] text-[#b85454] space-y-1.5 pl-1 bg-[#0b0f12]/50 p-2 rounded-lg border border-[#b85454]/20">
                     {conflicts.map((err, i) => (
                       <li key={i}>{err}</li>
                     ))}
                   </ul>
 
                   {/* AI Resolution Option */}
-                  <div className="border-t border-red-100 pt-3 flex flex-col gap-2">
+                  <div className="border-t border-[#b85454]/20 pt-3 flex flex-col gap-2">
                     <button
                       id="btn-ai-resolve"
                       type="button"
                       onClick={triggerAIRecommendation}
                       disabled={aiLoading}
-                      className="bg-blue-600 hover:bg-slate-905 duration-205 text-white font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 w-max text-[10px] self-end shadow-sm cursor-pointer"
+                      className="btn-amber text-[10px] self-end"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
                       {aiLoading
@@ -650,13 +650,13 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
 
                     {aiRecommendation && (
                       <div
-                        className="bg-blue-50 border border-blue-100 rounded-lg p-3 text-blue-900 text-xs mt-2 relative animate-fade-in"
+                        className="bg-[#c49a5c]/10 border border-[#c49a5c]/30 rounded-lg p-3 text-[#c49a5c] text-xs mt-2 relative animate-fade-in"
                         id="ai-recommender-card"
                       >
-                        <div className="flex items-center gap-1 mb-1 font-bold text-[10px] text-blue-700 uppercase tracking-widest leading-none">
+                        <div className="flex items-center gap-1 mb-1 font-bold text-[10px] uppercase tracking-widest leading-none">
                           <Sparkles className="w-3.5 h-3.5" /> AI Recommendation
                         </div>
-                        <p className="italic font-normal leading-relaxed text-slate-700 mt-1">
+                        <p className="italic font-normal leading-relaxed text-[#ede9e3] mt-1">
                           {aiRecommendation}
                         </p>
                       </div>
@@ -665,19 +665,19 @@ Provide a short, 2-sentence actionable operational recommendation to resolve the
                 </div>
               )}
 
-              <div className="flex items-center justify-end gap-3 border-t pt-3 border-slate-100">
+              <div className="flex items-center justify-end gap-3 border-t pt-3 border-[#27323a]">
                 <button
                   id="btn-schedule-cancel"
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border border-slate-200 rounded-lg hover:bg-slate-50 select-none text-slate-600 transition-all font-semibold"
+                  className="btn-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   id="btn-schedule-save"
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg select-none shadow-sm transition-all font-semibold"
+                  className="btn-primary"
                 >
                   Confirm Shift
                 </button>

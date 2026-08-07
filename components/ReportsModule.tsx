@@ -113,18 +113,18 @@ export default function ReportsModule({
   return (
     <div id="reports-module-root" className="space-y-6">
       {/* Filtering selectors */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm print:hidden">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 glass-panel p-4 rounded-2xl print:hidden">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1.5 text-xs">
-            <Filter className="w-4 h-4 text-slate-400" />
-            <span className="font-semibold text-slate-500">
+            <Filter className="w-4 h-4 text-[#8a96a0]" />
+            <span className="font-semibold text-[#8a96a0]">
               Report Category:
             </span>
             <select
               id="select-report-type"
               value={reportType}
               onChange={(e) => setReportType(e.target.value as any)}
-              className="border border-slate-205 rounded-lg p-1.5 font-bold text-slate-800 bg-slate-50"
+              className="input-field font-bold text-[#ede9e3] py-1.5"
             >
               <option value="performance">Route Performance Report</option>
               <option value="fuel">Fuel Utilization & Audit Logs</option>
@@ -134,13 +134,13 @@ export default function ReportsModule({
           </div>
 
           <div className="flex items-center gap-1.5 text-xs">
-            <Calendar className="w-4 h-4 text-slate-400" />
-            <span className="font-semibold text-slate-500">Timeframe:</span>
+            <Calendar className="w-4 h-4 text-[#8a96a0]" />
+            <span className="font-semibold text-[#8a96a0]">Timeframe:</span>
             <select
               id="select-report-timeframe"
               value={timeframe}
               onChange={(e) => setTimeframe(e.target.value as any)}
-              className="border border-slate-205 rounded-lg p-1.5 font-bold text-slate-800 bg-slate-50 animate-fade-in"
+              className="input-field font-bold text-[#ede9e3] py-1.5 animate-fade-in"
             >
               <option value="weekly">Weekly Operational Summary</option>
               <option value="monthly">Monthly Accounting Ledger</option>
@@ -152,7 +152,7 @@ export default function ReportsModule({
           <button
             id="btn-export-csv-report"
             onClick={handleExportReport}
-            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 duration-205 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold shadow-sm cursor-pointer"
+            className="btn-amber w-full sm:w-auto text-xs"
           >
             <Download className="w-4 h-4" />
             Export CSV to Storage
@@ -161,7 +161,7 @@ export default function ReportsModule({
           <button
             id="btn-print-pdf-report"
             onClick={triggerPDFPrint}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 duration-205 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold shadow-sm cursor-pointer"
+            className="btn-primary w-full sm:w-auto text-xs"
           >
             <Printer className="w-4 h-4" />
             Generate Official Print PDF
@@ -171,39 +171,39 @@ export default function ReportsModule({
 
       {/* Printable Report Layout block */}
       <div
-        className="bg-white border border-slate-200 rounded-3xl p-8 max-w-4xl mx-auto shadow-md print:shadow-none print:border-none relative overflow-hidden"
+        className="glass-panel rounded-3xl p-8 max-w-4xl mx-auto print:shadow-none print:border-none relative overflow-hidden print:bg-white print:text-black"
         id="official-audit-document"
       >
         {/* Report Header block */}
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b-2 pb-6 border-slate-300">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b-2 pb-6 border-[#27323a] print:border-slate-300">
           <div className="space-y-1">
-            <span className="text-[10px] bg-slate-900 text-white px-2 py-0.5 rounded font-bold font-mono tracking-wider block w-max uppercase">
+            <span className="badge badge-amber font-mono font-bold tracking-wider uppercase">
               SRMSS Official Depot Audit Report
             </span>
-            <h2 className="text-xl font-extrabold text-slate-900 tracking-tight leading-none uppercase">
+            <h2 className="text-xl font-extrabold text-[#ede9e3] print:text-black tracking-tight leading-none uppercase mt-2">
               {reportType === "performance" && "Route Operational Performance Report"}
               {reportType === "fuel" && "Fleet Fuel Consumption & Audit Log"}
               {reportType === "maintenance" && "Fleet Maintenance Expense Report"}
               {reportType === "utilization" && "Driver Duty Utilization Register"}
             </h2>
-            <p className="text-xs text-blue-700 font-mono font-bold uppercase tracking-wider">
+            <p className="text-xs text-[#8bb552] print:text-emerald-700 font-mono font-bold uppercase tracking-wider mt-1">
               Depot Transit System Management Hub
             </p>
           </div>
-          <div className="text-right text-[10px] font-mono text-slate-600 space-y-0.5">
+          <div className="text-right text-[10px] font-mono text-[#8a96a0] print:text-slate-600 space-y-0.5">
             <div>
               REF ID:{" "}
-              <span className="font-bold text-slate-900">
+              <span className="font-bold text-[#ede9e3] print:text-black">
                 SRMSS-RPT-{reportType.toUpperCase()}-{new Date().getFullYear()}
               </span>
             </div>
             <div>
               TIMEFRAME:{" "}
-              <span className="font-bold text-slate-900 uppercase">{timeframe}</span>
+              <span className="font-bold text-[#ede9e3] print:text-black uppercase">{timeframe}</span>
             </div>
             <div>
               GENERATED DATE:{" "}
-              <span className="font-bold text-slate-900">
+              <span className="font-bold text-[#ede9e3] print:text-black">
                 {new Date().toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "short",
@@ -215,38 +215,38 @@ export default function ReportsModule({
         </div>
 
         {/* Overview Stats Segment */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-b border-slate-100">
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-            <span className="block text-[10px] text-slate-400 font-mono uppercase font-bold leading-none">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-b border-[#27323a] print:border-slate-200">
+          <div className="p-3 bg-[#12181d] border border-[#27323a] print:bg-slate-50 print:border-slate-200 rounded-xl">
+            <span className="block text-[10px] text-[#8a96a0] font-mono uppercase font-bold leading-none">
               Active Routes
             </span>
-            <span className="block text-lg font-black text-slate-900 mt-1 font-mono">
+            <span className="block text-lg font-black text-[#ede9e3] print:text-black mt-1 font-mono">
               {routes.length}{" "}
               <span className="text-xs font-semibold">Lines</span>
             </span>
           </div>
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-            <span className="block text-[10px] text-slate-400 font-mono uppercase font-bold leading-none">
+          <div className="p-3 bg-[#12181d] border border-[#27323a] print:bg-slate-50 print:border-slate-200 rounded-xl">
+            <span className="block text-[10px] text-[#8a96a0] font-mono uppercase font-bold leading-none">
               Completed Trips
             </span>
-            <span className="block text-lg font-black text-slate-900 mt-1 font-mono">
+            <span className="block text-lg font-black text-[#ede9e3] print:text-black mt-1 font-mono">
               {completedTrips}{" "}
               <span className="text-xs font-semibold">Shifts</span>
             </span>
           </div>
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-            <span className="block text-[10px] text-slate-400 font-mono uppercase font-bold leading-none">
+          <div className="p-3 bg-[#12181d] border border-[#27323a] print:bg-slate-50 print:border-slate-200 rounded-xl">
+            <span className="block text-[10px] text-[#8a96a0] font-mono uppercase font-bold leading-none">
               Fuel Expenditures
             </span>
-            <span className="block text-lg font-black text-blue-700 mt-1 font-mono">
+            <span className="block text-lg font-black text-[#8bb552] print:text-emerald-700 mt-1 font-mono">
               LKR {totalFuelCost.toLocaleString()}
             </span>
           </div>
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-            <span className="block text-[10px] text-slate-400 font-mono uppercase font-bold leading-none">
+          <div className="p-3 bg-[#12181d] border border-[#27323a] print:bg-slate-50 print:border-slate-200 rounded-xl">
+            <span className="block text-[10px] text-[#8a96a0] font-mono uppercase font-bold leading-none">
               Maintenance Repairs
             </span>
-            <span className="block text-lg font-black text-slate-900 mt-1 font-mono">
+            <span className="block text-lg font-black text-[#c49a5c] print:text-amber-700 mt-1 font-mono">
               LKR {totalMaintCost.toLocaleString()}
             </span>
           </div>
@@ -256,11 +256,11 @@ export default function ReportsModule({
         <div className="py-6 space-y-6 flex-1 min-h-[300px]">
           {reportType === "performance" && (
             <div className="space-y-4">
-              <h4 className="font-bold text-slate-900 text-sm border-b pb-1 flex items-center gap-1">
-                <TrendingUp className="w-4.5 h-4.5 text-blue-600" /> Route
+              <h4 className="font-bold text-[#ede9e3] print:text-black text-sm border-b pb-1 border-[#27323a] flex items-center gap-1.5">
+                <TrendingUp className="w-4.5 h-4.5 text-[#6b8f3c]" /> Route
                 Operational Performance Indices
               </h4>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#8a96a0] print:text-slate-500">
                 Summary compiled for the {timeframe} reporting span detailing
                 route lengths and active dispatch logs:
               </p>
@@ -268,50 +268,52 @@ export default function ReportsModule({
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse font-sans">
                   <thead>
-                    <tr className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 font-bold border-b border-slate-200 dark:border-slate-700 font-mono text-[10px]">
-                      <th className="p-2 border border-slate-200 dark:border-slate-700">
+                    <tr className="bg-[#141a1f] print:bg-slate-100 text-[#8a96a0] print:text-slate-800 font-bold border-b border-[#27323a] print:border-slate-200 font-mono text-[10px]">
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">
                         Route Name
                       </th>
-                      <th className="p-2 border border-slate-200 dark:border-slate-700">
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">
                         Start location
                       </th>
-                      <th className="p-2 border border-slate-200 dark:border-slate-700">
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">
                         Arrival Station
                       </th>
-                      <th className="p-2 border border-slate-200 dark:border-slate-700 font-mono">
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono">
                         Distance (KM)
                       </th>
-                      <th className="p-2 border border-slate-200 dark:border-slate-700 font-mono">
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono">
                         Duration (MIN)
                       </th>
-                      <th className="p-2 border border-slate-200 dark:border-slate-700 text-center">
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 text-center">
                         Status
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-[#27323a] print:divide-slate-200">
                     {routes.map((r) => (
                       <tr
                         key={r.route_id}
-                        className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50"
+                        className="hover:bg-[#1a2228]/50 print:hover:bg-slate-50"
                       >
-                        <td className="p-2 border border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-semibold text-[#ede9e3] print:text-black">
                           {r.route_name}
                         </td>
-                        <td className="p-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200">
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#8a96a0] print:text-slate-700">
                           {r.start_location}
                         </td>
-                        <td className="p-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200">
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#8a96a0] print:text-slate-700">
                           {r.end_location}
                         </td>
-                        <td className="p-2 border border-slate-200 dark:border-slate-700 font-mono font-semibold text-slate-900 dark:text-slate-100">
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono font-semibold text-[#ede9e3] print:text-black">
                           {r.distance} KM
                         </td>
-                        <td className="p-2 border border-slate-200 dark:border-slate-700 font-mono text-slate-700 dark:text-slate-200">
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono text-[#8a96a0] print:text-slate-700">
                           {r.estimated_duration} mins
                         </td>
-                        <td className="p-2 border border-slate-200 dark:border-slate-700 text-center font-bold text-emerald-600 dark:text-emerald-400">
-                          {r.status}
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-center">
+                          <span className={`badge ${r.status === "Active" ? "badge-success" : "badge-danger"}`}>
+                            {r.status}
+                          </span>
                         </td>
                       </tr>
                     ))}
@@ -323,11 +325,11 @@ export default function ReportsModule({
 
           {reportType === "fuel" && (
             <div className="space-y-4">
-              <h4 className="font-bold text-slate-900 text-sm border-b pb-1 flex items-center gap-1">
-                <BarChart2 className="w-4.5 h-4.5 text-blue-600" /> Fleet Refuel
+              <h4 className="font-bold text-[#ede9e3] print:text-black text-sm border-b pb-1 border-[#27323a] flex items-center gap-1.5">
+                <BarChart2 className="w-4.5 h-4.5 text-[#6b8f3c]" /> Fleet Refuel
                 Consumption Ledger
               </h4>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#8a96a0] print:text-slate-500">
                 Audit trail verifying fuel efficiency averages across{" "}
                 {timeframe} shifts:
               </p>
@@ -335,40 +337,40 @@ export default function ReportsModule({
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-250 font-mono text-[10px]">
-                      <th className="p-2 border">Refuel Date</th>
-                      <th className="p-2 border">Vehicle Reg ID</th>
-                      <th className="p-2 border font-mono">Liters loaded</th>
-                      <th className="p-2 border font-mono">Fuel Price Paid</th>
-                      <th className="p-2 border font-mono">Run distance</th>
-                      <th className="p-2 border font-mono text-right">
+                    <tr className="bg-[#141a1f] print:bg-slate-100 text-[#8a96a0] print:text-slate-700 font-bold border-b border-[#27323a] font-mono text-[10px]">
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">Refuel Date</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">Vehicle Reg ID</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono">Liters loaded</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono">Fuel Price Paid</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono">Run distance</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono text-right">
                         Fuel Efficiency (KM / L)
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="font-mono">
+                  <tbody className="font-mono divide-y divide-[#27323a] print:divide-slate-200">
                     {fuelLogs.map((fl) => {
                       const v = vehicles.find(
                         (bus) => bus.vehicle_id === fl.vehicle_id,
                       );
                       return (
-                        <tr key={fl.fuel_id} className="hover:bg-slate-50/20">
-                          <td className="p-2 border font-semibold">
+                        <tr key={fl.fuel_id} className="hover:bg-[#1a2228]/50 print:hover:bg-slate-50">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-semibold text-[#ede9e3] print:text-black">
                             {fl.date}
                           </td>
-                          <td className="p-2 border font-sans font-semibold text-blue-700">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-sans font-semibold text-[#c49a5c]">
                             {v?.registration_number || fl.vehicle_id}
                           </td>
-                          <td className="p-2 border text-slate-700">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#8a96a0]">
                             {fl.liters} L
                           </td>
-                          <td className="p-2 border font-sans font-semibold text-slate-905">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-sans font-semibold text-[#ede9e3] print:text-black">
                             LKR {fl.cost}
                           </td>
-                          <td className="p-2 border text-slate-700">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#8a96a0]">
                             {fl.distance_covered} KM
                           </td>
-                          <td className="p-2 border text-right font-sans font-bold text-blue-600">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-right font-sans font-bold text-[#8bb552]">
                             {fl.liters > 0
                               ? (fl.distance_covered / fl.liters).toFixed(2)
                               : "0.00"}{" "}
@@ -377,22 +379,22 @@ export default function ReportsModule({
                         </tr>
                       );
                     })}
-                    <tr className="bg-slate-100/70 font-bold">
+                    <tr className="bg-[#141a1f] print:bg-slate-100 font-bold">
                       <td
                         colSpan={2}
-                        className="p-2 border text-right font-sans"
+                        className="p-2.5 border border-[#27323a] print:border-slate-200 text-right font-sans text-[#ede9e3] print:text-black"
                       >
                         Accumulated fuel Volume:
                       </td>
-                      <td className="p-2 border text-slate-800">
+                      <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#ede9e3] print:text-black">
                         {totalFuelLiters} L
                       </td>
-                      <td className="p-2 border font-sans text-blue-600">
+                      <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-sans text-[#8bb552]">
                         LKR {totalFuelCost}
                       </td>
                       <td
                         colSpan={2}
-                        className="p-2 border text-right text-[10px] text-slate-400"
+                        className="p-2.5 border border-[#27323a] print:border-slate-200 text-right text-[10px] text-[#8a96a0]"
                       >
                         Ledger balanced
                       </td>
@@ -405,11 +407,11 @@ export default function ReportsModule({
 
           {reportType === "maintenance" && (
             <div className="space-y-4">
-              <h4 className="font-bold text-slate-900 text-sm border-b pb-1 flex items-center gap-1">
-                <ShieldCheck className="w-4.5 h-4.5 text-blue-600" />{" "}
+              <h4 className="font-bold text-[#ede9e3] print:text-black text-sm border-b pb-1 border-[#27323a] flex items-center gap-1.5">
+                <ShieldCheck className="w-4.5 h-4.5 text-[#6b8f3c]" />{" "}
                 Maintenance Overhead Tracking Log
               </h4>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#8a96a0] print:text-slate-500">
                 Service logs detailing fleet corrective refits and emergency
                 repairs:
               </p>
@@ -417,16 +419,16 @@ export default function ReportsModule({
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-250 font-mono text-[10px]">
-                      <th className="p-2 border">Vehicle Reg</th>
-                      <th className="p-2 border">Type</th>
-                      <th className="p-2 border">Refit Date</th>
-                      <th className="p-2 border">Next Check Date</th>
-                      <th className="p-2 border font-mono">Invoice Cost</th>
-                      <th className="p-2 border">Status</th>
+                    <tr className="bg-[#141a1f] print:bg-slate-100 text-[#8a96a0] print:text-slate-700 font-bold border-b border-[#27323a] font-mono text-[10px]">
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">Vehicle Reg</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">Type</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">Refit Date</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">Next Check Date</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono">Invoice Cost</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">Status</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-[#27323a] print:divide-slate-200">
                     {maintenance.map((m) => {
                       const v = vehicles.find(
                         (bus) => bus.vehicle_id === m.vehicle_id,
@@ -434,25 +436,27 @@ export default function ReportsModule({
                       return (
                         <tr
                           key={m.maintenance_id}
-                          className="hover:bg-slate-50/20"
+                          className="hover:bg-[#1a2228]/50 print:hover:bg-slate-50"
                         >
-                          <td className="p-2 border font-bold font-mono">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-bold font-mono text-[#ede9e3] print:text-black">
                             {v?.registration_number || m.vehicle_id}
                           </td>
-                          <td className="p-2 border font-semibold">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-semibold text-[#ede9e3] print:text-black">
                             {m.maintenance_type}
                           </td>
-                          <td className="p-2 border text-slate-650 font-mono">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#8a96a0] font-mono">
                             {m.service_date}
                           </td>
-                          <td className="p-2 border text-slate-650 font-mono">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#8a96a0] font-mono">
                             {m.next_service_date}
                           </td>
-                          <td className="p-2 border font-mono font-bold text-slate-900">
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono font-bold text-[#ede9e3] print:text-black">
                             LKR {m.cost}
                           </td>
-                          <td className="p-2 border font-semibold capitalize text-emerald-700">
-                            {m.status}
+                          <td className="p-2.5 border border-[#27323a] print:border-slate-200">
+                            <span className={`badge ${m.status === "Completed" ? "badge-success" : "badge-amber"}`}>
+                              {m.status}
+                            </span>
                           </td>
                         </tr>
                       );
@@ -465,11 +469,11 @@ export default function ReportsModule({
 
           {reportType === "utilization" && (
             <div className="space-y-4">
-              <h4 className="font-bold text-slate-900 text-sm border-b pb-1 flex items-center gap-1">
-                <FileText className="w-4.5 h-4.5 text-blue-650" /> Driver
+              <h4 className="font-bold text-[#ede9e3] print:text-black text-sm border-b pb-1 border-[#27323a] flex items-center gap-1.5">
+                <FileText className="w-4.5 h-4.5 text-[#6b8f3c]" /> Driver
                 Utilization Register
               </h4>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#8a96a0] print:text-slate-500">
                 Weekly operational shift hour meters tracking driver safety and
                 rest limits:
               </p>
@@ -477,35 +481,37 @@ export default function ReportsModule({
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-250 font-mono text-[10px]">
-                      <th className="p-2 border">Driver Name</th>
-                      <th className="p-2 border">NIC Number</th>
-                      <th className="p-2 border">License Reference</th>
-                      <th className="p-2 border">Mobile Contact</th>
-                      <th className="p-2 border font-mono">
+                    <tr className="bg-[#141a1f] print:bg-slate-100 text-[#8a96a0] print:text-slate-700 font-bold border-b border-[#27323a] font-mono text-[10px]">
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">Driver Name</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">NIC Number</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">License Reference</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200">Mobile Contact</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 font-mono">
                         Weekly Shift Hour
                       </th>
-                      <th className="p-2 border text-center">Duty Status</th>
+                      <th className="p-2.5 border border-[#27323a] print:border-slate-200 text-center">Duty Status</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-[#27323a] print:divide-slate-200">
                     {drivers.map((d) => (
-                      <tr key={d.driver_id} className="hover:bg-slate-50/20">
-                        <td className="p-2 border font-semibold">{d.name}</td>
-                        <td className="p-2 border text-slate-600 font-mono">
+                      <tr key={d.driver_id} className="hover:bg-[#1a2228]/50 print:hover:bg-slate-50">
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-semibold text-[#ede9e3] print:text-black">{d.name}</td>
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#8a96a0] font-mono">
                           {d.nic}
                         </td>
-                        <td className="p-2 border text-slate-600 font-mono">
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#8a96a0] font-mono">
                           {d.license_number}
                         </td>
-                        <td className="p-2 border text-slate-600 font-mono">
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-[#8a96a0] font-mono">
                           {d.phone}
                         </td>
-                        <td className="p-2 border font-bold font-mono text-slate-800">
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 font-bold font-mono text-[#ede9e3] print:text-black">
                           {d.working_hours} hrs
                         </td>
-                        <td className="p-2 border text-center font-bold text-blue-600 capitalize">
-                          {d.status}
+                        <td className="p-2.5 border border-[#27323a] print:border-slate-200 text-center">
+                          <span className={`badge ${d.status === "Active" ? "badge-success" : d.status === "Inactive" ? "badge-danger" : "badge-amber"}`}>
+                            {d.status}
+                          </span>
                         </td>
                       </tr>
                     ))}
@@ -518,19 +524,19 @@ export default function ReportsModule({
 
         {/* Closing & Signatures block */}
         <div
-          className="border-t-2 pt-8 flex justify-between items-end gap-6 text-[10px] text-slate-500 font-mono"
+          className="border-t-2 pt-8 flex justify-between items-end gap-6 text-[10px] text-[#8a96a0] print:text-slate-500 font-mono border-[#27323a] print:border-slate-300"
           id="signature-block"
         >
           <div>
-            <div className="font-bold text-slate-750 uppercase">
+            <div className="font-bold text-[#ede9e3] print:text-black uppercase">
               Security Token
             </div>
             <div>VERIFIED SECURE PLATFORM SHA: 256B89D776</div>
             <div>SRMSS DEPT OF HIGHWAYS TRANSIT</div>
           </div>
           <div className="text-center">
-            <div className="w-32 border-b border-slate-350 mx-auto h-8"></div>
-            <div className="font-bold text-slate-800 mt-2 uppercase">
+            <div className="w-32 border-b border-[#27323a] print:border-slate-300 mx-auto h-8"></div>
+            <div className="font-bold text-[#ede9e3] print:text-black mt-2 uppercase">
               Depot Operations Chief
             </div>
             <div>Official Signer & Authority</div>

@@ -17,13 +17,17 @@ export const metadata: Metadata = {
   description: "Depot-System",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#0b0f12] text-[#ede9e3] selection:bg-[#6b8f3c]/30 selection:text-[#8bb552]">{children}</body>
     </html>
   );
 }

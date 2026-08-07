@@ -80,26 +80,26 @@ export default function Dashboard({
   return (
     <div id="dashboard-root" className="space-y-6 animate-fade-in">
       {/* 2x3 statistics bento grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {/* Total Routes card */}
         <div
           id="stat-card-routes"
           onClick={() => onSetTab("routes")}
-          className="glass-panel p-5 rounded-2xl shadow-xs hover-lift cursor-pointer space-y-2 flex flex-col justify-between"
+          className="glass-panel p-5 rounded-2xl cursor-pointer space-y-2 flex flex-col justify-between transition-all hover:border-[#6b8f3c]/40 hover:-translate-y-0.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-400 font-mono uppercase font-bold tracking-wider leading-none">
+            <span className="text-[10px] text-[#8a96a0] font-mono uppercase font-bold tracking-wider leading-none">
               Total Routes
             </span>
-            <div className="p-2 bg-blue-500/10 rounded-xl text-blue-500 shadow-inner">
+            <div className="p-2 bg-[#6b8f3c]/15 rounded-xl text-[#8bb552]">
               <Navigation className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
+            <span className="text-2xl font-black text-[#ede9e3] font-mono tracking-tight">
               {totalRoutes}
             </span>
-            <span className="block text-[9px] text-slate-400 font-medium">
+            <span className="block text-[9px] text-[#8a96a0] font-medium mt-0.5">
               Configured tracks
             </span>
           </div>
@@ -109,47 +109,47 @@ export default function Dashboard({
         <div
           id="stat-card-drivers"
           onClick={() => onSetTab("drivers")}
-          className="glass-panel p-5 rounded-2xl shadow-xs hover-lift cursor-pointer space-y-2 flex flex-col justify-between"
+          className="glass-panel p-5 rounded-2xl cursor-pointer space-y-2 flex flex-col justify-between transition-all hover:border-[#6b8f3c]/40 hover:-translate-y-0.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-400 font-mono uppercase font-bold tracking-wider leading-none">
+            <span className="text-[10px] text-[#8a96a0] font-mono uppercase font-bold tracking-wider leading-none">
               Depot Drivers
             </span>
-            <div className="p-2 bg-sky-500/10 rounded-xl text-sky-500 shadow-inner">
+            <div className="p-2 bg-[#c49a5c]/15 rounded-xl text-[#c49a5c]">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
+            <span className="text-2xl font-black text-[#ede9e3] font-mono tracking-tight">
               {totalDrivers}
             </span>
-            <span className="block text-[9px] text-emerald-605 font-bold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span className="block text-[9px] text-[#5fa87a] font-bold flex items-center gap-1 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#5fa87a]"></span>
               {availableDrivers} Available
             </span>
           </div>
         </div>
 
-        {/* Total Busses card */}
+        {/* Total Buses card */}
         <div
           id="stat-card-vehicles"
           onClick={() => onSetTab("vehicles")}
-          className="glass-panel p-5 rounded-2xl shadow-xs hover-lift cursor-pointer space-y-2 flex flex-col justify-between"
+          className="glass-panel p-5 rounded-2xl cursor-pointer space-y-2 flex flex-col justify-between transition-all hover:border-[#6b8f3c]/40 hover:-translate-y-0.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-400 font-mono uppercase font-bold tracking-wider leading-none">
+            <span className="text-[10px] text-[#8a96a0] font-mono uppercase font-bold tracking-wider leading-none">
               Total Fleet
             </span>
-            <div className="p-2 bg-teal-500/10 rounded-xl text-teal-500 shadow-inner">
+            <div className="p-2 bg-[#6b8f3c]/15 rounded-xl text-[#8bb552]">
               <Bus className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
+            <span className="text-2xl font-black text-[#ede9e3] font-mono tracking-tight">
               {totalVehicles}
             </span>
-            <span className="block text-[9px] text-emerald-650 font-bold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="block text-[9px] text-[#5fa87a] font-bold flex items-center gap-1 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#5fa87a] animate-pulse"></span>
               {availableVehicles} Active Units
             </span>
           </div>
@@ -159,21 +159,21 @@ export default function Dashboard({
         <div
           id="stat-card-trips"
           onClick={() => onSetTab("schedules")}
-          className="glass-panel p-5 rounded-2xl shadow-xs hover-lift cursor-pointer space-y-2 flex flex-col justify-between"
+          className="glass-panel p-5 rounded-2xl cursor-pointer space-y-2 flex flex-col justify-between transition-all hover:border-[#6b8f3c]/40 hover:-translate-y-0.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-400 font-mono uppercase font-bold tracking-wider leading-none">
+            <span className="text-[10px] text-[#8a96a0] font-mono uppercase font-bold tracking-wider leading-none">
               Total Shifts
             </span>
-            <div className="p-2 bg-purple-500/10 rounded-xl text-purple-500 shadow-inner">
+            <div className="p-2 bg-[#5a8ea8]/15 rounded-xl text-[#5a8ea8]">
               <Clock className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <span className="text-2xl font-black text-slate-900 font-mono tracking-tight">
+            <span className="text-2xl font-black text-[#ede9e3] font-mono tracking-tight">
               {totalTrips}
             </span>
-            <span className="block text-[9px] text-slate-400 font-medium">
+            <span className="block text-[9px] text-[#8a96a0] font-medium mt-0.5">
               Loaded schedules
             </span>
           </div>
@@ -183,23 +183,22 @@ export default function Dashboard({
         <div
           id="stat-card-active"
           onClick={() => onSetTab("operations")}
-          className="bg-gradient-to-br from-blue-600 to-indigo-650 hover:from-blue-500 hover:to-indigo-600 p-5 rounded-2xl shadow-xs hover-lift cursor-pointer text-white space-y-2 flex flex-col justify-between relative overflow-hidden group shadow-blue-500/10"
+          className="glass-panel p-5 rounded-2xl cursor-pointer text-white space-y-2 flex flex-col justify-between relative overflow-hidden group border-[#6b8f3c]/30 bg-[#6b8f3c]/10 hover:bg-[#6b8f3c]/20 transition-all hover:-translate-y-0.5"
         >
-          <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/5 rounded-full blur-xl group-hover:scale-125 transition-all"></div>
           <div className="flex items-center justify-between relative z-10">
-            <span className="text-[10px] text-blue-100 font-mono uppercase font-bold tracking-wider leading-none">
+            <span className="text-[10px] text-[#8bb552] font-mono uppercase font-bold tracking-wider leading-none">
               Trips Dispatched
             </span>
-            <div className="p-1.5 bg-white/10 backdrop-blur-md rounded-lg text-white shadow-inner">
+            <div className="p-1.5 bg-[#6b8f3c]/20 rounded-lg text-[#8bb552]">
               <Zap className="w-4 h-4 animate-bounce" />
             </div>
           </div>
           <div className="relative z-10">
-            <span className="text-2xl font-black text-white font-mono tracking-tight">
+            <span className="text-2xl font-black text-[#ede9e3] font-mono tracking-tight">
               {activeTrips}
             </span>
-            <span className="block text-[9px] text-blue-100 font-semibold flex items-center gap-1 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>{" "}
+            <span className="block text-[9px] text-[#5fa87a] font-semibold flex items-center gap-1 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#5fa87a] animate-ping"></span>{" "}
               Operating Live
             </span>
           </div>
@@ -209,42 +208,40 @@ export default function Dashboard({
         <div
           id="stat-card-delayed"
           onClick={() => onSetTab("operations")}
-          className="bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 p-5 rounded-2xl shadow-xs hover-lift cursor-pointer text-white space-y-2 flex flex-col justify-between relative overflow-hidden group shadow-amber-500/10"
+          className="glass-panel p-5 rounded-2xl cursor-pointer text-white space-y-2 flex flex-col justify-between relative overflow-hidden group border-[#c47a4a]/30 bg-[#c47a4a]/10 hover:bg-[#c47a4a]/20 transition-all hover:-translate-y-0.5"
         >
-          <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/5 rounded-full blur-xl group-hover:scale-125 transition-all"></div>
           <div className="flex items-center justify-between relative z-10">
-            <span className="text-[10px] text-amber-50 font-mono uppercase font-bold tracking-wider leading-none">
+            <span className="text-[10px] text-[#c47a4a] font-mono uppercase font-bold tracking-wider leading-none">
               Delayed Alarms
             </span>
-            <div className="p-1.5 bg-white/10 backdrop-blur-md rounded-lg text-white shadow-inner">
+            <div className="p-1.5 bg-[#c47a4a]/20 rounded-lg text-[#c47a4a]">
               <AlertCircle className="w-4 h-4" />
             </div>
           </div>
           <div className="relative z-10">
-            <span className="text-2xl font-black text-white font-mono tracking-tight">
+            <span className="text-2xl font-black text-[#ede9e3] font-mono tracking-tight">
               {delayedTrips}
             </span>
-            <span className="block text-[9px] text-amber-50 mt-0.5">
+            <span className="block text-[9px] text-[#c47a4a] mt-0.5 font-medium">
               Overdue on coordinate
             </span>
           </div>
         </div>
       </div>
 
-      {/* Center Layout split - fills remaining vertical space */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch flex-1 min-h-[500px]">
+      {/* Center Layout split */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch flex-1 min-h-[460px]">
         {/* Vector graph: Fuel refuel trends */}
-        <div className="lg:col-span-8 glass-panel rounded-2xl p-6 shadow-sm hover-lift flex flex-col justify-between h-full">
+        <div className="lg:col-span-8 glass-panel rounded-2xl p-6 flex flex-col justify-between h-full">
           <div>
-            <h3 className="font-bold text-slate-900 text-sm bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+            <h3 className="font-bold text-[#ede9e3] text-sm">
               Fuel Consumption Metric Audit
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-[#8a96a0]">
               Total volume in liters consumed per logged vehicle session
             </p>
           </div>
 
-          {/* Scrollable container for fuel logs so content doesn't break full height */}
           <div className="mt-6 space-y-4 flex-1 overflow-y-auto pr-1 min-h-[200px]">
             {fuelLogs.map((f, i) => {
               const bus = vehicles.find((v) => v.vehicle_id === f.vehicle_id);
@@ -252,17 +249,17 @@ export default function Dashboard({
               return (
                 <div key={i} className="space-y-1.5">
                   <div className="flex justify-between text-xs">
-                    <span className="font-semibold text-slate-800 dark:text-slate-200">
+                    <span className="font-semibold text-[#ede9e3]">
                       {bus?.registration_number || f.vehicle_id} (
                       {bus?.fuel_type})
                     </span>
-                    <span className="font-mono text-slate-500 font-semibold">
+                    <span className="font-mono text-[#8a96a0] font-semibold">
                       {f.liters} L (LKR {f.cost})
                     </span>
                   </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-900/60 h-3 rounded-md overflow-hidden flex shadow-inner">
+                  <div className="w-full bg-[#12181d] h-3 rounded-md overflow-hidden flex border border-[#27323a]">
                     <div
-                      className="bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-md transition-all duration-300 shimmer-bar"
+                      className="bg-gradient-to-r from-[#6b8f3c] to-[#c49a5c] h-full rounded-md transition-all duration-300"
                       style={{ width: `${pct}%` }}
                     ></div>
                   </div>
@@ -271,16 +268,16 @@ export default function Dashboard({
             })}
           </div>
 
-          <div className="border-t border-slate-100 dark:border-slate-800 pt-4 mt-6 flex justify-between items-center text-xs text-slate-500 font-medium">
+          <div className="border-t border-[#27323a] pt-4 mt-6 flex justify-between items-center text-xs text-[#8a96a0] font-medium">
             <span>
               Aggregated Depot Fuel Volume:{" "}
-              <strong className="text-slate-800 dark:text-white">
+              <strong className="text-[#ede9e3]">
                 {totalFuelLiters} L
               </strong>
             </span>
             <span>
               Total Accounting Cost:{" "}
-              <strong className="text-blue-600 font-semibold">
+              <strong className="text-[#c49a5c] font-semibold">
                 LKR {totalFuelCost}
               </strong>
             </span>
@@ -288,28 +285,28 @@ export default function Dashboard({
         </div>
 
         {/* Real-time Status and Availability overview */}
-        <div className="lg:col-span-4 glass-panel rounded-2xl p-6 shadow-sm hover-lift flex flex-col justify-between h-full">
+        <div className="lg:col-span-4 glass-panel rounded-2xl p-6 flex flex-col justify-between h-full">
           <div>
-            <h3 className="font-bold text-slate-900 text-sm bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+            <h3 className="font-bold text-[#ede9e3] text-sm">
               Live Depot Board status
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-[#8a96a0]">
               Resource levels checked June 14, 2026
             </p>
           </div>
 
           <div className="space-y-4 text-xs my-auto">
             {/* Drivers */}
-            <div className="p-4 bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center justify-between hover:bg-slate-50 transition-colors">
+            <div className="p-4 bg-[#141a1f] border border-[#27323a] rounded-2xl flex items-center justify-between">
               <div className="space-y-1">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block">
+                <span className="font-bold text-[#ede9e3] block">
                   Available Driver Rosters
                 </span>
-                <span className="text-[10px] text-slate-400 block">
+                <span className="text-[10px] text-[#8a96a0] block">
                   {availableDrivers} of {totalDrivers} drivers active
                 </span>
               </div>
-              <span className="text-xl font-mono font-black text-slate-900 dark:text-white bg-white/70 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700 shadow-xs">
+              <span className="text-xl font-mono font-black text-[#ede9e3] bg-[#1a2228] px-3 py-1.5 rounded-xl border border-[#27323a]">
                 {totalDrivers > 0
                   ? Math.round((availableDrivers / totalDrivers) * 100)
                   : 0}
@@ -318,16 +315,16 @@ export default function Dashboard({
             </div>
 
             {/* Fleet */}
-            <div className="p-4 bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center justify-between hover:bg-slate-50 transition-colors">
+            <div className="p-4 bg-[#141a1f] border border-[#27323a] rounded-2xl flex items-center justify-between">
               <div className="space-y-1">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block">
+                <span className="font-bold text-[#ede9e3] block">
                   Fleet dispatch readiness
                 </span>
-                <span className="text-[10px] text-slate-400 block">
+                <span className="text-[10px] text-[#8a96a0] block">
                   {availableVehicles} of {totalVehicles} units operating
                 </span>
               </div>
-              <span className="text-xl font-mono font-black text-slate-900 dark:text-white bg-white/70 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700 shadow-xs">
+              <span className="text-xl font-mono font-black text-[#ede9e3] bg-[#1a2228] px-3 py-1.5 rounded-xl border border-[#27323a]">
                 {totalVehicles > 0
                   ? Math.round((availableVehicles / totalVehicles) * 100)
                   : 0}
@@ -337,10 +334,10 @@ export default function Dashboard({
           </div>
 
           {/* Bottom Status Tag */}
-          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
+          <div className="p-3 bg-[#5fa87a]/15 border border-[#5fa87a]/30 rounded-xl flex items-center justify-between text-xs text-[#5fa87a] font-semibold">
             <span>Operational Status</span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="w-2 h-2 rounded-full bg-[#5fa87a] animate-pulse"></span>
               Normal Operations
             </span>
           </div>

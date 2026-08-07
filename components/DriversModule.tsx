@@ -142,23 +142,23 @@ export default function DriversModule({
   return (
     <div id="drivers-module-root" className="space-y-6">
       {/* Filtering and Actions Strip */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 glass-panel p-4 rounded-2xl">
         <div className="relative w-full sm:max-w-xs">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#8a96a0] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             id="input-search-drivers"
             type="text"
             placeholder="Search drivers (Name, NIC, Licence)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full text-xs pl-9 pr-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
+            className="input-field w-full pl-9"
           />
         </div>
         {canWrite && (
           <button
             id="btn-add-driver"
             onClick={openAddModal}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-semibold shadow-sm transition-colors"
+            className="btn-primary w-full sm:w-auto text-xs"
           >
             <Plus className="w-4 h-4" />
             Add New Driver
@@ -169,24 +169,24 @@ export default function DriversModule({
       {/* Grid Layout of Driver Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredDrivers.length === 0 ? (
-          <div className="md:col-span-3 text-center py-12 bg-white rounded-2xl border border-slate-200 text-slate-500 text-xs">
+          <div className="md:col-span-3 text-center py-12 glass-panel rounded-2xl text-[#8a96a0] text-xs">
             No driver files found matching your parameters.
           </div>
         ) : (
           filteredDrivers.map((d) => {
             const licenseCheck = checkLicenseStatus(d.license_expiry);
-            const isOverworked = d.working_hours >= 45; // 48 is normal, 45 trigger warnings
+            const isOverworked = d.working_hours >= 45;
 
             return (
               <div
                 key={d.driver_id}
                 id={`driver-${d.driver_id}`}
-                className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+                className="glass-card p-5 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm">
+                      <div className="w-10 h-10 rounded-xl bg-[#6b8f3c]/20 border border-[#6b8f3c]/30 flex items-center justify-center text-[#8bb552] font-bold text-sm">
                         {d.name
                           .split(" ")
                           .map((n) => n[0])
@@ -195,24 +195,24 @@ export default function DriversModule({
                           .toUpperCase()}
                       </div>
                       <div>
-                        <h4 className="font-bold text-slate-900 text-sm flex items-center gap-1">
+                        <h4 className="font-bold text-[#ede9e3] text-sm flex items-center gap-1.5">
                           {d.name}
                           {d.status === "On Trip" && (
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span className="w-2 h-2 rounded-full bg-[#5fa87a] animate-pulse"></span>
                           )}
                         </h4>
-                        <span className="text-[10px] text-slate-400 font-mono">
+                        <span className="text-[10px] text-[#8a96a0] font-mono">
                           ID: {d.driver_id}
                         </span>
                       </div>
                     </div>
                     <span
-                      className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                      className={`badge ${
                         d.status === "Active"
-                          ? "bg-emerald-50 text-emerald-700"
+                          ? "badge-success"
                           : d.status === "On Trip"
-                            ? "bg-blue-50 text-blue-700"
-                            : "bg-slate-100 text-slate-600"
+                            ? "badge-primary"
+                            : "badge-amber"
                       }`}
                     >
                       {d.status}
@@ -220,33 +220,39 @@ export default function DriversModule({
                   </div>
 
                   {/* Core Details */}
-                  <div className="mt-4 space-y-2 border-t pt-3 border-slate-50 text-xs">
-                    <div className="flex justify-between items-center text-slate-500">
+                  <div className="mt-4 space-y-2 border-t pt-3 border-[#27323a] text-xs">
+                    <div className="flex justify-between items-center text-[#8a96a0]">
                       <span>NIC Reference</span>
-                      <span className="font-mono font-medium text-slate-800">
+                      <span className="font-mono font-medium text-[#ede9e3]">
                         {d.nic}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center text-slate-500">
+                    <div className="flex justify-between items-center text-[#8a96a0]">
                       <span>Phone Line</span>
-                      <span className="font-mono font-medium text-slate-800 flex items-center gap-1">
-                        <Phone className="w-3 h-3 text-slate-400" />
+                      <span className="font-mono font-medium text-[#ede9e3] flex items-center gap-1">
+                        <Phone className="w-3 h-3 text-[#8a96a0]" />
                         {d.phone}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center text-slate-500">
+                    <div className="flex justify-between items-center text-[#8a96a0]">
                       <span>License ID</span>
-                      <span className="font-mono font-medium text-blue-600 flex items-center gap-1">
+                      <span className="font-mono font-medium text-[#c49a5c] flex items-center gap-1">
                         <CreditCard className="w-3" />
                         {d.license_number}
                       </span>
                     </div>
 
                     {/* License Expiry Tracking */}
-                    <div className="flex justify-between items-center text-slate-500">
+                    <div className="flex justify-between items-center text-[#8a96a0]">
                       <span>License Status</span>
                       <span
-                        className={`font-mono text-[10px] px-2 py-0.5 rounded border font-bold ${licenseCheck.color}`}
+                        className={`font-mono text-[10px] px-2 py-0.5 rounded border font-bold ${
+                          licenseCheck.isExpired
+                            ? "bg-[#b85454]/15 text-[#b85454] border-[#b85454]/30"
+                            : licenseCheck.status === "Expiring Soon"
+                              ? "bg-[#c47a4a]/15 text-[#c47a4a] border-[#c47a4a]/30"
+                              : "bg-[#5fa87a]/15 text-[#5fa87a] border-[#5fa87a]/30"
+                        }`}
                       >
                         {licenseCheck.status} ({d.license_expiry})
                       </span>
@@ -255,19 +261,19 @@ export default function DriversModule({
                     {/* Weekly hours meter */}
                     <div className="space-y-1 pt-1.5">
                       <div className="flex justify-between text-[11px]">
-                        <span className="text-slate-500">
+                        <span className="text-[#8a96a0]">
                           Weekly Accumulated Hours
                         </span>
                         <span
-                          className={`font-bold ${isOverworked ? "text-amber-600" : "text-slate-800"}`}
+                          className={`font-bold ${isOverworked ? "text-[#c47a4a]" : "text-[#ede9e3]"}`}
                         >
                           {d.working_hours} / 48 hrs
                         </span>
                       </div>
-                      <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div className="w-full bg-[#12181d] border border-[#27323a] rounded-full h-1.5 overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-500 ${
-                            isOverworked ? "bg-amber-500" : "bg-blue-600"
+                            isOverworked ? "bg-[#c47a4a]" : "bg-[#6b8f3c]"
                           }`}
                           style={{
                             width: `${Math.min((d.working_hours / 48) * 100, 100)}%`,
@@ -275,7 +281,7 @@ export default function DriversModule({
                         ></div>
                       </div>
                       {isOverworked && (
-                        <span className="text-[9px] text-amber-600 font-semibold flex items-center gap-1 mt-0.5">
+                        <span className="text-[9px] text-[#c47a4a] font-semibold flex items-center gap-1 mt-0.5">
                           <ShieldAlert className="w-3 h-3" /> Fatigue threshold
                           near: Rest requested
                         </span>
@@ -285,11 +291,11 @@ export default function DriversModule({
                 </div>
 
                 {canWrite && (
-                  <div className="flex items-center justify-end gap-2 border-t pt-3 mt-4">
+                  <div className="flex items-center justify-end gap-2 border-t border-[#27323a] pt-3 mt-4">
                     <button
                       id={`edit-${d.driver_id}`}
                       onClick={() => openEditModal(d)}
-                      className="text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100/50 px-3 py-1.5 rounded-lg flex items-center gap-1"
+                      className="btn-secondary py-1 px-3 text-xs"
                     >
                       <Edit2 className="w-3 h-3" />
                       Configure
@@ -297,7 +303,7 @@ export default function DriversModule({
                     <button
                       id={`delete-${d.driver_id}`}
                       onClick={() => onDeleteDriver(d.driver_id)}
-                      className="text-xs font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 p-1.5 rounded-lg"
+                      className="p-1.5 rounded-lg border border-[#b85454]/30 bg-[#b85454]/10 text-[#b85454] hover:bg-[#b85454]/20 transition-colors"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -312,12 +318,12 @@ export default function DriversModule({
       {/* Write/Edit Driver Overlay Modal */}
       {showModal && (
         <div
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in"
+          className="modal-overlay animate-fade-in"
           id="modal-container-drivers"
         >
-          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-xl overflow-hidden flex flex-col p-6 space-y-4">
-            <div className="flex items-center justify-between border-b pb-3 border-slate-100">
-              <h3 className="font-bold text-slate-950 text-base">
+          <div className="modal-content space-y-4">
+            <div className="flex items-center justify-between border-b pb-3 border-[#27323a]">
+              <h3 className="font-bold text-[#ede9e3] text-base">
                 {editingDriver
                   ? `Configure Driver File: ${editingDriver.name}`
                   : "Register New Depot Driver"}
@@ -325,7 +331,7 @@ export default function DriversModule({
               <button
                 id="btn-close-driver-modal"
                 onClick={() => setShowModal(false)}
-                className="p-1 hover:bg-slate-150 rounded-lg text-slate-400 hover:text-slate-700 transition-colors"
+                className="p-1 rounded-lg text-[#8a96a0] hover:text-[#ede9e3] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -334,7 +340,7 @@ export default function DriversModule({
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1 md:col-span-2">
-                  <label className="font-semibold text-slate-750">
+                  <label className="font-semibold text-[#8a96a0]">
                     Driver Full Name
                   </label>
                   <input
@@ -344,12 +350,12 @@ export default function DriversModule({
                     placeholder="e.g. Richard Hendricks"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium"
+                    className="input-field w-full font-medium"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     National Card ID (NIC)
                   </label>
                   <input
@@ -359,12 +365,12 @@ export default function DriversModule({
                     placeholder="e.g., 90123456V / 19901..."
                     value={nic}
                     onChange={(e) => setNic(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium font-mono"
+                    className="input-field w-full font-mono"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Phone Connection
                   </label>
                   <input
@@ -374,12 +380,12 @@ export default function DriversModule({
                     placeholder="e.g. +94 77 123 4567"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium font-mono"
+                    className="input-field w-full font-mono"
                   />
                 </div>
 
                 <div className="space-y-1 md:col-span-2">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Resident Address
                   </label>
                   <input
@@ -388,12 +394,12 @@ export default function DriversModule({
                     placeholder="Residential street, Ward, Zip"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium"
+                    className="input-field w-full font-medium"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     License Number (D/L)
                   </label>
                   <input
@@ -403,12 +409,12 @@ export default function DriversModule({
                     placeholder="e.g. B-908234-X"
                     value={licenseNumber}
                     onChange={(e) => setLicenseNumber(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold font-mono"
+                    className="input-field w-full font-mono font-semibold"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     License Expiry Date
                   </label>
                   <input
@@ -417,12 +423,12 @@ export default function DriversModule({
                     required
                     value={licenseExpiry}
                     onChange={(e) => setLicenseExpiry(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold font-mono"
+                    className="input-field w-full font-mono font-semibold"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Weekly Working Hours Initial
                   </label>
                   <input
@@ -432,19 +438,19 @@ export default function DriversModule({
                     max="80"
                     value={workingHours}
                     onChange={(e) => setWorkingHours(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono font-semibold"
+                    className="input-field w-full font-mono font-semibold"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Availability status
                   </label>
                   <select
                     id="driver-form-status"
                     value={status}
                     onChange={(e) => setStatus(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"
+                    className="input-field w-full font-semibold"
                   >
                     <option value="Active">Active / On Duty</option>
                     <option value="Inactive">Inactive / Rest</option>
@@ -453,19 +459,19 @@ export default function DriversModule({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 border-t pt-3 border-slate-100">
+              <div className="flex items-center justify-end gap-3 border-t pt-3 border-[#27323a]">
                 <button
                   id="btn-driver-modal-cancel"
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border border-slate-200 rounded-lg hover:bg-slate-50 select-none text-slate-600 transition-all font-semibold"
+                  className="btn-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   id="btn-driver-modal-save"
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg select-none shadow-sm transition-all font-semibold"
+                  className="btn-primary"
                 >
                   {editingDriver ? "Save Changes" : "Register Driver"}
                 </button>

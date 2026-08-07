@@ -103,23 +103,23 @@ export default function VehiclesModule({
   return (
     <div id="vehicles-module-root" className="space-y-6">
       {/* Search and configuration block */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 glass-panel p-4 rounded-2xl">
         <div className="relative w-full sm:max-w-xs">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#8a96a0] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             id="input-search-vehicles"
             type="text"
             placeholder="Search fleet (Reg Number, Type, Fuel)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full text-xs pl-9 pr-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
+            className="input-field w-full pl-9"
           />
         </div>
         {canWrite && (
           <button
             id="btn-add-vehicle"
             onClick={openAddModal}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-semibold shadow-sm transition-colors"
+            className="btn-primary w-full sm:w-auto text-xs"
           >
             <Plus className="w-4 h-4" />
             Register Vehicle
@@ -130,85 +130,76 @@ export default function VehiclesModule({
       {/* Grid of Vehicles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredVehicles.length === 0 ? (
-          <div className="md:col-span-4 text-center py-12 bg-white rounded-2xl border border-slate-200 text-slate-500 text-xs">
+          <div className="md:col-span-4 text-center py-12 glass-panel rounded-2xl text-[#8a96a0] text-xs">
             No buses or fleet assets registered under these coordinates.
           </div>
         ) : (
           filteredVehicles.map((v) => {
-            // High mileage suggests service requirement (every 25k km warning)
             const serviceUrgent = v.mileage > 80000;
 
             return (
               <div
                 key={v.vehicle_id}
                 id={`vehicle-${v.vehicle_id}`}
-                className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between border-t-4"
+                className="glass-card p-5 flex flex-col justify-between border-t-4"
                 style={{
                   borderTopColor:
                     v.status === "Available"
-                      ? "#10b981"
+                      ? "#5fa87a"
                       : v.status === "Maintenance"
-                        ? "#f59e0b"
-                        : "#2563eb",
+                        ? "#c47a4a"
+                        : "#6b8f3c",
                 }}
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="font-extrabold text-slate-900 tracking-tight text-sm font-mono bg-slate-100 px-2 py-0.5 rounded-md">
+                        <span className="font-extrabold text-[#ede9e3] tracking-tight text-sm font-mono bg-[#12181d] px-2 py-0.5 rounded-md border border-[#27323a]">
                           {v.registration_number}
                         </span>
                       </div>
-                      <span className="text-[10px] text-slate-400 font-mono block mt-1">
+                      <span className="text-[10px] text-[#8a96a0] font-mono block mt-1">
                         FLEET ID: {v.vehicle_id}
                       </span>
                     </div>
 
                     <span
-                      className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${
+                      className={`badge ${
                         v.status === "Available"
-                          ? "bg-emerald-50 text-emerald-700"
+                          ? "badge-success"
                           : v.status === "Maintenance"
-                            ? "bg-amber-50 text-amber-700"
-                            : "bg-blue-50 text-blue-700"
+                            ? "badge-warning"
+                            : "badge-primary"
                       }`}
                     >
                       {v.status}
                     </span>
                   </div>
 
-                  <div className="mt-4 space-y-2 text-xs border-b border-dashed pb-3 border-slate-100">
-                    <div className="flex justify-between text-slate-500">
+                  <div className="mt-4 space-y-2 text-xs border-b border-dashed pb-3 border-[#27323a]">
+                    <div className="flex justify-between text-[#8a96a0]">
                       <span>Vehicle Category</span>
-                      <span className="font-semibold text-slate-800">
+                      <span className="font-semibold text-[#ede9e3]">
                         {v.vehicle_type}
                       </span>
                     </div>
-                    <div className="flex justify-between text-slate-500">
+                    <div className="flex justify-between text-[#8a96a0]">
                       <span>Fuel Type</span>
-                      <span
-                        className={`font-bold text-[9px] px-1.5 rounded-md ${
-                          v.fuel_type === "Electric"
-                            ? "bg-emerald-100 text-emerald-800"
-                            : v.fuel_type === "Hybrid"
-                              ? "bg-teal-100 text-teal-800"
-                              : "bg-orange-100 text-slate-800"
-                        }`}
-                      >
+                      <span className="badge badge-amber font-bold text-[9px]">
                         {v.fuel_type}
                       </span>
                     </div>
-                    <div className="flex justify-between text-slate-500">
+                    <div className="flex justify-between text-[#8a96a0]">
                       <span>Seating Capacity</span>
-                      <span className="font-sans font-bold text-slate-800">
+                      <span className="font-sans font-bold text-[#ede9e3]">
                         {v.seating_capacity} Seats
                       </span>
                     </div>
-                    <div className="flex justify-between text-slate-500">
+                    <div className="flex justify-between text-[#8a96a0]">
                       <span>Total Mileage</span>
-                      <span className="font-mono font-bold text-slate-800 flex items-center gap-1">
-                        <Gauge className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="font-mono font-bold text-[#ede9e3] flex items-center gap-1">
+                        <Gauge className="w-3.5 h-3.5 text-[#8a96a0]" />
                         {v.mileage.toLocaleString()} KM
                       </span>
                     </div>
@@ -217,22 +208,22 @@ export default function VehiclesModule({
                   {/* Health Indicator bar */}
                   <div className="mt-3 space-y-1">
                     <div className="flex items-center justify-between text-[10px]">
-                      <span className="text-slate-400">Total Run wear</span>
-                      <span className="font-bold text-slate-500">
+                      <span className="text-[#8a96a0]">Total Run wear</span>
+                      <span className="font-bold text-[#ede9e3]">
                         {Math.min(Math.round(v.mileage / 1000), 100)}%
                       </span>
                     </div>
-                    <div className="w-full bg-slate-50 rounded-full h-1 overflow-hidden">
+                    <div className="w-full bg-[#12181d] border border-[#27323a] rounded-full h-1 overflow-hidden">
                       <div
-                        className={`h-full rounded-full ${serviceUrgent ? "bg-amber-500" : "bg-blue-500"}`}
+                        className={`h-full rounded-full ${serviceUrgent ? "bg-[#c47a4a]" : "bg-[#6b8f3c]"}`}
                         style={{
                           width: `${Math.min((v.mileage / 100000) * 100, 100)}%`,
                         }}
                       ></div>
                     </div>
                     {serviceUrgent && (
-                      <span className="text-[9px] text-amber-600 font-bold flex items-center gap-0.5 mt-1">
-                        <AlertTriangle className="w-3 h-3 text-amber-500" />{" "}
+                      <span className="text-[9px] text-[#c47a4a] font-bold flex items-center gap-0.5 mt-1">
+                        <AlertTriangle className="w-3 h-3 text-[#c47a4a]" />{" "}
                         Service recommended soon
                       </span>
                     )}
@@ -240,11 +231,11 @@ export default function VehiclesModule({
                 </div>
 
                 {canWrite && (
-                  <div className="flex items-center justify-end gap-2 border-t pt-3 mt-4">
+                  <div className="flex items-center justify-end gap-2 border-t border-[#27323a] pt-3 mt-4">
                     <button
                       id={`edit-vehicle-${v.vehicle_id}`}
                       onClick={() => openEditModal(v)}
-                      className="text-xs font-semibold text-slate-700 hover:text-blue-600 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-lg py-1 px-2.5 flex items-center gap-1.5 font-sans"
+                      className="btn-secondary py-1 px-2.5 text-xs flex items-center gap-1.5 font-sans"
                     >
                       <Edit2 className="w-3 h-3" />
                       Configure
@@ -252,7 +243,7 @@ export default function VehiclesModule({
                     <button
                       id={`delete-vehicle-${v.vehicle_id}`}
                       onClick={() => onDeleteVehicle(v.vehicle_id)}
-                      className="text-slate-400 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg"
+                      className="p-1.5 rounded-lg border border-[#b85454]/30 bg-[#b85454]/10 text-[#b85454] hover:bg-[#b85454]/20 transition-colors"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -267,12 +258,12 @@ export default function VehiclesModule({
       {/* Add/Edit Vehicle Modal overlay */}
       {showModal && (
         <div
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in"
+          className="modal-overlay animate-fade-in"
           id="modal-container-vehicles"
         >
-          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-xl overflow-hidden flex flex-col p-6 space-y-4">
-            <div className="flex items-center justify-between border-b pb-3 border-slate-100">
-              <h3 className="font-bold text-slate-950 text-base">
+          <div className="modal-content space-y-4">
+            <div className="flex items-center justify-between border-b pb-3 border-[#27323a]">
+              <h3 className="font-bold text-[#ede9e3] text-base">
                 {editingVehicle
                   ? `Configure Bus Unit: ${editingVehicle.registration_number}`
                   : "Registry New Bus Terminal Asset"}
@@ -280,7 +271,7 @@ export default function VehiclesModule({
               <button
                 id="btn-close-vehicle-modal"
                 onClick={() => setShowModal(false)}
-                className="p-1 hover:bg-slate-150 rounded-lg text-slate-400 hover:text-slate-700 transition-colors"
+                className="p-1 rounded-lg text-[#8a96a0] hover:text-[#ede9e3] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -289,7 +280,7 @@ export default function VehiclesModule({
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Registration Number
                   </label>
                   <input
@@ -300,19 +291,19 @@ export default function VehiclesModule({
                     placeholder="e.g. WP ND-4004 / LP-40"
                     value={regNum}
                     onChange={(e) => setRegNum(e.target.value.toUpperCase())}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-bold font-mono"
+                    className="input-field w-full font-bold font-mono"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Vehicle Classification
                   </label>
                   <select
                     id="vehicle-form-type"
                     value={vType}
                     onChange={(e) => setVType(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"
+                    className="input-field w-full font-semibold"
                   >
                     <option value="Single Decker">
                       Single Decker Bus (Standard)
@@ -331,7 +322,7 @@ export default function VehiclesModule({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Total Seating Capacity
                   </label>
                   <input
@@ -342,12 +333,12 @@ export default function VehiclesModule({
                     max="150"
                     value={capacity}
                     onChange={(e) => setCapacity(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold font-mono"
+                    className="input-field w-full font-semibold font-mono"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Initial Mileage (KM)
                   </label>
                   <input
@@ -357,19 +348,19 @@ export default function VehiclesModule({
                     min="0"
                     value={mileage}
                     onChange={(e) => setMileage(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold font-mono"
+                    className="input-field w-full font-semibold font-mono"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Fuel Infrastructure
                   </label>
                   <select
                     id="vehicle-form-fuel"
                     value={fuelType}
                     onChange={(e) => setFuelType(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"
+                    className="input-field w-full font-semibold"
                   >
                     <option value="Diesel">Diesel Fuel Injection</option>
                     <option value="Electric">Lithium Electric Cell</option>
@@ -379,14 +370,14 @@ export default function VehiclesModule({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-700">
+                  <label className="font-semibold text-[#8a96a0]">
                     Fleet Status Flag
                   </label>
                   <select
                     id="vehicle-form-status"
                     value={status}
                     onChange={(e) => setStatus(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"
+                    className="input-field w-full font-semibold"
                   >
                     <option value="Available">Available for Dispatch</option>
                     <option value="Maintenance">
@@ -397,19 +388,19 @@ export default function VehiclesModule({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 border-t pt-3 border-slate-100">
+              <div className="flex items-center justify-end gap-3 border-t pt-3 border-[#27323a]">
                 <button
                   id="btn-vehicle-modal-cancel"
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border border-slate-200 rounded-lg hover:bg-slate-50 select-none text-slate-600 transition-all font-semibold"
+                  className="btn-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   id="btn-vehicle-modal-save"
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg select-none shadow-sm transition-all font-semibold"
+                  className="btn-primary"
                 >
                   {editingVehicle ? "Save Configuration" : "Register Unit"}
                 </button>
