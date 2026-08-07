@@ -144,22 +144,22 @@ export default function UserManagement({
     <div className="space-y-6">
       {/* Search */}
 
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 glass-panel p-4 rounded-2xl">
         <div className="relative w-full sm:max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8a96a0]" />
 
           <input
             placeholder="Search users..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full text-xs pl-9 pr-4 py-2 border rounded-xl bg-slate-50"
-          ></input>
+            className="input-field w-full pl-9"
+          />
         </div>
 
         {canWrite && (
           <button
             onClick={openAddModal}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs flex items-center gap-2"
+            className="btn-primary text-xs"
           >
             <Plus className="w-4 h-4" />
             Add User
@@ -171,75 +171,77 @@ export default function UserManagement({
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredUsers.length === 0 ? (
-          <div className="md:col-span-3 text-center bg-white rounded-xl p-10 text-xs text-slate-500">
+          <div className="md:col-span-3 text-center glass-panel rounded-2xl p-10 text-xs text-[#8a96a0]">
             No users found
           </div>
         ) : (
           filteredUsers.map((user) => (
             <div
               key={user.id}
-              className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition"
+              className="glass-card p-5 flex flex-col justify-between"
             >
-              <div className="flex justify-between items-start">
-                <div className="flex gap-3 items-center">
-                  <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
-                    <User className="w-5 h-5 text-blue-600" />
+              <div>
+                <div className="flex justify-between items-start">
+                  <div className="flex gap-3 items-center">
+                    <div className="w-10 h-10 rounded-xl bg-[#6b8f3c]/20 border border-[#6b8f3c]/30 flex items-center justify-center text-[#8bb552]">
+                      <User className="w-5 h-5" />
+                    </div>
+
+                    <div>
+                      <h3 className="font-bold text-sm text-[#ede9e3]">{user.fullName}</h3>
+
+                      <p className="text-[10px] text-[#8a96a0]">
+                        @{user.username}
+                      </p>
+                    </div>
                   </div>
 
-                  <div>
-                    <h3 className="font-bold text-sm">{user.fullName}</h3>
+                  <span
+                    className={`badge ${
+                      user.status === "ACTIVE"
+                        ? "badge-success"
+                        : "badge-danger"
+                    }`}
+                  >
+                    {user.status}
+                  </span>
+                </div>
 
-                    <p className="text-[10px] text-slate-400">
-                      @{user.username}
-                    </p>
+                <div className="mt-4 border-t border-[#27323a] pt-3 space-y-3 text-xs">
+                  <div className="flex justify-between">
+                    <span className="flex gap-1 text-[#8a96a0]">
+                      <Mail className="w-3 h-3" />
+                      Email
+                    </span>
+
+                    <span className="truncate max-w-[150px] text-[#ede9e3]">{user.email}</span>
                   </div>
-                </div>
 
-                <span
-                  className={`text-[10px] px-2 py-1 rounded-full font-bold ${
-                    user.status === "ACTIVE"
-                      ? "bg-green-50 text-green-700"
-                      : "bg-red-50 text-red-700"
-                  }`}
-                >
-                  {user.status}
-                </span>
-              </div>
+                  <div className="flex justify-between">
+                    <span className="flex gap-1 text-[#8a96a0]">
+                      <Shield className="w-3 h-3" />
+                      Role
+                    </span>
 
-              <div className="mt-4 border-t pt-3 space-y-3 text-xs">
-                <div className="flex justify-between">
-                  <span className="flex gap-1 text-slate-500">
-                    <Mail className="w-3 h-3" />
-                    Email
-                  </span>
+                    <span className="font-semibold text-[#c49a5c]">{user.role}</span>
+                  </div>
 
-                  <span className="truncate max-w-[150px]">{user.email}</span>
-                </div>
+                  <div className="flex justify-between">
+                    <span className="flex gap-1 text-[#8a96a0]">
+                      <Building className="w-3 h-3" />
+                      Depot
+                    </span>
 
-                <div className="flex justify-between">
-                  <span className="flex gap-1 text-slate-500">
-                    <Shield className="w-3 h-3" />
-                    Role
-                  </span>
-
-                  <span className="font-semibold">{user.role}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="flex gap-1 text-slate-500">
-                    <Building className="w-3 h-3" />
-                    Depot
-                  </span>
-
-                  <span>{user.depot?.name ?? "-"}</span>
+                    <span className="text-[#ede9e3]">{user.depot?.name ?? "-"}</span>
+                  </div>
                 </div>
               </div>
 
               {canWrite && (
-                <div className="flex justify-end gap-2 mt-4 pt-3 border-t">
+                <div className="flex justify-end gap-2 mt-4 pt-3 border-t border-[#27323a]">
                   <button
                     onClick={() => openEditModal(user)}
-                    className="text-xs bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg flex gap-1"
+                    className="btn-secondary py-1 px-3 text-xs"
                   >
                     <Edit2 className="w-3 h-3" />
                     Edit
@@ -247,7 +249,7 @@ export default function UserManagement({
 
                   <button
                     onClick={() => onDeleteUser(user.id)}
-                    className="text-xs bg-red-50 text-red-600 px-2 rounded-lg"
+                    className="p-1.5 rounded-lg border border-[#b85454]/30 bg-[#b85454]/10 text-[#b85454] hover:bg-[#b85454]/20 transition-colors text-xs"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -261,15 +263,15 @@ export default function UserManagement({
       {/* Modal */}
 
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
-            <div className="flex justify-between border-b pb-3 mb-4">
-              <h2 className="font-bold">
+        <div className="modal-overlay animate-fade-in">
+          <div className="modal-content space-y-4">
+            <div className="flex justify-between items-center border-b border-[#27323a] pb-3">
+              <h2 className="font-bold text-[#ede9e3]">
                 {editingUser ? "Edit User" : "Create User"}
               </h2>
 
-              <button onClick={() => setShowModal(false)}>
-                <X />
+              <button onClick={() => setShowModal(false)} className="p-1 text-[#8a96a0] hover:text-[#ede9e3]">
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -279,7 +281,7 @@ export default function UserManagement({
                 placeholder="Full Name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full border p-2 rounded-lg"
+                className="input-field w-full"
               />
 
               <input
@@ -288,7 +290,7 @@ export default function UserManagement({
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border p-2 rounded-lg"
+                className="input-field w-full"
               />
 
               <input
@@ -296,7 +298,7 @@ export default function UserManagement({
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full border p-2 rounded-lg"
+                className="input-field w-full"
               />
 
               <input
@@ -306,13 +308,13 @@ export default function UserManagement({
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border p-2 rounded-lg"
+                className="input-field w-full"
               />
 
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full border p-2 rounded-lg"
+                className="input-field w-full"
               >
                 <option value="MAIN_ADMIN">Main Admin</option>
 
@@ -328,7 +330,7 @@ export default function UserManagement({
                 onChange={(e) =>
                   setDepotId(e.target.value ? Number(e.target.value) : "")
                 }
-                className="w-full border p-2 rounded-lg"
+                className="input-field w-full"
               >
                 <option value="">No Depot</option>
 
@@ -342,23 +344,23 @@ export default function UserManagement({
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full border p-2 rounded-lg"
+                className="input-field w-full"
               >
                 <option value="ACTIVE">Active</option>
 
                 <option value="INACTIVE">Inactive</option>
               </select>
 
-              <div className="flex justify-end gap-3 pt-3 border-t">
+              <div className="flex justify-end gap-3 pt-3 border-t border-[#27323a]">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border rounded-lg"
+                  className="btn-secondary"
                 >
                   Cancel
                 </button>
 
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg">
+                <button type="submit" className="btn-primary">
                   Save
                 </button>
               </div>

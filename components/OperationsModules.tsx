@@ -139,14 +139,14 @@ export default function OperationsModules(props: OperationsModulesProps) {
   return (
     <div id="operations-module-root" className="space-y-6">
       {/* Workflow Navigation Tab group */}
-      <div className="flex border-b border-slate-200">
+      <div className="flex border-b border-[#27323a] gap-2">
         <button
           id="btn-subtab-trips"
           onClick={() => setActiveWorkflow("trips")}
-          className={`px-5 py-3 text-xs font-bold border-b-2 transition-colors flex items-center gap-1.5 ${
+          className={`px-5 py-3 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
             activeWorkflow === "trips"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-slate-550 hover:text-slate-800"
+              ? "border-[#6b8f3c] text-[#8bb552]"
+              : "border-transparent text-[#8a96a0] hover:text-[#ede9e3]"
           }`}
         >
           <Navigation className="w-4 h-4" />
@@ -165,10 +165,10 @@ export default function OperationsModules(props: OperationsModulesProps) {
             if (vehicles.length > 0 && !fuelVehicleId)
               setFuelVehicleId(vehicles[0].vehicle_id);
           }}
-          className={`px-5 py-3 text-xs font-bold border-b-2 transition-colors flex items-center gap-1.5 ${
+          className={`px-5 py-3 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
             activeWorkflow === "fuel"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-slate-550 hover:text-slate-800"
+              ? "border-[#6b8f3c] text-[#8bb552]"
+              : "border-transparent text-[#8a96a0] hover:text-[#ede9e3]"
           }`}
         >
           <Droplet className="w-4 h-4" />
@@ -181,14 +181,14 @@ export default function OperationsModules(props: OperationsModulesProps) {
             if (vehicles.length > 0 && !maintVehicleId)
               setMaintVehicleId(vehicles[0].vehicle_id);
           }}
-          className={`px-5 py-3 text-xs font-bold border-b-2 transition-colors flex items-center gap-1.5 ${
+          className={`px-5 py-3 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
             activeWorkflow === "maintenance"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-slate-550 hover:text-slate-800"
+              ? "border-[#6b8f3c] text-[#8bb552]"
+              : "border-transparent text-[#8a96a0] hover:text-[#ede9e3]"
           }`}
         >
           <Tool className="w-4 h-4" />
-          Maintenance repair schedules
+          Maintenance Repair Schedules
         </button>
       </div>
 
@@ -197,14 +197,14 @@ export default function OperationsModules(props: OperationsModulesProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Main Active Manifest */}
           <div
-            className="lg:col-span-12 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden"
+            className="lg:col-span-12 glass-panel rounded-2xl overflow-hidden"
             id="active-manifest"
           >
-            <div className="bg-slate-50 border-b border-slate-205 px-5 py-3">
-              <h3 className="font-bold text-slate-800 text-sm">
+            <div className="bg-[#141a1f] border-b border-[#27323a] px-5 py-3">
+              <h3 className="font-bold text-[#ede9e3] text-sm">
                 Ongoing Depot Operational Manifest
               </h3>
-              <p className="text-[10px] text-slate-500 font-mono">
+              <p className="text-[10px] text-[#8a96a0] font-mono">
                 Live status monitoring & trip completion gates
               </p>
             </div>
@@ -212,7 +212,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
             <div className="max-w-full overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-slate-50/50 text-slate-500 font-bold border-b border-slate-200 uppercase font-mono text-[9px] tracking-wider">
+                  <tr className="bg-[#141a1f]/50 text-[#8a96a0] font-bold border-b border-[#27323a] uppercase font-mono text-[9px] tracking-wider">
                     <th className="p-4">Trip Code</th>
                     <th className="p-4">Tied Route Info</th>
                     <th className="p-4">Assigned Fleet</th>
@@ -222,12 +222,12 @@ export default function OperationsModules(props: OperationsModulesProps) {
                     <th className="p-4 text-right">Gates/Override</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-[#27323a]">
                   {trips.length === 0 ? (
                     <tr>
                       <td
                         colSpan={7}
-                        className="p-8 text-center text-slate-500 italic"
+                        className="p-8 text-center text-[#8a96a0] italic"
                       >
                         No trips loaded on current timetabled date.
                       </td>
@@ -245,39 +245,39 @@ export default function OperationsModules(props: OperationsModulesProps) {
                       );
 
                       return (
-                        <tr key={t.trip_id} className="hover:bg-slate-50/50">
-                          <td className="p-4 font-mono font-bold text-slate-800">
+                        <tr key={t.trip_id} className="hover:bg-[#1a2228]/50 transition-colors">
+                          <td className="p-4 font-mono font-bold text-[#ede9e3]">
                             {t.trip_id}
                           </td>
-                          <td className="p-4 text-slate-800">
+                          <td className="p-4 text-[#ede9e3]">
                             <div>
                               <span className="font-bold">
                                 {route?.route_name || "Direct transit link"}
                               </span>
-                              <span className="block text-[10px] text-slate-400 font-mono">
+                              <span className="block text-[10px] text-[#8a96a0] font-mono">
                                 Sched Ref: {t.schedule_id}
                               </span>
                             </div>
                           </td>
-                          <td className="p-4 font-mono text-blue-700 font-semibold">
+                          <td className="p-4 font-mono text-[#c49a5c] font-semibold">
                             {bus?.registration_number || "Awaiting vehicle"}
                           </td>
-                          <td className="p-4 text-slate-650 font-semibold">
+                          <td className="p-4 text-[#8a96a0] font-semibold">
                             {t.start_time || "Pending dispatch"}
                           </td>
-                          <td className="p-4 text-slate-650 font-semibold">
+                          <td className="p-4 text-[#8a96a0] font-semibold">
                             {t.end_time || "--:--"}
                           </td>
                           <td className="p-4">
                             <span
-                              className={`text-[9px] px-2 py-0.5 rounded font-extrabold uppercase ${
+                              className={`badge ${
                                 t.status === "Active"
-                                  ? "bg-blue-100 text-blue-800 animate-pulse"
+                                  ? "badge-success animate-pulse"
                                   : t.status === "Completed"
-                                    ? "bg-emerald-100 text-emerald-800"
+                                    ? "badge-success"
                                     : t.status === "Delayed"
-                                      ? "bg-amber-100 text-amber-800"
-                                      : "bg-red-100 text-red-850"
+                                      ? "badge-warning"
+                                      : "badge-danger"
                               }`}
                             >
                               {t.status}
@@ -285,14 +285,14 @@ export default function OperationsModules(props: OperationsModulesProps) {
                           </td>
                           <td className="p-4 text-right">
                             {canWrite ? (
-                              <div className="flex gap-1 justify-end">
+                              <div className="flex gap-1.5 justify-end">
                                 {t.status === "Scheduled" && (
                                   <button
                                     id={`btn-start-trip-${t.trip_id}`}
                                     onClick={() => onStartTrip(t.trip_id)}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2.5 rounded text-[10px] flex items-center gap-0.5 cursor-pointer"
+                                    className="btn-primary py-1 px-2.5 text-[10px]"
                                   >
-                                    <Play className="w-3" /> Start Transit
+                                    <Play className="w-3 h-3" /> Start Transit
                                   </button>
                                 )}
                                 {t.status === "Active" && (
@@ -302,7 +302,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
                                       onClick={() =>
                                         onEndTrip(t.trip_id, "Completed")
                                       }
-                                      className="bg-emerald-550 hover:bg-emerald-600 text-white font-bold py-1 px-2 rounded text-[10px] cursor-pointer"
+                                      className="btn-primary py-1 px-2 text-[10px]"
                                     >
                                       Mark Complete
                                     </button>
@@ -311,7 +311,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
                                       onClick={() =>
                                         onUpdateTripStatus(t.trip_id, "Delayed")
                                       }
-                                      className="bg-amber-500 hover:bg-amber-600 text-white font-bold py-1 px-2 rounded text-[10px] cursor-pointer"
+                                      className="btn-amber py-1 px-2 text-[10px]"
                                     >
                                       Delay Alert
                                     </button>
@@ -327,19 +327,19 @@ export default function OperationsModules(props: OperationsModulesProps) {
                                         "Route delayed but completed safely.",
                                       )
                                     }
-                                    className="bg-emerald-550 text-white hover:bg-emerald-600 font-bold py-1 px-2 rounded text-[10px] cursor-pointer"
+                                    className="btn-primary py-1 px-2 text-[10px]"
                                   >
                                     Complete Shift
                                   </button>
                                 )}
                                 {t.status === "Completed" && (
-                                  <span className="text-slate-400 font-semibold text-[10px]">
+                                  <span className="text-[#8a96a0] font-semibold text-[10px]">
                                     Closed Log
                                   </span>
                                 )}
                               </div>
                             ) : (
-                              <span className="text-slate-400 font-mono font-semibold text-[10px]">
+                              <span className="text-[#8a96a0] font-mono font-semibold text-[10px]">
                                 Read-Only
                               </span>
                             )}
@@ -359,9 +359,9 @@ export default function OperationsModules(props: OperationsModulesProps) {
       {activeWorkflow === "fuel" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Audit logger form */}
-          <div className="lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-            <h3 className="font-bold text-slate-900 text-sm mb-4 border-b pb-2 border-slate-100 flex items-center gap-1">
-              <Droplet className="w-4.5 h-4.5 text-blue-600" /> Fuel Log Entry
+          <div className="lg:col-span-4 glass-panel rounded-2xl p-5">
+            <h3 className="font-bold text-[#ede9e3] text-sm mb-4 border-b pb-2 border-[#27323a] flex items-center gap-1.5">
+              <Droplet className="w-4.5 h-4.5 text-[#6b8f3c]" /> Fuel Log Entry
               Form
             </h3>
 
@@ -370,14 +370,14 @@ export default function OperationsModules(props: OperationsModulesProps) {
               className="space-y-4 text-xs font-semibold"
             >
               <div className="space-y-1">
-                <label className="text-slate-705">
+                <label className="text-[#8a96a0]">
                   Target Vehicle (Terminal fleet)
                 </label>
                 <select
                   id="fuel-form-vehicle"
                   value={fuelVehicleId}
                   onChange={(e) => setFuelVehicleId(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="input-field w-full font-semibold"
                 >
                   {vehicles.map((v) => (
                     <option key={v.vehicle_id} value={v.vehicle_id}>
@@ -388,7 +388,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
               </div>
 
               <div className="space-y-1">
-                <label className="text-slate-700 font-semibold">
+                <label className="text-[#8a96a0] font-semibold">
                   Refuel Date
                 </label>
                 <input
@@ -396,13 +396,13 @@ export default function OperationsModules(props: OperationsModulesProps) {
                   type="date"
                   value={fuelDate}
                   onChange={(e) => setFuelDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono font-semibold"
+                  className="input-field w-full font-mono font-semibold"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-slate-700 font-semibold">
+                  <label className="text-[#8a96a0] font-semibold">
                     Liters Dispensed
                   </label>
                   <input
@@ -411,11 +411,11 @@ export default function OperationsModules(props: OperationsModulesProps) {
                     min="1"
                     value={fuelLiters}
                     onChange={(e) => setFuelLiters(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono font-semibold"
+                    className="input-field w-full font-mono font-semibold"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-700 font-semibold">
+                  <label className="text-[#8a96a0] font-semibold">
                     Total Cost (LKR)
                   </label>
                   <input
@@ -424,13 +424,13 @@ export default function OperationsModules(props: OperationsModulesProps) {
                     min="1"
                     value={fuelCost}
                     onChange={(e) => setFuelCost(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono font-semibold"
+                    className="input-field w-full font-mono font-semibold"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-slate-700">
+                <label className="text-[#8a96a0]">
                   Distance Traveled Since Last Refuel (KM)
                 </label>
                 <input
@@ -439,7 +439,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
                   min="0"
                   value={fuelDistance}
                   onChange={(e) => setFuelDistance(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono font-semibold"
+                  className="input-field w-full font-mono font-semibold"
                 />
               </div>
 
@@ -447,7 +447,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
                 <button
                   id="btn-submit-fuel-log"
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg cursor-pointer transition-colors"
+                  className="btn-primary w-full"
                 >
                   Log Fuel Expenditure
                 </button>
@@ -456,13 +456,13 @@ export default function OperationsModules(props: OperationsModulesProps) {
           </div>
 
           {/* Audit logs history */}
-          <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
-            <div className="bg-slate-50 border-b border-slate-200 px-5 py-3 flex items-center justify-between">
+          <div className="lg:col-span-8 glass-panel rounded-2xl overflow-hidden flex flex-col justify-between">
+            <div className="bg-[#141a1f] border-b border-[#27323a] px-5 py-3 flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-slate-800 text-sm">
+                <h3 className="font-bold text-[#ede9e3] text-sm">
                   Depot Refuel Ledger Logs
                 </h3>
-                <p className="text-[10px] text-slate-500 font-mono">
+                <p className="text-[10px] text-[#8a96a0] font-mono">
                   Efficiency calculations audit trails
                 </p>
               </div>
@@ -471,7 +471,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
             <div className="flex-1 overflow-y-auto max-h-[385px]">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-slate-50/50 text-slate-500 font-bold border-b border-slate-200 uppercase font-mono text-[9px] tracking-wider">
+                  <tr className="bg-[#141a1f]/50 text-[#8a96a0] font-bold border-b border-[#27323a] uppercase font-mono text-[9px] tracking-wider">
                     <th className="p-3">Refuel Date</th>
                     <th className="p-3">Vehicle</th>
                     <th className="p-3">Liters Entered</th>
@@ -480,29 +480,29 @@ export default function OperationsModules(props: OperationsModulesProps) {
                     <th className="p-3 font-mono">Avg Fuel Efficiency</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-mono">
+                <tbody className="divide-y divide-[#27323a] font-mono">
                   {fuelLogs.map((log) => {
                     const vehicle = vehicles.find(
                       (v) => v.vehicle_id === log.vehicle_id,
                     );
 
                     return (
-                      <tr key={log.fuel_id} className="hover:bg-slate-50/30">
-                        <td className="p-3 font-semibold text-slate-700">
+                      <tr key={log.fuel_id} className="hover:bg-[#1a2228]/50 transition-colors">
+                        <td className="p-3 font-semibold text-[#ede9e3]">
                           {log.date}
                         </td>
-                        <td className="p-3 font-sans font-semibold text-blue-700">
+                        <td className="p-3 font-sans font-semibold text-[#c49a5c]">
                           {vehicle?.registration_number || log.vehicle_id}
                         </td>
-                        <td className="p-3 text-slate-800">{log.liters} L</td>
-                        <td className="p-3 font-sans font-bold text-slate-900">
+                        <td className="p-3 text-[#ede9e3]">{log.liters} L</td>
+                        <td className="p-3 font-sans font-bold text-[#ede9e3]">
                           LKR {log.cost}
                         </td>
-                        <td className="p-3 text-slate-800">
+                        <td className="p-3 text-[#ede9e3]">
                           {log.distance_covered} KM
                         </td>
                         <td className="p-3">
-                          <span className="bg-blue-50 border border-blue-100 text-blue-700 rounded-md px-2 py-0.5 font-bold font-mono">
+                          <span className="badge badge-primary font-mono font-bold">
                             {getFuelEfficiency(
                               log.liters,
                               log.distance_covered,
@@ -524,9 +524,9 @@ export default function OperationsModules(props: OperationsModulesProps) {
       {activeWorkflow === "maintenance" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Dispatch repair form */}
-          <div className="lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-            <h3 className="font-bold text-slate-900 text-sm mb-4 border-b pb-2 border-slate-100 flex items-center gap-1">
-              <Tool className="w-4.5 h-4.5 text-blue-600" /> Book Vehicle Repair
+          <div className="lg:col-span-4 glass-panel rounded-2xl p-5">
+            <h3 className="font-bold text-[#ede9e3] text-sm mb-4 border-b pb-2 border-[#27323a] flex items-center gap-1.5">
+              <Tool className="w-4.5 h-4.5 text-[#6b8f3c]" /> Book Vehicle Repair
             </h3>
 
             <form
@@ -534,12 +534,12 @@ export default function OperationsModules(props: OperationsModulesProps) {
               className="space-y-4 text-xs font-semibold"
             >
               <div className="space-y-1">
-                <label className="text-slate-700">Vehicle under Repairs</label>
+                <label className="text-[#8a96a0]">Vehicle under Repairs</label>
                 <select
                   id="maint-form-vehicle"
                   value={maintVehicleId}
                   onChange={(e) => setMaintVehicleId(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="input-field w-full font-semibold"
                 >
                   {vehicles.map((v) => (
                     <option key={v.vehicle_id} value={v.vehicle_id}>
@@ -550,12 +550,12 @@ export default function OperationsModules(props: OperationsModulesProps) {
               </div>
 
               <div className="space-y-1">
-                <label className="text-slate-755">Intervention Category</label>
+                <label className="text-[#8a96a0]">Intervention Category</label>
                 <select
                   id="maint-form-type"
                   value={maintType}
                   onChange={(e) => setMaintType(e.target.value as any)}
-                  className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="input-field w-full font-semibold"
                 >
                   <option value="Scheduled">Scheduled Regular Service</option>
                   <option value="Corrective">
@@ -567,41 +567,41 @@ export default function OperationsModules(props: OperationsModulesProps) {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-slate-700">Refit Date</label>
+                  <label className="text-[#8a96a0]">Refit Date</label>
                   <input
                     id="maint-form-date"
                     type="date"
                     value={maintDate}
                     onChange={(e) => setMaintDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
+                    className="input-field w-full font-mono font-semibold"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-700">Nest Service Date</label>
+                  <label className="text-[#8a96a0]">Next Service Date</label>
                   <input
                     id="maint-form-next"
                     type="date"
                     value={maintNextDate}
                     onChange={(e) => setMaintNextDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
+                    className="input-field w-full font-mono font-semibold"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-slate-700">Calculated Cost (LKR)</label>
+                <label className="text-[#8a96a0]">Calculated Cost (LKR)</label>
                 <input
                   id="maint-form-cost"
                   type="number"
                   min="0"
                   value={maintCost}
                   onChange={(e) => setMaintCost(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="input-field w-full font-mono font-semibold"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-slate-700">
+                <label className="text-[#8a96a0]">
                   Engineers Remarks / Breakdown Notes
                 </label>
                 <textarea
@@ -609,7 +609,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
                   placeholder="Describe failure scope, spark plug replaced, gearbox filters..."
                   value={maintRemarks}
                   onChange={(e) => setMaintRemarks(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 h-16 font-normal"
+                  className="input-field w-full h-16 font-normal"
                 />
               </div>
 
@@ -617,7 +617,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
                 <button
                   id="btn-book-maintenance"
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg cursor-pointer transition-colors"
+                  className="btn-primary w-full"
                 >
                   Dispatch Maintenance Ticket
                 </button>
@@ -626,12 +626,12 @@ export default function OperationsModules(props: OperationsModulesProps) {
           </div>
 
           {/* Maintenance Registers list */}
-          <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
-            <div className="bg-slate-50 border-b border-slate-200 px-5 py-3">
-              <h3 className="font-bold text-slate-800 text-sm">
+          <div className="lg:col-span-8 glass-panel rounded-2xl overflow-hidden flex flex-col justify-between">
+            <div className="bg-[#141a1f] border-b border-[#27323a] px-5 py-3">
+              <h3 className="font-bold text-[#ede9e3] text-sm">
                 Active Repair registers & logs
               </h3>
-              <p className="text-[10px] text-slate-500 font-mono">
+              <p className="text-[10px] text-[#8a96a0] font-mono">
                 Fleet mechanical service files
               </p>
             </div>
@@ -639,7 +639,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
             <div className="flex-1 overflow-y-auto max-h-[464px]">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-slate-50/50 text-slate-500 font-bold border-b border-slate-200 uppercase font-mono text-[9px] tracking-wider">
+                  <tr className="bg-[#141a1f]/50 text-[#8a96a0] font-bold border-b border-[#27323a] uppercase font-mono text-[9px] tracking-wider">
                     <th className="p-3">Vehicle Class</th>
                     <th className="p-3">Category</th>
                     <th className="p-3">Service Date</th>
@@ -649,7 +649,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
                     <th className="p-3 text-right">Action Gate</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-[#27323a]">
                   {maintenance.map((m) => {
                     const vehicle = vehicles.find(
                       (v) => v.vehicle_id === m.vehicle_id,
@@ -658,41 +658,41 @@ export default function OperationsModules(props: OperationsModulesProps) {
                     return (
                       <tr
                         key={m.maintenance_id}
-                        className="hover:bg-slate-50/40"
+                        className="hover:bg-[#1a2228]/50 transition-colors"
                       >
-                        <td className="p-3 font-bold text-slate-800 font-mono">
+                        <td className="p-3 font-bold text-[#ede9e3] font-mono">
                           {vehicle?.registration_number || m.vehicle_id}
                         </td>
                         <td className="p-3">
                           <span
-                            className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                            className={`badge ${
                               m.maintenance_type === "Emergency"
-                                ? "bg-red-100 text-red-800"
+                                ? "badge-danger"
                                 : m.maintenance_type === "Corrective"
-                                  ? "bg-amber-100 text-amber-800"
-                                  : "bg-blue-100 text-blue-800"
+                                  ? "badge-warning"
+                                  : "badge-primary"
                             }`}
                           >
                             {m.maintenance_type}
                           </span>
                         </td>
-                        <td className="p-3 text-slate-655 font-mono font-semibold">
+                        <td className="p-3 text-[#8a96a0] font-mono font-semibold">
                           {m.service_date}
                         </td>
-                        <td className="p-3 font-mono font-bold text-slate-900">
+                        <td className="p-3 font-mono font-bold text-[#ede9e3]">
                           LKR {m.cost}
                         </td>
-                        <td className="p-3 text-slate-650 max-w-[160px] truncate">
+                        <td className="p-3 text-[#8a96a0] max-w-[160px] truncate">
                           {m.remarks || "No supplementary notes logged"}
                         </td>
                         <td className="p-3">
                           <span
-                            className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${
+                            className={`badge ${
                               m.status === "Completed"
-                                ? "bg-emerald-50 text-emerald-800"
+                                ? "badge-success"
                                 : m.status === "In Progress"
-                                  ? "bg-blue-50 text-blue-800 animate-pulse"
-                                  : "bg-amber-50 text-amber-800"
+                                  ? "badge-primary animate-pulse"
+                                  : "badge-warning"
                             }`}
                           >
                             {m.status}
@@ -708,7 +708,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
                                   "Completed",
                                 )
                               }
-                              className="bg-emerald-550 text-white hover:bg-emerald-600 font-bold px-2 py-1 rounded text-[9px]"
+                              className="btn-primary py-1 px-2 text-[9px]"
                             >
                               Done Close
                             </button>
