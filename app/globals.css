@@ -4553,3 +4553,10 @@ textarea,
     border-color: #cbd5e1 !important;
   }
 }
+
+.custom-auth-card {
+  width: 100% !important;
+  max-width: 480px !important; /* Adjust this value to make it as wide as you want */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}

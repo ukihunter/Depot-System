@@ -690,55 +690,55 @@ function App() {
       throw error;
     }
   };
-  const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoginError("");
-    setAuthLoading(true);
+  // const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   setLoginError("");
+  //   setAuthLoading(true);
 
-    try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: regFullName,
-          email: regEmail,
-          username: regUsername,
-          password: regPassword,
-        }),
-      });
+  //   try {
+  //     const response = await fetch("/api/auth/register", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         fullName: regFullName,
+  //         email: regEmail,
+  //         username: regUsername,
+  //         password: regPassword,
+  //       }),
+  //     });
 
-      const data = await response.json();
-      if (!response.ok || !data.success) {
-        setLoginError(data.message ?? "Unable to create account.");
-        return;
-      }
+  //     const data = await response.json();
+  //     if (!response.ok || !data.success) {
+  //       setLoginError(data.message ?? "Unable to create account.");
+  //       return;
+  //     }
 
-      const user = normalizeUser(data.user);
-      setCurrentUser(user);
-      persistUser(user);
-      setActiveTab(getFirstAccessibleTab(user.role));
-      setRegFullName("");
-      setRegEmail("");
-      setRegUsername("");
-      setRegPassword("");
-      setAuthTab("login");
-    } catch (error) {
-      console.error("Registration failed:", error);
-      setLoginError("Unable to connect to the server. Please try again.");
-    } finally {
-      setAuthLoading(false);
-    }
-  };
+  //     const user = normalizeUser(data.user);
+  //     setCurrentUser(user);
+  //     persistUser(user);
+  //     setActiveTab(getFirstAccessibleTab(user.role));
+  //     setRegFullName("");
+  //     setRegEmail("");
+  //     setRegUsername("");
+  //     setRegPassword("");
+  //     setAuthTab("login");
+  //   } catch (error) {
+  //     console.error("Registration failed:", error);
+  //     setLoginError("Unable to connect to the server. Please try again.");
+  //   } finally {
+  //     setAuthLoading(false);
+  //   }
+  // };
 
-  const handleResetPassword = async (
-    event: React.FormEvent<HTMLFormElement>,
-  ) => {
-    event.preventDefault();
-    setShowForgotModal(false);
-    setLoginError(
-      `Reset link requested for ${forgotPasswordUser || "the selected account"}.`,
-    );
-  };
+  // const handleResetPassword = async (
+  //   event: React.FormEvent<HTMLFormElement>,
+  // ) => {
+  //   event.preventDefault();
+  //   setShowForgotModal(false);
+  //   setLoginError(
+  //     `Reset link requested for ${forgotPasswordUser || "the selected account"}.`,
+  //   );
+  // };
 
   const handleLogout = () => {
     window.localStorage.removeItem("srmss_user");
@@ -1184,259 +1184,175 @@ function App() {
   if (!currentUser) {
     return (
       <div
-        className={`min-h-screen ${theme === "dark" ? "bg-slate-950 text-slate-100" : "bg-slate-100 text-slate-900"}`}
+        className={`relative min-h-screen w-full bg-no-repeat bg-center transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-slate-950 text-slate-100"
+            : "bg-slate-900 text-slate-900"
+        }`}
+        style={{
+          backgroundImage: `url('https://images.pexels.com/photos/3230239/pexels-photo-3230239.jpeg')`,
+          backgroundSize: "100% auto", // Fits width 100%, lets height adjust naturally
+        }}
       >
-        <div className="absolute right-5 top-5 z-20">
-          <button
-            type="button"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="rounded-xl border border-slate-300/60 bg-white/80 px-3 py-2 text-xs font-semibold shadow-sm backdrop-blur"
-          >
-            {theme === "dark" ? (
-              <Sun className="inline-block h-4 w-4" />
-            ) : (
-              <Moon className="inline-block h-4 w-4" />
-            )}
-          </button>
-        </div>
+        {/* Background Dark Overlay for High-Contrast & Legibility */}
+        <div className="absolute inset-0 bg-slate-950/75 backdrop-blur-xs" />
 
-        <div className="mx-auto  flex min-h-screen max-w-6xl items-center px-4 py-10 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
-          <div className="hidden rounded-4xl bg-linear-to-br from-slate-950 via-slate-900 to-slate-800 p-10 text-white shadow-2xl lg:block">
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
-                <Bus className="h-6 w-6" />
-              </div>
-              <div>
-                <div className="text-xs font-black tracking-[0.25em]">
-                  SRMSS
+        {/* Theme Toggle */}
+        <div className="absolute right-6 top-6 z-30"></div>
+
+        {/* Main Container */}
+        <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl items-center px-4 py-12 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+          {/* Left Column: Brand Hero Card */}
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-slate-950/60 p-10 text-white shadow-2xl ring-1 ring-white/10 backdrop-blur-xl lg:p-12">
+            {/* Subtle background glow decorative elements */}
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-3.5">
+                <div className="flex h-20 w-12 items-center justify-center rounded-2xl bg-white/10 text-white shadow-inner backdrop-blur-md ring-1 ring-white/20">
+                  <Bus className="h-10 w-10 text-cyan-400" />
                 </div>
-                <div className="text-[10px] uppercase tracking-[0.3em] text-slate-300">
-                  Transit Control
+                <div>
+                  <div className="text-xl font-black tracking-[0.25em] text-white">
+                    SRMSS
+                  </div>
+                  <div className="text-[40px] font-semibold uppercase tracking-[0.3em] text-cyan-400/90">
+                    Transit Control
+                  </div>
                 </div>
               </div>
+
+              <h1 className="mt-12 max-w-lg text-4xl font-extrabold tracking-tight text-white lg:text-5xl lg:leading-[1.15]">
+                Smart route operations & fleet control.
+              </h1>
+
+              <p className="mt-6 max-w-md text-sm leading-relaxed text-slate-300/90">
+                Sign in to manage routes, vehicles, drivers, schedules, dispatch
+                logs, and audit reporting from a single centralized dashboard.
+              </p>
             </div>
-            <h1 className="mt-10 max-w-lg text-4xl font-black leading-tight">
-              Smart route operations, scheduling, and fleet control in one
-              place.
-            </h1>
-            <p className="mt-4 max-w-md text-sm leading-6 text-slate-300">
-              Sign in to manage routes, vehicles, drivers, schedules, dispatch
-              logs, and audit reporting from a single dashboard.
-            </p>
           </div>
 
-          <div className="mx-auto w-full max-w-md rounded-4xl border border-slate-200/70 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
-            <div className="mb-5 flex border-b border-slate-200 pb-1 dark:border-slate-800">
+          {/* Right Column: Authentication Card (Guaranteed Solid Background) */}
+          <div
+            className="custom-auth-card rounded-2xl border border-slate-700/80 p-8 shadow-2xl lg:p-10"
+            style={{ backgroundColor: "#202020", opacity: 1 }}
+          >
+            <div className="mb-6 flex border-b border-slate-800 pb-2">
               <button
                 type="button"
                 onClick={() => setAuthTab("login")}
-                className={`flex-1 py-2 text-xs font-bold ${authTab === "login" ? "border-b-2 border-blue-600 text-blue-600" : "text-slate-400"}`}
+                className={`relative pb-3 text-xs font-bold tracking-wide transition-colors ${
+                  authTab === "login"
+                    ? "text-cyan-400"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
               >
                 Sign In
-              </button>
-              <button
-                type="button"
-                onClick={() => setAuthTab("register")}
-                className={`flex-1 py-2 text-xs font-bold ${authTab === "register" ? "border-b-2 border-blue-600 text-blue-600" : "text-slate-400"}`}
-              >
-                Create Account
+                {authTab === "login" && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-cyan-400" />
+                )}
               </button>
             </div>
 
-            <h2 className="text-xl font-black">
-              {authTab === "login" ? "Welcome back" : "Register account"}
-            </h2>
-            <p className="mt-1 text-xs text-slate-500">
-              {authTab === "login"
-                ? "Access the depot portal."
-                : "Create a passenger or staff account."}
-            </p>
+            <div>
+              <h2 className="text-2xl font-black tracking-tight text-white">
+                {authTab === "login" ? "Welcome back" : "Register account"}
+              </h2>
+              <p className="mt-1 text-xs font-medium text-slate-400">
+                {authTab === "login"
+                  ? "Access the depot management portal."
+                  : "Create a passenger or staff account."}
+              </p>
+            </div>
 
+            {/* Error Banner */}
             {loginError && (
-              <div className="mt-4 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-200">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-                <span>{loginError}</span>
+              <div
+                className="mt-5 flex items-start gap-3 rounded-2xl border border-red-500/30 p-3.5 text-xs text-red-300"
+                style={{ backgroundColor: "#450a0a" }}
+              >
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+                <span className="leading-relaxed">{loginError}</span>
               </div>
             )}
 
-            {authTab === "login" ? (
-              <form onSubmit={handleLogin} className="mt-5 space-y-4">
+            {/* Login Form */}
+            {authTab === "login" && (
+              <form onSubmit={handleLogin} className="mt-6 space-y-5">
                 <div>
-                  <label className="mb-1 block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
+                  <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
                     Username
                   </label>
                   <div className="relative">
-                    <UserCheck className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <UserCheck className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                     <input
+                      type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800"
+                      placeholder="Username"
+                      className="w-full rounded-2xl border border-slate-800 py-3 pl-10 pr-4 text-sm font-medium text-white outline-none transition-all placeholder:text-slate-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                      style={{ backgroundColor: "#020617" }}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <div className="mb-1 flex items-center justify-between">
-                    <label className="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
+                  <div className="mb-1.5 flex items-center justify-between">
+                    <label className="block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
                       Password
                     </label>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setForgotPasswordUser(username);
-                        setShowForgotModal(true);
-                      }}
-                      className="text-[10px] font-bold text-blue-600"
-                    >
-                      Forgot password?
-                    </button>
                   </div>
                   <div className="relative">
-                    <Unlock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <Unlock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                     <input
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800"
+                      placeholder="••••••••"
+                      className="w-full rounded-2xl border border-slate-800 py-3 pl-10 pr-4 text-sm font-medium text-white outline-none transition-all placeholder:text-slate-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                      style={{ backgroundColor: "#020617" }}
                     />
                   </div>
                 </div>
 
-                <label className="flex items-center gap-2 text-xs text-slate-600">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                  />
-                  Keep me signed in
-                </label>
+                <div className="flex items-center justify-between pt-1">
+                  <label className="flex cursor-pointer select-none items-center gap-2.5 text-xs font-medium text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="h-4 w-4 rounded-md border-slate-700 text-cyan-500 focus:ring-cyan-500/20"
+                      style={{ backgroundColor: "#020617" }}
+                    />
+                    Keep me signed in
+                  </label>
+                </div>
 
                 <button
                   type="submit"
                   disabled={authLoading}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-blue-600 to-cyan-500 py-3 text-sm font-black text-white shadow-lg disabled:opacity-70"
+                  className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl  from-blue-600 to-cyan-500 py-3.5 text-sm font-bold text-white shadow-lg 0 hover:bg-[#6b8e13]"
+                  style={{
+                    background: "#7da216",
+                    color: "white",
+                  }}
                 >
                   {authLoading ? (
                     <RefreshCw className="h-4 w-4 animate-spin" />
                   ) : (
-                    <Zap className="h-4 w-4" />
+                    <Zap className="h-4 w-4 transition-transform group-hover:scale-110" />
                   )}
-                  Access Portal
-                </button>
-              </form>
-            ) : (
-              <form onSubmit={handleRegister} className="mt-5 space-y-3.5">
-                <div>
-                  <label className="mb-1 block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
-                    Full name
-                  </label>
-                  <input
-                    value={regFullName}
-                    onChange={(e) => setRegFullName(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={regEmail}
-                    onChange={(e) => setRegEmail(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
-                    Username
-                  </label>
-                  <input
-                    value={regUsername}
-                    onChange={(e) => setRegUsername(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    value={regPassword}
-                    onChange={(e) => setRegPassword(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={authLoading}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-cyan-600 py-3 text-sm font-black text-white shadow-lg disabled:opacity-70"
-                >
-                  {authLoading ? (
-                    <RefreshCw className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <UserCheck className="h-4 w-4" />
-                  )}
-                  Create Account
+                  <span>Access Portal</span>
                 </button>
               </form>
             )}
           </div>
         </div>
-
-        {showForgotModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900">
-              <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-3 dark:border-slate-800">
-                <h3 className="font-black uppercase tracking-wider">
-                  Reset Password
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => setShowForgotModal(false)}
-                  className="text-2xl leading-none text-slate-400"
-                >
-                  ×
-                </button>
-              </div>
-              <form
-                onSubmit={handleResetPassword}
-                className="space-y-4 text-xs"
-              >
-                <div>
-                  <label className="mb-1 block font-bold uppercase tracking-widest text-slate-500">
-                    Account Username
-                  </label>
-                  <input
-                    value={forgotPasswordUser}
-                    onChange={(e) => setForgotPasswordUser(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800"
-                  />
-                </div>
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowForgotModal(false)}
-                    className="rounded-lg px-3 py-2 font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="rounded-lg bg-blue-600 px-4 py-2 font-bold text-white"
-                  >
-                    Send Reset Link
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
-
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <header className="flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
