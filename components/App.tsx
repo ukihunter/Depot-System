@@ -1183,65 +1183,84 @@ function App() {
 
   if (!currentUser) {
     return (
-      <div className="relative min-h-screen w-full bg-[#0b0f12] text-[#ede9e3] flex items-center justify-center p-4">
-        {/* Subtle background glow elements */}
-        <div className="pointer-events-none absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-[#6b8f3c]/10 blur-3xl" />
-        <div className="pointer-events-none absolute right-1/4 bottom-1/4 h-96 w-96 rounded-full bg-[#c49a5c]/10 blur-3xl" />
+      <div
+        className={`relative min-h-screen w-full bg-no-repeat bg-center transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-slate-100 text-slate-100"
+            : "bg-slate-100 text-slate-900"
+        }`}
+        style={{
+          backgroundImage: `url('https://images.pexels.com/photos/3230239/pexels-photo-3230239.jpeg')`,
+          backgroundSize: "100% auto", // Fits width 100%, lets height adjust naturally
+        }}
+      >
+        {/* Background Dark Overlay for High-Contrast & Legibility */}
+        <div className="absolute inset-0  backdrop-blur-xs" />
+
+        {/* Theme Toggle */}
+        <div className="absolute right-6 top-6 z-30"></div>
 
         {/* Main Container */}
-        <div className="relative z-10 mx-auto flex min-h-screen max-w-5xl items-center w-full px-4 py-12 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+        <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl items-center px-4 py-12 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
           {/* Left Column: Brand Hero Card */}
-          <div className="relative overflow-hidden rounded-3xl bg-[#141a1f]/80 p-8 lg:p-12 border border-[#27323a] shadow-2xl backdrop-blur-xl mb-6 lg:mb-0">
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-slate-950/60 p-10 text-white shadow-2xl ring-1 ring-white/10 backdrop-blur-xl lg:p-12">
+            {/* Subtle background glow decorative elements */}
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
+
             <div className="relative z-10">
               <div className="flex items-center gap-3.5">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#6b8f3c]/20 text-[#6b8f3c] border border-[#6b8f3c]/30">
-                  <Bus className="h-7 w-7 text-[#8bb552]" />
+                <div className="flex h-20 w-12 items-center justify-center rounded-2xl text-white  ">
+                  <Bus className="h-10 w-10 text-cyan-400" />
                 </div>
                 <div>
-                  <div className="text-sm font-black tracking-[0.25em] text-[#6b8f3c] uppercase">
+                  <div className="text-xl font-black tracking-[0.25em] text-white">
                     SRMSS
                   </div>
-                  <div className="text-xl font-bold tracking-wider text-[#ede9e3]">
-                    Transit Control Hub
+                  <div className="text-[40px] font-semibold uppercase tracking-[0.3em] text-cyan-400/90">
+                    Transit Control
                   </div>
                 </div>
               </div>
 
-              <h1 className="mt-8 text-3xl font-extrabold tracking-tight text-[#ede9e3] lg:text-4xl lg:leading-tight">
-                Smart route operations & depot management.
+              <h1 className="mt-12 max-w-lg text-4xl font-extrabold tracking-tight text-white lg:text-5xl lg:leading-[1.15]">
+                Smart route operations & fleet control.
               </h1>
 
-              <p className="mt-4 text-sm leading-relaxed text-[#8a96a0]">
+              <p className="mt-6 max-w-md text-sm leading-relaxed text-slate-300/90">
                 Sign in to manage routes, vehicles, drivers, schedules, dispatch
                 logs, and audit reporting from a single centralized dashboard.
               </p>
             </div>
           </div>
 
-          {/* Right Column: Authentication Card */}
-          <div className="rounded-3xl border border-[#27323a] bg-[#141a1f]/95 p-8 shadow-2xl backdrop-blur-xl">
-            <div className="mb-6 flex border-b border-[#27323a] pb-3">
+          {/* Right Column: Authentication Card (Guaranteed Solid Background) */}
+          <div
+            className="custom-auth-card rounded-2xl border border-slate-700/80 p-8 shadow-2xl lg:p-10"
+            style={{ backgroundColor: "#202020", opacity: 1 }}
+          >
+            <div className="mb-6 flex border-b border-slate-800 pb-2">
               <button
                 type="button"
                 onClick={() => setAuthTab("login")}
                 className={`relative pb-3 text-xs font-bold tracking-wide transition-colors ${
                   authTab === "login"
-                    ? "text-[#6b8f3c]"
-                    : "text-[#8a96a0] hover:text-[#ede9e3]"
+                    ? "text-cyan-400"
+                    : "text-slate-400 hover:text-slate-200"
                 }`}
               >
                 Sign In
                 {authTab === "login" && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-[#6b8f3c]" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-cyan-400" />
                 )}
               </button>
             </div>
 
             <div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-[#ede9e3]">
+              <h2 className="text-2xl font-black tracking-tight text-white">
                 {authTab === "login" ? "Welcome back" : "Register account"}
               </h2>
-              <p className="mt-1 text-xs font-medium text-[#8a96a0]">
+              <p className="mt-1 text-xs font-medium text-slate-400">
                 {authTab === "login"
                   ? "Access the depot management portal."
                   : "Create a passenger or staff account."}
@@ -1250,56 +1269,62 @@ function App() {
 
             {/* Error Banner */}
             {loginError && (
-              <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#b85454]/40 bg-[#b85454]/10 p-3.5 text-xs text-[#b85454]">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+              <div
+                className="mt-5 flex items-start gap-3 rounded-2xl border border-red-500/30 p-3.5 text-xs text-red-300"
+                style={{ backgroundColor: "#450a0a" }}
+              >
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
                 <span className="leading-relaxed">{loginError}</span>
               </div>
             )}
 
             {/* Login Form */}
             {authTab === "login" && (
-              <form onSubmit={handleLogin} className="mt-6 space-y-4">
+              <form onSubmit={handleLogin} className="mt-6 space-y-5">
                 <div>
-                  <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.18em] text-[#8a96a0]">
+                  <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
                     Username
                   </label>
                   <div className="relative">
-                    <UserCheck className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#56636d]" />
+                    <UserCheck className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                     <input
                       type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="Username"
-                      className="w-full rounded-xl border border-[#27323a] bg-[#0b0f12] py-3 pl-10 pr-4 text-sm font-medium text-[#ede9e3] outline-none transition-all placeholder:text-[#56636d] focus:border-[#6b8f3c] focus:ring-2 focus:ring-[#6b8f3c]/20"
+                      className="w-full rounded-2xl border border-slate-800 py-3 pl-10 pr-4 text-sm font-medium text-white outline-none transition-all placeholder:text-slate-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                      style={{ backgroundColor: "#020617" }}
                     />
                   </div>
                 </div>
 
                 <div>
                   <div className="mb-1.5 flex items-center justify-between">
-                    <label className="block text-[10px] font-bold uppercase tracking-[0.18em] text-[#8a96a0]">
+                    <label className="block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
                       Password
                     </label>
                   </div>
                   <div className="relative">
-                    <Unlock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#56636d]" />
+                    <Unlock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                     <input
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full rounded-xl border border-[#27323a] bg-[#0b0f12] py-3 pl-10 pr-4 text-sm font-medium text-[#ede9e3] outline-none transition-all placeholder:text-[#56636d] focus:border-[#6b8f3c] focus:ring-2 focus:ring-[#6b8f3c]/20"
+                      className="w-full rounded-2xl border border-slate-800 py-3 pl-10 pr-4 text-sm font-medium text-white outline-none transition-all placeholder:text-slate-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                      style={{ backgroundColor: "#020617" }}
                     />
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-1">
-                  <label className="flex cursor-pointer select-none items-center gap-2.5 text-xs font-medium text-[#8a96a0]">
+                  <label className="flex cursor-pointer select-none items-center gap-2.5 text-xs font-medium text-slate-300">
                     <input
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="h-4 w-4 rounded border-[#27323a] bg-[#0b0f12] text-[#6b8f3c] accent-[#6b8f3c]"
+                      className="h-4 w-4 rounded-md border-slate-700 text-cyan-500 focus:ring-cyan-500/20"
+                      style={{ backgroundColor: "#020617" }}
                     />
                     Keep me signed in
                   </label>
@@ -1308,12 +1333,16 @@ function App() {
                 <button
                   type="submit"
                   disabled={authLoading}
-                  className="btn-primary w-full py-3 text-sm font-bold shadow-lg"
+                  className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl  from-blue-600 to-cyan-500 py-3.5 text-sm font-bold text-white shadow-lg 0 hover:bg-[#6b8e13]"
+                  style={{
+                    background: "#7da216",
+                    color: "white",
+                  }}
                 >
                   {authLoading ? (
                     <RefreshCw className="h-4 w-4 animate-spin" />
                   ) : (
-                    <Zap className="h-4 w-4" />
+                    <Zap className="h-4 w-4 transition-transform group-hover:scale-110" />
                   )}
                   <span>Access Portal</span>
                 </button>
@@ -1341,22 +1370,14 @@ function App() {
 
         <div className="flex items-center gap-3">
           <div className="hidden text-right sm:block">
-            <div className="text-xs font-bold text-[#ede9e3]">{currentUser.full_name}</div>
+            <div className="text-xs font-bold text-[#ede9e3]">
+              {currentUser.full_name}
+            </div>
             <div className="text-[10px] uppercase tracking-wide text-[#c49a5c]">
               {formatRoleLabel(currentUser.role)} Account
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="rounded-xl border border-[#27323a] bg-[#1a2228] p-2 text-[#8a96a0] hover:text-[#ede9e3] transition-colors"
-          >
-            {theme === "dark" ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </button>
+
           <button
             type="button"
             onClick={handleLogout}
@@ -1611,9 +1632,7 @@ function App() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[#8a96a0]">
-                    Operating hours
-                  </label>
+                  <label className="text-[#8a96a0]">Operating hours</label>
                   <input
                     value={operatingHours}
                     onChange={(e) => setOperatingHours(e.target.value)}
@@ -1621,10 +1640,7 @@ function App() {
                   />
                 </div>
                 <div className="flex justify-end gap-2 border-t border-[#27323a] pt-4">
-                  <button
-                    type="submit"
-                    className="btn-primary"
-                  >
+                  <button type="submit" className="btn-primary">
                     Save Configurations
                   </button>
                 </div>
