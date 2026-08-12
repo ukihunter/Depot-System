@@ -45,7 +45,13 @@ export default function SchedulesModule({
   onAIResolve,
   userRole,
 }: SchedulesModuleProps) {
-  const [filterDate, setFilterDate] = useState("2026-06-15"); // default preview date
+  const [filterDate, setFilterDate] = useState(() => {
+    const today = new Date();
+    const offset = today.getTimezoneOffset();
+    return new Date(today.getTime() - offset * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
+  });
   const [timelineMode, setTimelineMode] = useState<"Daily" | "Weekly" | "All">(
     "Daily",
   );
