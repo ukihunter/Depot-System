@@ -65,7 +65,7 @@ export default function OperationsModules(props: OperationsModulesProps) {
   } = props;
   const [activeWorkflow, setActiveWorkflow] = useState<
     "trips" | "fuel" | "maintenance"
-  >("trips");
+  >("fuel");
 
   // Fuel form state
   const [fuelVehicleId, setFuelVehicleId] = useState("");
@@ -141,24 +141,6 @@ export default function OperationsModules(props: OperationsModulesProps) {
       {/* Workflow Navigation Tab group */}
       <div className="flex border-b border-[#27323a] gap-2">
         <button
-          id="btn-subtab-trips"
-          onClick={() => setActiveWorkflow("trips")}
-          className={`px-5 py-3 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
-            activeWorkflow === "trips"
-              ? "border-[#6b8f3c] text-[#8bb552]"
-              : "border-transparent text-[#8a96a0] hover:text-[#ede9e3]"
-          }`}
-        >
-          <Navigation className="w-4 h-4" />
-          Active Trip Manifest (
-          {
-            trips.filter(
-              (t) => t.status === "Active" || t.status === "Scheduled",
-            ).length
-          }
-          )
-        </button>
-        <button
           id="btn-subtab-fuel"
           onClick={() => {
             setActiveWorkflow("fuel");
@@ -191,169 +173,6 @@ export default function OperationsModules(props: OperationsModulesProps) {
           Maintenance Repair Schedules
         </button>
       </div>
-
-      {/* TRIP WORKFLOW TAB */}
-      {activeWorkflow === "trips" && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Main Active Manifest */}
-          <div
-            className="lg:col-span-12 glass-panel rounded-2xl overflow-hidden"
-            id="active-manifest"
-          >
-            <div className="bg-[#141a1f] border-b border-[#27323a] px-5 py-3">
-              <h3 className="font-bold text-[#ede9e3] text-sm">
-                Ongoing Depot Operational Manifest
-              </h3>
-              <p className="text-[10px] text-[#8a96a0] font-mono">
-                Live status monitoring & trip completion gates
-              </p>
-            </div>
-
-            <div className="max-w-full overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="bg-[#141a1f]/50 text-[#8a96a0] font-bold border-b border-[#27323a] uppercase font-mono text-[9px] tracking-wider">
-                    <th className="p-4">Trip Code</th>
-                    <th className="p-4">Tied Route Info</th>
-                    <th className="p-4">Assigned Fleet</th>
-                    <th className="p-4">Start Coordinates</th>
-                    <th className="p-4">End Coordinates</th>
-                    <th className="p-4">Dispatch status</th>
-                    <th className="p-4 text-right">Gates/Override</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#27323a]">
-                  {trips.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={7}
-                        className="p-8 text-center text-[#8a96a0] italic"
-                      >
-                        No trips loaded on current timetabled date.
-                      </td>
-                    </tr>
-                  ) : (
-                    trips.map((t) => {
-                      const sched = schedules.find(
-                        (s) => s.schedule_id === t.schedule_id,
-                      );
-                      const route = routes.find(
-                        (r) => r.route_id === sched?.route_id,
-                      );
-                      const bus = vehicles.find(
-                        (v) => v.vehicle_id === sched?.vehicle_id,
-                      );
-
-                      return (
-                        <tr key={t.trip_id} className="hover:bg-[#1a2228]/50 transition-colors">
-                          <td className="p-4 font-mono font-bold text-[#ede9e3]">
-                            {t.trip_id}
-                          </td>
-                          <td className="p-4 text-[#ede9e3]">
-                            <div>
-                              <span className="font-bold">
-                                {route?.route_name || "Direct transit link"}
-                              </span>
-                              <span className="block text-[10px] text-[#8a96a0] font-mono">
-                                Sched Ref: {t.schedule_id}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="p-4 font-mono text-[#c49a5c] font-semibold">
-                            {bus?.registration_number || "Awaiting vehicle"}
-                          </td>
-                          <td className="p-4 text-[#8a96a0] font-semibold">
-                            {t.start_time || "Pending dispatch"}
-                          </td>
-                          <td className="p-4 text-[#8a96a0] font-semibold">
-                            {t.end_time || "--:--"}
-                          </td>
-                          <td className="p-4">
-                            <span
-                              className={`badge ${
-                                t.status === "Active"
-                                  ? "badge-success animate-pulse"
-                                  : t.status === "Completed"
-                                    ? "badge-success"
-                                    : t.status === "Delayed"
-                                      ? "badge-warning"
-                                      : "badge-danger"
-                              }`}
-                            >
-                              {t.status}
-                            </span>
-                          </td>
-                          <td className="p-4 text-right">
-                            {canWrite ? (
-                              <div className="flex gap-1.5 justify-end">
-                                {t.status === "Scheduled" && (
-                                  <button
-                                    id={`btn-start-trip-${t.trip_id}`}
-                                    onClick={() => onStartTrip(t.trip_id)}
-                                    className="btn-primary py-1 px-2.5 text-[10px]"
-                                  >
-                                    <Play className="w-3 h-3" /> Start Transit
-                                  </button>
-                                )}
-                                {t.status === "Active" && (
-                                  <>
-                                    <button
-                                      id={`btn-complete-trip-${t.trip_id}`}
-                                      onClick={() =>
-                                        onEndTrip(t.trip_id, "Completed")
-                                      }
-                                      className="btn-primary py-1 px-2 text-[10px]"
-                                    >
-                                      Mark Complete
-                                    </button>
-                                    <button
-                                      id={`btn-delay-trip-${t.trip_id}`}
-                                      onClick={() =>
-                                        onUpdateTripStatus(t.trip_id, "Delayed")
-                                      }
-                                      className="btn-amber py-1 px-2 text-[10px]"
-                                    >
-                                      Delay Alert
-                                    </button>
-                                  </>
-                                )}
-                                {t.status === "Delayed" && (
-                                  <button
-                                    id={`btn-complete-trip-delay-${t.trip_id}`}
-                                    onClick={() =>
-                                      onEndTrip(
-                                        t.trip_id,
-                                        "Completed",
-                                        "Route delayed but completed safely.",
-                                      )
-                                    }
-                                    className="btn-primary py-1 px-2 text-[10px]"
-                                  >
-                                    Complete Shift
-                                  </button>
-                                )}
-                                {t.status === "Completed" && (
-                                  <span className="text-[#8a96a0] font-semibold text-[10px]">
-                                    Closed Log
-                                  </span>
-                                )}
-                              </div>
-                            ) : (
-                              <span className="text-[#8a96a0] font-mono font-semibold text-[10px]">
-                                Read-Only
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* FUEL WORKFLOW TAB */}
       {activeWorkflow === "fuel" && (
@@ -487,7 +306,10 @@ export default function OperationsModules(props: OperationsModulesProps) {
                     );
 
                     return (
-                      <tr key={log.fuel_id} className="hover:bg-[#1a2228]/50 transition-colors">
+                      <tr
+                        key={log.fuel_id}
+                        className="hover:bg-[#1a2228]/50 transition-colors"
+                      >
                         <td className="p-3 font-semibold text-[#ede9e3]">
                           {log.date}
                         </td>
@@ -526,7 +348,8 @@ export default function OperationsModules(props: OperationsModulesProps) {
           {/* Dispatch repair form */}
           <div className="lg:col-span-4 glass-panel rounded-2xl p-5">
             <h3 className="font-bold text-[#ede9e3] text-sm mb-4 border-b pb-2 border-[#27323a] flex items-center gap-1.5">
-              <Tool className="w-4.5 h-4.5 text-[#6b8f3c]" /> Book Vehicle Repair
+              <Tool className="w-4.5 h-4.5 text-[#6b8f3c]" /> Book Vehicle
+              Repair
             </h3>
 
             <form
